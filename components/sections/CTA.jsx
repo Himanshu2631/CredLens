@@ -4,7 +4,13 @@ import React from 'react';
 import Container from '@/components/layout/Container';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import { Button } from '@/components/ui/button';
+import CTACard from '@/components/ui/CTACard';
+import SectionHeader from '@/components/ui/SectionHeader';
 
+/**
+ * Centered CTA section promoting the platform's immediate diagnostics.
+ * Integrates reusable CTACard and SectionHeader elements.
+ */
 export default function CTA() {
   const handleScrollToAudit = (e) => {
     e.preventDefault();
@@ -17,27 +23,18 @@ export default function CTA() {
   return (
     <SectionWrapper className="pb-20 pt-10">
       <Container>
-        <div className="w-full max-w-4xl mx-auto rounded-2xl border border-border/80 bg-zinc-950/70 p-8 md:p-14 text-center select-none shadow-[0_16px_40px_-8px_rgba(0,0,0,0.6)] flex flex-col items-center relative overflow-hidden">
-          
-          {/* Subtle geometric grid background overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(24,24,27,0.8),transparent)] pointer-events-none" />
-
-          <div className="relative z-10 space-y-6 max-w-2xl flex flex-col items-center">
+        <CTACard>
+          <div className="space-y-6 max-w-2xl flex flex-col items-center">
             
-            {/* CTA Category badge */}
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-0.5 text-[9px] font-mono font-medium text-emerald-450 uppercase">
-              Immediate Diagnostics
-            </div>
-
-            {/* Headline */}
-            <h3 className="text-section text-lg sm:text-2xl tracking-tight text-white max-w-lg">
-              Take control of your AI margins.
-            </h3>
-
-            {/* Subheadline description */}
-            <p className="text-zinc-400 text-xs md:text-sm leading-relaxed max-w-md">
-              Ingest your model execution logs locally. Flag duplicate licenses, token leaks, and rate tier anomalies in under two minutes.
-            </p>
+            {/* CTA Header Info */}
+            <SectionHeader
+              badge="Immediate Diagnostics"
+              title="Take control of your AI margins."
+              description="Ingest your model execution logs locally. Flag duplicate licenses, token leaks, and rate tier anomalies in under two minutes."
+              align="center"
+              titleClassName="text-lg sm:text-2xl max-w-lg"
+              descriptionClassName="max-w-md"
+            />
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto pt-2">
@@ -75,7 +72,7 @@ export default function CTA() {
             </div>
 
           </div>
-        </div>
+        </CTACard>
       </Container>
     </SectionWrapper>
   );

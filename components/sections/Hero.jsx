@@ -5,6 +5,7 @@ import Container from '@/components/layout/Container';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import { Button } from '@/components/ui/button';
 import AuditPreviewCard from '@/components/audit/AuditPreviewCard';
+import Badge from '@/components/ui/Badge';
 
 export default function Hero() {
   const handleScrollToAudit = (e) => {
@@ -28,10 +29,9 @@ export default function Hero() {
       <Container className="flex flex-col items-center text-center">
         
         {/* Sleek top badge representing engine status */}
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1 text-[11px] font-medium text-zinc-400 select-none animate-fade-in">
-          <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <Badge variant="muted" dot>
           AI Spend Optimization Engine
-        </div>
+        </Badge>
 
         {/* Headline - structured with clamped size text-hero */}
         <h1 className="text-hero max-w-3xl mt-6 tracking-tight">

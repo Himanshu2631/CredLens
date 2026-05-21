@@ -3,7 +3,12 @@
 import React from 'react';
 import Container from '@/components/layout/Container';
 import SectionWrapper from '@/components/layout/SectionWrapper';
+import SectionHeader from '@/components/ui/SectionHeader';
 
+/**
+ * HowItWorks section detailing the 3-step process of auditing AI costs.
+ * Integrates the reusable SectionHeader component.
+ */
 export default function HowItWorks() {
   const steps = [
     {
@@ -28,17 +33,12 @@ export default function HowItWorks() {
       <Container className="space-y-16">
         
         {/* Section Title Header */}
-        <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-0.5 text-[9px] font-mono font-medium text-emerald-450 uppercase select-none">
-            Audit Pipeline
-          </div>
-          <h3 className="text-section mt-4 tracking-tight text-white">
-            Audit your spend in three steps
-          </h3>
-          <p className="text-zinc-400 text-xs md:text-sm mt-2 max-w-lg select-none">
-            A developer-first ingestion pipeline built to identify leaks instantly without exposing database credentials or security environments.
-          </p>
-        </div>
+        <SectionHeader
+          badge="Audit Pipeline"
+          title="Audit your spend in three steps"
+          description="A developer-first ingestion pipeline built to identify leaks instantly without exposing database credentials or security environments."
+          descriptionClassName="select-none max-w-lg mt-2"
+        />
 
         {/* Steps Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
