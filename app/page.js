@@ -1,65 +1,155 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState } from 'react';
+import Container from '@/components/layout/Container';
+import PageHeader from '@/components/layout/PageHeader';
+import AuditForm from '@/components/forms/AuditForm';
+import { OPTIMIZATION_RULES } from '@/data/rules';
+import { AlertCircle, Terminal, HelpCircle, Code, ShieldCheck, Database } from 'lucide-react';
 
 export default function Home() {
+  const [activeAudit, setActiveAudit] = useState(null);
+
+  const handleAuditSubmit = (formData) => {
+    setActiveAudit(formData);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="flex-1 bg-black pb-16">
+      {/* Hero Intro Header */}
+      <Container>
+        <PageHeader
+          title="AI Spend Optimization platform"
+          description="Day 1 Architecture environment. Configure parameters and upload raw model execution logs to test client-side validation and schema bindings."
+          actions={
+            <div className="flex items-center gap-1.5 rounded-full border border-zinc-900 bg-zinc-950/80 px-3 py-1 text-[11px] font-medium text-emerald-400">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Day 1 Workspace
+            </div>
+          }
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+      </Container>
+
+      {/* Main Form and Info Workspace */}
+      <Container className="mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Panel: Audit Configuration Form */}
+          <div className="lg:col-span-5 space-y-6">
+            <AuditForm onSubmitSuccess={handleAuditSubmit} />
+
+            {/* Platform Constraints Callout */}
+            <div className="rounded-xl border border-zinc-900 bg-zinc-950/30 p-4 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-medium text-zinc-300">
+                <AlertCircle className="h-4 w-4 text-zinc-500" />
+                Scope Architecture Reminder
+              </div>
+              <p className="text-[11px] text-zinc-500 leading-relaxed">
+                Database queries, backend routes, and background queue workers are mocked or stubbed. In the next phase, submitting this form will dispatch an API request to trigger the Mongoose ingestion pipelines.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Panel: Architecture Inspector & Mock Run Output */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Live State Inspector */}
+            <div className="rounded-xl border border-zinc-900 bg-zinc-950 overflow-hidden">
+              <div className="flex items-center justify-between border-b border-zinc-900 bg-zinc-950 px-4 py-2">
+                <div className="flex items-center gap-2">
+                  <Terminal className="h-3.5 w-3.5 text-zinc-400" />
+                  <span className="text-xs font-mono text-zinc-400">Active State Inspector</span>
+                </div>
+                <span className="text-[10px] text-zinc-500 font-mono">
+                  {activeAudit ? 'STATUS: INGEST_READY' : 'STATUS: WAITING_FOR_INPUT'}
+                </span>
+              </div>
+              
+              <div className="p-5 font-mono text-xs text-zinc-400 bg-black/40 min-h-[160px] flex flex-col justify-between">
+                {activeAudit ? (
+                  <div className="space-y-4">
+                    <p className="text-zinc-500 text-[11px]">
+                      // Form submitted. Ready to create Mongoose records in Atlas...
+                    </p>
+                    <pre className="text-emerald-400 bg-zinc-950 p-3 rounded-lg border border-zinc-900 overflow-x-auto text-[11px]">
+                      {JSON.stringify(
+                        {
+                          event: 'SUBMIT_AUDIT_REQUEST',
+                          timestamp: new Date().toISOString(),
+                          payload: {
+                            projectName: activeAudit.projectName,
+                            monthlyBudget: Number(activeAudit.monthlyBudget),
+                            primaryProvider: activeAudit.primaryProvider,
+                            fileName: activeAudit.fileName,
+                          },
+                          dbAction: 'await Audit.create(payload)'
+                        },
+                        null,
+                        2
+                      )}
+                    </pre>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-8 space-y-2">
+                    <Code className="h-5 w-5 text-zinc-600" />
+                    <p className="text-zinc-500 text-[11px]">
+                      Submit the configuration form on the left to populate the simulated payload inspect state.
+                    </p>
+                  </div>
+                )}
+                
+                <div className="border-t border-zinc-900/60 mt-4 pt-3 flex items-center justify-between text-[10px] text-zinc-500">
+                  <span className="flex items-center gap-1">
+                    <Database className="h-3 w-3" /> Schema: models/Audit.js
+                  </span>
+                  <span>Collection: audits</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Static Optimization Rules Catalog */}
+            <div className="rounded-xl border border-zinc-900 bg-zinc-950 p-6 space-y-4">
+              <div className="space-y-1">
+                <h3 className="text-xs font-medium text-white flex items-center gap-2">
+                  <HelpCircle className="h-3.5 w-3.5 text-zinc-400" />
+                  Audit Engine Rules (Static Config)
+                </h3>
+                <p className="text-[11px] text-zinc-500">
+                  These cost saving rules are imported from <code className="text-zinc-400 font-mono text-[10px]">data/rules.js</code> and map logs to recommendations.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {OPTIMIZATION_RULES.map((rule) => (
+                  <div
+                    key={rule.id}
+                    className="group rounded-lg border border-zinc-900 bg-black/30 p-3 hover:border-zinc-800 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
+                        {rule.provider} / {rule.category}
+                      </span>
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded font-medium ${
+                        rule.impact === 'high'
+                          ? 'bg-red-950/50 text-red-400 border border-red-900/30'
+                          : rule.impact === 'medium'
+                          ? 'bg-amber-950/50 text-amber-400 border border-amber-900/30'
+                          : 'bg-zinc-900 text-zinc-400'
+                      }`}>
+                        {rule.impact} saving
+                      </span>
+                    </div>
+                    <h4 className="mt-2 text-xs font-medium text-zinc-300 group-hover:text-white transition-colors">
+                      {rule.title}
+                    </h4>
+                    <p className="mt-1 text-[10px] text-zinc-500 leading-normal">
+                      {rule.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </Container>
     </div>
   );
 }
