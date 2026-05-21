@@ -12,10 +12,10 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const navigation = [
-    { name: 'Dashboard', href: '#', icon: LayoutDashboard },
-    { name: 'Cost Auditor', href: '#', icon: Activity, active: true },
-    { name: 'API Key Manager', href: '#', icon: Sliders },
-    { name: 'Subscriptions', href: '#', icon: CreditCard },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Cost Auditor', href: '/', icon: Activity },
+    { name: 'API Key Manager', href: '/api-keys', icon: Sliders },
+    { name: 'Subscriptions', href: '/subscriptions', icon: CreditCard },
   ];
 
   return (
