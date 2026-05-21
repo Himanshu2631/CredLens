@@ -5,10 +5,10 @@ import PageContainer from '@/components/layout/PageContainer';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import ContentWrapper from '@/components/layout/ContentWrapper';
 import Container from '@/components/layout/Container';
-import PageHeader from '@/components/layout/PageHeader';
+import Hero from '@/components/sections/Hero';
 import AuditForm from '@/components/forms/AuditForm';
 import { OPTIMIZATION_RULES } from '@/data/rules';
-import { AlertCircle, Terminal, HelpCircle, Code, ShieldCheck, Database } from 'lucide-react';
+import { AlertCircle, Terminal, HelpCircle, Code, Database } from 'lucide-react';
 
 export default function Home() {
   const [activeAudit, setActiveAudit] = useState(null);
@@ -19,24 +19,11 @@ export default function Home() {
 
   return (
     <PageContainer>
-      {/* Page Header Section */}
-      <SectionWrapper className="pb-0 pt-4">
-        <Container>
-          <PageHeader
-            title="AI Spend Optimization platform"
-            description="Day 1 Architecture environment. Configure parameters and upload raw model execution logs to test client-side validation and schema bindings."
-            actions={
-              <div className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-medium text-emerald-400">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                Day 1 Workspace
-              </div>
-            }
-          />
-        </Container>
-      </SectionWrapper>
+      {/* Hero Section */}
+      <Hero />
 
       {/* Main Workspace Section */}
-      <SectionWrapper className="pt-8">
+      <SectionWrapper id="audit-workspace" className="pt-12 scroll-mt-20">
         <Container>
           <ContentWrapper cols={12}>
             {/* Left Panel: Audit Configuration Form */}
@@ -112,7 +99,7 @@ export default function Home() {
               </div>
 
               {/* Static Optimization Rules Catalog */}
-              <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+              <div id="rules-catalog" className="scroll-mt-20 rounded-xl border border-border bg-card p-6 space-y-4">
                 <div className="space-y-1">
                   <h3 className="text-body-premium font-medium text-white flex items-center gap-2">
                     <HelpCircle className="h-3.5 w-3.5 text-muted-foreground" />
