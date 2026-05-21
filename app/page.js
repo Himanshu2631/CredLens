@@ -6,6 +6,10 @@ import SectionWrapper from '@/components/layout/SectionWrapper';
 import ContentWrapper from '@/components/layout/ContentWrapper';
 import Container from '@/components/layout/Container';
 import Hero from '@/components/sections/Hero';
+import SocialProof from '@/components/sections/SocialProof';
+import Features from '@/components/sections/Features';
+import HowItWorks from '@/components/sections/HowItWorks';
+import CTA from '@/components/sections/CTA';
 import AuditForm from '@/components/forms/AuditForm';
 import { OPTIMIZATION_RULES } from '@/data/rules';
 import { AlertCircle, Terminal, HelpCircle, Code, Database } from 'lucide-react';
@@ -22,8 +26,17 @@ export default function Home() {
       {/* Hero Section */}
       <Hero />
 
+      {/* Social Proof */}
+      <SocialProof />
+
+      {/* Feature Highlights */}
+      <Features />
+
+      {/* How It Works */}
+      <HowItWorks />
+
       {/* Main Workspace Section */}
-      <SectionWrapper id="audit-workspace" className="pt-12 scroll-mt-20">
+      <SectionWrapper id="audit-workspace" className="pt-12 scroll-mt-20 border-b border-border/30 bg-zinc-950/5">
         <Container>
           <ContentWrapper cols={12}>
             {/* Left Panel: Audit Configuration Form */}
@@ -143,6 +156,9 @@ export default function Home() {
           </ContentWrapper>
         </Container>
       </SectionWrapper>
+
+      {/* Final CTA Section */}
+      <CTA />
     </PageContainer>
   );
 }
