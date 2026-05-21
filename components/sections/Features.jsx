@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '@/components/layout/Container';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import FeatureRow from './FeatureRow';
@@ -11,6 +11,16 @@ import MockCard from '@/components/ui/MockCard';
  * Utilizes reusable FeatureRow layouts and MockCard containers.
  */
 export default function Features() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('https://credlens.com/audit/acme-labs-849a');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <SectionWrapper className="border-b border-border/30 bg-zinc-950/25">
       <Container className="space-y-24 md:space-y-36">
@@ -125,8 +135,16 @@ export default function Features() {
                 <div className="text-[11px] font-mono text-zinc-400 overflow-hidden text-ellipsis whitespace-nowrap flex-1">
                   https://credlens.com/audit/acme-labs-849a
                 </div>
-                <button className="h-7.5 px-3 rounded bg-zinc-900 border border-zinc-800 text-[10px] font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer shrink-0">
-                  Copy Link
+                <button
+                  onClick={handleCopy}
+                  aria-label="Copy sharing link to clipboard"
+                  className={`h-7.5 px-3 rounded text-[10px] font-mono border transition-all duration-150 cursor-pointer shrink-0 ${
+                    copied
+                      ? 'bg-emerald-950/30 border-emerald-900/40 text-emerald-450'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-850'
+                  }`}
+                >
+                  {copied ? 'Copied!' : 'Copy Link'}
                 </button>
               </div>
               <div className="text-[10px] text-zinc-500 leading-normal">

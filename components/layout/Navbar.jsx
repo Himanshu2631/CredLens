@@ -103,6 +103,8 @@ export default function Navbar() {
               onClick={() => setIsOpen(!isOpen)}
               className="relative inline-flex items-center justify-center rounded-md p-2 text-zinc-400 hover:text-white hover:bg-zinc-900 focus:outline-none transition-colors"
               aria-label="Toggle menu"
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
             >
               <div className="relative w-[18px] h-4 flex flex-col justify-between">
                 <span
@@ -128,6 +130,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Panel: Dropdown slider with opacity/height transitions */}
       <div
+        id="mobile-menu"
         className={`md:hidden absolute top-[52px] left-0 right-0 border-b border-border bg-black/95 backdrop-blur-md transition-all duration-250 ease-in-out origin-top ${
           isOpen
             ? 'opacity-100 translate-y-0 scale-y-100 pointer-events-auto'

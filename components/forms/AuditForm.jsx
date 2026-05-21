@@ -96,6 +96,7 @@ export default function AuditForm({ onSubmitSuccess }) {
           <Input
             id="projectName"
             placeholder="e.g. Acme AI"
+            aria-invalid={errors.projectName ? "true" : "false"}
             className="h-9 border-border bg-background text-xs placeholder:text-zinc-650 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0"
             {...register('projectName')}
           />
@@ -117,6 +118,7 @@ export default function AuditForm({ onSubmitSuccess }) {
               id="monthlyBudget"
               type="number"
               placeholder="e.g. 5000"
+              aria-invalid={errors.monthlyBudget ? "true" : "false"}
               className="h-9 border-border bg-background text-xs placeholder:text-zinc-650 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0"
               {...register('monthlyBudget')}
             />
@@ -134,6 +136,7 @@ export default function AuditForm({ onSubmitSuccess }) {
             </Label>
             <select
               id="primaryProvider"
+              aria-invalid={errors.primaryProvider ? "true" : "false"}
               className="flex w-full rounded-md border border-border bg-background px-3 py-1.5 h-9 text-xs text-zinc-300 ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               {...register('primaryProvider')}
             >
@@ -153,12 +156,14 @@ export default function AuditForm({ onSubmitSuccess }) {
 
         {/* Drag and Drop File Upload Skeleton */}
         <div className="space-y-2">
-          <Label className="text-muted-premium font-medium text-muted-foreground">Upload Usage Logs (CSV / JSON)</Label>
-          <div className="relative flex flex-col items-center justify-center border border-dashed border-border bg-background/20 hover:bg-background/60 hover:border-zinc-700 transition-all rounded-lg p-6 text-center cursor-pointer group">
+          <Label htmlFor="file-upload" className="text-muted-premium font-medium text-muted-foreground">Upload Usage Logs (CSV / JSON)</Label>
+          <div className="relative flex flex-col items-center justify-center border border-dashed border-border bg-background/20 hover:bg-background/60 hover:border-zinc-700 focus-within:ring-1 focus-within:ring-ring focus-within:border-zinc-700 transition-all rounded-lg p-6 text-center cursor-pointer group">
             <input
+              id="file-upload"
               type="file"
               accept=".csv,.json"
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              aria-label="Upload Usage Logs (CSV or JSON)"
               onChange={handleFileChange}
             />
             <div className="flex flex-col items-center gap-2">
