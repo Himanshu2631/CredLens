@@ -68,12 +68,12 @@ export default function Home() {
                     {activeAudit ? 'STATUS: INGEST_READY' : 'STATUS: WAITING_FOR_INPUT'}
                   </span>
                 </div>
-                
+
                 <div className="p-5 font-mono text-xs text-muted-foreground bg-background/25 min-h-[160px] flex flex-col justify-between">
                   {activeAudit ? (
                     <div className="space-y-4">
                       <p className="text-muted-foreground text-[11px]">
-                        // Form submitted. Ready to create Mongoose records in Atlas...
+                        {/* Form submitted. Ready to create Mongoose records in Atlas...*/}
                       </p>
                       <pre className="text-emerald-400 bg-background p-3 rounded-lg border border-border overflow-x-auto text-[11px]">
                         {JSON.stringify(
@@ -101,7 +101,7 @@ export default function Home() {
                       </p>
                     </div>
                   )}
-                  
+
                   <div className="border-t border-border/60 mt-4 pt-3 flex items-center justify-between text-[10px] text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Database className="h-3 w-3" /> Schema: models/Audit.js
@@ -133,13 +133,12 @@ export default function Home() {
                         <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
                           {rule.provider} / {rule.category}
                         </span>
-                        <span className={`text-[9px] px-1.5 py-0.5 rounded font-medium ${
-                          rule.impact === 'high'
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded font-medium ${rule.impact === 'high'
                             ? 'bg-red-950/20 text-red-400 border border-red-900/30'
                             : rule.impact === 'medium'
-                            ? 'bg-amber-950/20 text-amber-400 border border-amber-900/30'
-                            : 'bg-secondary text-muted-foreground border border-border/30'
-                        }`}>
+                              ? 'bg-amber-950/20 text-amber-400 border border-amber-900/30'
+                              : 'bg-secondary text-muted-foreground border border-border/30'
+                          }`}>
                           {rule.impact} saving
                         </span>
                       </div>
