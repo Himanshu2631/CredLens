@@ -8,8 +8,9 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-mono);
   --font-heading: var(--font-sans);
+  
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -18,11 +19,7 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
+  
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -39,84 +36,127 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* 
+ * Premium Custom Dark Theme (Default)
+ * Formulated in OKLCH for superior color rendering.
+ * Pure dark space background, refined zinc/gray text hierarchy, and thin, sharp borders.
+ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: oklch(0.05 0 0);          /* #0a0a0a - Ultra-dark space black */
+  --foreground: oklch(0.96 0 0);          /* #f4f4f5 - High-contrast off-white */
+  
+  --card: oklch(0.08 0 0);                /* #121212 - Slightly lighter panel gray */
+  --card-foreground: oklch(0.96 0 0);
+  
+  --popover: oklch(0.08 0 0);
+  --popover-foreground: oklch(0.96 0 0);
+  
+  --primary: oklch(1 0 0);                /* #ffffff - CTA Primary Solid White */
+  --primary-foreground: oklch(0 0 0);     /* #000000 - CTA Text */
+  
+  --secondary: oklch(0.12 0 0);           /* #1a1a1a - Secondary action gray */
+  --secondary-foreground: oklch(0.96 0 0);
+  
+  --muted: oklch(0.12 0 0);               /* #1a1a1a - Disabled or passive containers */
+  --muted-foreground: oklch(0.70 0 0);    /* #a1a1aa - Muted metadata gray */
+  
+  --accent: oklch(0.12 0 0);
+  --accent-foreground: oklch(1 0 0);
+  
+  --destructive: oklch(0.40 0.18 20);     /* Deep blood crimson for alerts */
+  --destructive-foreground: oklch(0.98 0 0);
+  
+  --border: oklch(0.18 0 0);              /* #242427 - Minimal razor-thin border */
+  --input: oklch(0.14 0 0);               /* #1a1a1c - Input interior */
+  --ring: oklch(0.35 0 0);                /* #52525b - Silent focus indicator */
+  
+  --radius: 0.5rem;                       /* Balanced premium rounded corners */
 }
 
+/* Force dark styling as global default body wrapper */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.05 0 0);
+  --foreground: oklch(0.96 0 0);
 }
 
+/* 
+ * Tailwind v4 Custom Typography Utilities
+ * Provides standardized, responsive type hierarchies to avoid ad-hoc values.
+ */
+@utility text-hero {
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 4vw, 2.75rem); /* Dynamically scales with viewport */
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: oklch(0.985 0 0);
+}
+
+@utility text-section {
+  font-family: var(--font-sans);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: oklch(0.96 0 0);
+}
+
+@utility text-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.875rem; /* 14px */
+  font-weight: 400;
+  line-height: 1.6;
+  color: oklch(0.70 0 0); /* zinc-400 */
+}
+
+@utility text-body-premium {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem; /* 13px - highly legible compact text */
+  font-weight: 400;
+  line-height: 1.5;
+  color: oklch(0.85 0 0); /* zinc-200 */
+}
+
+@utility text-muted-premium {
+  font-family: var(--font-sans);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 400;
+  line-height: 1.4;
+  color: oklch(0.55 0 0); /* zinc-500 */
+}
+
+@utility text-cta {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* 
+ * Tailwind v4 Spacing Presets
+ * Consistent spacing configurations to avoid grid misalignment.
+ */
+@utility section-spacing {
+  padding-top: clamp(3rem, 8vw, 6rem);
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+}
+
+@utility container-padding {
+  padding-left: clamp(1rem, 4vw, 2rem);
+  padding-right: clamp(1rem, 4vw, 2rem);
+}
+
+/*
+ * Base Layer Resets
+ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -125,6 +165,6 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply font-sans antialiased scroll-smooth h-full;
   }
 }

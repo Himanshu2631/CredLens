@@ -15,14 +15,14 @@ export default function Home() {
   };
 
   return (
-    <div className="flex-1 bg-black pb-16">
+    <div className="flex-1 bg-background pb-16">
       {/* Hero Intro Header */}
       <Container>
         <PageHeader
           title="AI Spend Optimization platform"
           description="Day 1 Architecture environment. Configure parameters and upload raw model execution logs to test client-side validation and schema bindings."
           actions={
-            <div className="flex items-center gap-1.5 rounded-full border border-zinc-900 bg-zinc-950/80 px-3 py-1 text-[11px] font-medium text-emerald-400">
+            <div className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-medium text-emerald-400">
               <ShieldCheck className="h-3.5 w-3.5" />
               Day 1 Workspace
             </div>
@@ -38,12 +38,12 @@ export default function Home() {
             <AuditForm onSubmitSuccess={handleAuditSubmit} />
 
             {/* Platform Constraints Callout */}
-            <div className="rounded-xl border border-zinc-900 bg-zinc-950/30 p-4 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-medium text-zinc-300">
-                <AlertCircle className="h-4 w-4 text-zinc-500" />
+            <div className="rounded-xl border border-border bg-card/30 p-4 space-y-2">
+              <div className="flex items-center gap-2 text-body-premium font-medium text-zinc-300">
+                <AlertCircle className="h-4 w-4 text-muted-foreground" />
                 Scope Architecture Reminder
               </div>
-              <p className="text-[11px] text-zinc-500 leading-relaxed">
+              <p className="text-muted-premium">
                 Database queries, backend routes, and background queue workers are mocked or stubbed. In the next phase, submitting this form will dispatch an API request to trigger the Mongoose ingestion pipelines.
               </p>
             </div>
@@ -52,24 +52,24 @@ export default function Home() {
           {/* Right Panel: Architecture Inspector & Mock Run Output */}
           <div className="lg:col-span-7 space-y-6">
             {/* Live State Inspector */}
-            <div className="rounded-xl border border-zinc-900 bg-zinc-950 overflow-hidden">
-              <div className="flex items-center justify-between border-b border-zinc-900 bg-zinc-950 px-4 py-2">
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="flex items-center justify-between border-b border-border bg-card px-4 py-2">
                 <div className="flex items-center gap-2">
-                  <Terminal className="h-3.5 w-3.5 text-zinc-400" />
-                  <span className="text-xs font-mono text-zinc-400">Active State Inspector</span>
+                  <Terminal className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span className="text-muted-premium font-mono">Active State Inspector</span>
                 </div>
-                <span className="text-[10px] text-zinc-500 font-mono">
+                <span className="text-[10px] text-muted-foreground font-mono">
                   {activeAudit ? 'STATUS: INGEST_READY' : 'STATUS: WAITING_FOR_INPUT'}
                 </span>
               </div>
               
-              <div className="p-5 font-mono text-xs text-zinc-400 bg-black/40 min-h-[160px] flex flex-col justify-between">
+              <div className="p-5 font-mono text-xs text-muted-foreground bg-background/25 min-h-[160px] flex flex-col justify-between">
                 {activeAudit ? (
                   <div className="space-y-4">
-                    <p className="text-zinc-500 text-[11px]">
+                    <p className="text-muted-foreground text-[11px]">
                       // Form submitted. Ready to create Mongoose records in Atlas...
                     </p>
-                    <pre className="text-emerald-400 bg-zinc-950 p-3 rounded-lg border border-zinc-900 overflow-x-auto text-[11px]">
+                    <pre className="text-emerald-400 bg-background p-3 rounded-lg border border-border overflow-x-auto text-[11px]">
                       {JSON.stringify(
                         {
                           event: 'SUBMIT_AUDIT_REQUEST',
@@ -89,14 +89,14 @@ export default function Home() {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center text-center py-8 space-y-2">
-                    <Code className="h-5 w-5 text-zinc-600" />
-                    <p className="text-zinc-500 text-[11px]">
+                    <Code className="h-5 w-5 text-zinc-700" />
+                    <p className="text-muted-foreground text-[11px]">
                       Submit the configuration form on the left to populate the simulated payload inspect state.
                     </p>
                   </div>
                 )}
                 
-                <div className="border-t border-zinc-900/60 mt-4 pt-3 flex items-center justify-between text-[10px] text-zinc-500">
+                <div className="border-t border-border/60 mt-4 pt-3 flex items-center justify-between text-[10px] text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Database className="h-3 w-3" /> Schema: models/Audit.js
                   </span>
@@ -106,14 +106,14 @@ export default function Home() {
             </div>
 
             {/* Static Optimization Rules Catalog */}
-            <div className="rounded-xl border border-zinc-900 bg-zinc-950 p-6 space-y-4">
+            <div className="rounded-xl border border-border bg-card p-6 space-y-4">
               <div className="space-y-1">
-                <h3 className="text-xs font-medium text-white flex items-center gap-2">
-                  <HelpCircle className="h-3.5 w-3.5 text-zinc-400" />
+                <h3 className="text-body-premium font-medium text-white flex items-center gap-2">
+                  <HelpCircle className="h-3.5 w-3.5 text-muted-foreground" />
                   Audit Engine Rules (Static Config)
                 </h3>
-                <p className="text-[11px] text-zinc-500">
-                  These cost saving rules are imported from <code className="text-zinc-400 font-mono text-[10px]">data/rules.js</code> and map logs to recommendations.
+                <p className="text-muted-premium">
+                  These cost saving rules are imported from <code className="text-zinc-300 font-mono text-[10px]">data/rules.js</code> and map logs to recommendations.
                 </p>
               </div>
 
@@ -121,18 +121,18 @@ export default function Home() {
                 {OPTIMIZATION_RULES.map((rule) => (
                   <div
                     key={rule.id}
-                    className="group rounded-lg border border-zinc-900 bg-black/30 p-3 hover:border-zinc-800 transition-colors"
+                    className="group rounded-lg border border-border bg-background/20 p-3 hover:border-border/80 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
                         {rule.provider} / {rule.category}
                       </span>
                       <span className={`text-[9px] px-1.5 py-0.5 rounded font-medium ${
                         rule.impact === 'high'
-                          ? 'bg-red-950/50 text-red-400 border border-red-900/30'
+                          ? 'bg-red-950/20 text-red-400 border border-red-900/30'
                           : rule.impact === 'medium'
-                          ? 'bg-amber-950/50 text-amber-400 border border-amber-900/30'
-                          : 'bg-zinc-900 text-zinc-400'
+                          ? 'bg-amber-950/20 text-amber-400 border border-amber-900/30'
+                          : 'bg-secondary text-muted-foreground border border-border/30'
                       }`}>
                         {rule.impact} saving
                       </span>
@@ -140,7 +140,7 @@ export default function Home() {
                     <h4 className="mt-2 text-xs font-medium text-zinc-300 group-hover:text-white transition-colors">
                       {rule.title}
                     </h4>
-                    <p className="mt-1 text-[10px] text-zinc-500 leading-normal">
+                    <p className="mt-1 text-[10px] text-muted-foreground leading-normal">
                       {rule.description}
                     </p>
                   </div>
