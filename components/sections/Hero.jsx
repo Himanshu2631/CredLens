@@ -4,6 +4,7 @@ import React from 'react';
 import Container from '@/components/layout/Container';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import { Button } from '@/components/ui/button';
+import AuditPreviewCard from '@/components/audit/AuditPreviewCard';
 
 export default function Hero() {
   const handleScrollToAudit = (e) => {
@@ -87,6 +88,11 @@ export default function Hero() {
             <path d="m9 12 2 2 4-4" />
           </svg>
           <span>100% private. Audits run entirely inside your browser.</span>
+        </div>
+
+        {/* Audit Report Preview Card */}
+        <div className="mt-12 md:mt-16 w-full animate-fade-in">
+          <AuditPreviewCard />
         </div>
 
       </Container>
