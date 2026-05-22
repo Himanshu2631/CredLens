@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ArrowRight, Loader2, Sparkles } from 'lucide-react';
@@ -22,8 +22,9 @@ const STEPS = [
 export default function SpendAuditForm({ onSubmitSuccess }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Initialize React Hook Form
+  // Initialize React Hook Form with default values
   const methods = useForm({
     resolver: zodResolver(spendAuditFormSchema),
     mode: 'onTouch',
@@ -37,7 +38,47 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
     }
   });
 
-  const { handleSubmit, trigger, reset } = methods;
+  const { handleSubmit, trigger, reset, watch } = methods;
+  
+  // Watch all form inputs
+  const formValues = watch();
+
+  // Step 1: Hydrate form state and step from localStorage after mount to prevent SSR mismatch
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      const savedState = localStorage.getItem('credlens_spend_audit_flow');
+      if (savedState) {
+        const parsed = JSON.parse(savedState);
+        if (parsed && typeof parsed === 'object') {
+          if (parsed.formData) {
+            // Re-populate all inputs safely
+            reset(parsed.formData);
+          }
+          if (typeof parsed.currentStep === 'number') {
+            // Restore previous progress step
+            setCurrentStep(parsed.currentStep);
+          }
+        }
+      }
+    } catch (e) {
+      console.error('[CredLens] Failed to load persisted form state:', e);
+    }
+  }, [reset]);
+
+  // Step 2: Auto-save form values and step index on state change (client-only)
+  useEffect(() => {
+    if (!isMounted) return;
+    try {
+      const stateToPersist = {
+        formData: formValues,
+        currentStep: currentStep
+      };
+      localStorage.setItem('credlens_spend_audit_flow', JSON.stringify(stateToPersist));
+    } catch (e) {
+      console.error('[CredLens] Failed to save form state to localStorage:', e);
+    }
+  }, [formValues, currentStep, isMounted]);
 
   // Handle forward navigation with validation triggers per step
   const handleNext = async () => {
@@ -73,6 +114,13 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
         ...data,
         submittedAt: new Date().toISOString()
       });
+    }
+
+    // Clear local storage key on successful submission so they start fresh next time
+    try {
+      localStorage.removeItem('credlens_spend_audit_flow');
+    } catch (e) {
+      console.error('[CredLens] Failed to clear local storage key:', e);
     }
 
     // Reset flow and form states
@@ -114,7 +162,7 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
             AI Spend Optimizer
           </h2>
           <p className="text-muted-premium">
-            Map your subscriptions, license seats, and workflows to scan for seat redundancy and token bloating.
+            Map your subscriptions, license seats, and workloads to scan for seat redundancy and token bloating.
           </p>
         </div>
 
