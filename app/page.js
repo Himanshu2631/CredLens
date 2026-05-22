@@ -12,13 +12,18 @@ import HowItWorks from '@/components/sections/HowItWorks';
 import CTA from '@/components/sections/CTA';
 import SpendAuditForm from '@/components/forms/SpendAuditForm/SpendAuditForm';
 import { OPTIMIZATION_RULES } from '@/data/rules';
+import { runSpendAudit } from '@/lib/audit/rulesEngine';
 import { AlertCircle, Terminal, HelpCircle, Code, Database } from 'lucide-react';
 
 export default function Home() {
   const [activeAudit, setActiveAudit] = useState(null);
 
   const handleAuditSubmit = (formData) => {
-    setActiveAudit(formData);
+    const auditResult = runSpendAudit(formData);
+    setActiveAudit({
+      ...formData,
+      auditResult
+    });
   };
 
   return (
@@ -89,6 +94,7 @@ export default function Home() {
                               optimizationGoal: activeAudit.optimizationGoal || 'None specified',
                               submittedAt: activeAudit.submittedAt,
                             },
+                            auditResult: activeAudit.auditResult,
                             dbAction: 'await SpendAudit.create(payload)'
                           },
                           null,

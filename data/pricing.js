@@ -25,6 +25,7 @@ export const PRICING_REGISTRY = {
         pricingType: 'per_seat',
         monthlyCost: 30,
         seatPricing: true,
+        minSeats: 2,
         notes: 'Centralized workspace billing. Minimum 2 seats required.'
       },
       enterprise: {
@@ -56,6 +57,7 @@ export const PRICING_REGISTRY = {
         pricingType: 'per_seat',
         monthlyCost: 30,
         seatPricing: true,
+        minSeats: 5,
         notes: 'Administrative panel, shared projects. Minimum 5 seats.'
       }
     }
@@ -236,6 +238,13 @@ export function getToolPlans(toolId) {
   return Object.values(tool.plans);
 }
 
+// Standard estimated seat rates for custom/enterprise plans used in audits
+export const ENTERPRISE_ESTIMATED_RATES = {
+  chatgpt: 60,
+  gemini: 35,
+  v0_dev: 50
+};
+
 /**
  * Computes baseline cost for a selected tool and plan.
  * 
@@ -256,7 +265,9 @@ export function calculatePlanCost(toolId, planId, seatsCount = 1) {
 
   // Multiply cost by seats if it scales per seat or per user (in a team context)
   if (plan.seatPricing || plan.pricingType === 'per_seat' || plan.pricingType === 'per_user') {
-    return plan.monthlyCost * Math.max(1, seatsCount);
+    const minSeats = plan.minSeats || 1;
+    const billedSeats = Math.max(minSeats, seatsCount);
+    return plan.monthlyCost * billedSeats;
   }
 
   // Flat rate (e.g. Free or API baseline fee)
