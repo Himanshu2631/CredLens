@@ -1,40 +1,40 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Bot, Cpu, GitFork, Image, MessageCircle } from 'lucide-react';
+import { Code, PenTool, Search, BarChart2, Sliders } from 'lucide-react';
 import FormField from './FormField';
 import { cn } from '@/lib/utils';
 
-// Primary use-case options
+// Updated Primary Use-Cases
 const USE_CASES = [
   {
-    id: 'production_llms',
-    title: 'Production Core LLM',
-    desc: 'High-volume user-facing chat, parsing, and structured generation API calls',
-    icon: Bot
+    id: 'coding',
+    title: 'Coding & Development',
+    desc: 'Writing code, refactoring, building apps, and managing repository scripts',
+    icon: Code
   },
   {
-    id: 'prototyping_rd',
-    title: 'R&D / Prototyping',
-    desc: 'Internal experimentations, pipeline evaluations, and developer notebooks',
-    icon: Cpu
+    id: 'writing',
+    title: 'Content & Writing',
+    desc: 'Copywriting, marketing, email campaigns, drafting documentation, and blogging',
+    icon: PenTool
   },
   {
-    id: 'agentic_workflows',
-    title: 'Agentic Workflows',
-    desc: 'Autonomous multi-step loops, tools calling, and long-running state machine graphs',
-    icon: GitFork
+    id: 'research',
+    title: 'Research & Search',
+    desc: 'Synthesizing papers, looking up API documentations, and parsing PDF briefs',
+    icon: Search
   },
   {
-    id: 'image_media',
-    title: 'Creative / Media Gen',
-    desc: 'Asset generation using diffusion models, GPU clusters, and style embeddings',
-    icon: Image
+    id: 'data_analysis',
+    title: 'Data Analysis',
+    desc: 'Cleaning spreadsheet logs, graphing metrics, database query writing',
+    icon: BarChart2
   },
   {
-    id: 'customer_support',
-    title: 'Support Automation',
-    desc: 'RAG search agents, knowledge base indexing, and ticket classification',
-    icon: MessageCircle
+    id: 'mixed_usage',
+    title: 'Mixed / Consolidated',
+    desc: 'General purpose workloads distributed evenly across developer & workspace tools',
+    icon: Sliders
   }
 ];
 
@@ -51,8 +51,8 @@ export default function UseCaseSelection() {
       
       {/* 1. Primary Use-case Card Radio Group */}
       <FormField
-        label="Primary AI Use-Case"
-        description="Choose the dominant architectural pattern for your AI usage."
+        label="Primary AI Workload"
+        description="Select the workload category where your team spends the most model tokens or monthly subscriptions."
         error={errors.useCase}
       >
         <div className="flex flex-col gap-2 mt-2">
@@ -98,12 +98,12 @@ export default function UseCaseSelection() {
       {/* 2. Target Optimization Goal Textarea */}
       <FormField
         label="Target Optimization Goals (Optional)"
-        description="What specific objective are you aiming to solve? (e.g. prompt token caching, rate-limit pooling, routing models)"
+        description="Detail any specific goals, concerns, or bottlenecks you want our audit to target."
         error={errors.optimizationGoal}
       >
         <textarea
           id="optimizationGoal"
-          placeholder="e.g. Reduce Anthropic prompt caching overhead, find cold vector search indexes..."
+          placeholder="e.g. Consolidate ChatGPT seats into Cursor, reduce duplicate copilot accounts..."
           rows={2}
           className="w-full mt-2 rounded-lg border border-border bg-background/50 px-3 py-2 text-xs text-zinc-300 placeholder:text-zinc-650 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring transition-colors outline-none resize-none"
           {...register('optimizationGoal')}

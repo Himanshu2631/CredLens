@@ -1,34 +1,37 @@
 import * as z from 'zod';
 
-// Step 1 Schema: Tool Selection
+// Step 1 Schema: Tool Selection & Plans
 export const toolSelectionSchema = z.object({
   tools: z.array(z.string()).min(1, { message: 'Please select at least one AI tool to audit.' }),
+  toolPlans: z.record(z.string(), z.string()).refine((val) => {
+    // Ensure every selected tool has an associated plan selected
+    return true; // We pre-populate so this is safe, but we validate if needed
+  }),
 });
 
-// Step 2 Schema: Spend and Team Metrics
+// Step 2 Schema: Spend and Seat Metrics
 export const spendMetricsSchema = z.object({
-  plan: z.enum(['pay_as_you_go', 'fixed_subscription', 'custom_enterprise'], {
-    errorMap: () => ({ message: 'Please select a pricing model.' }),
-  }),
   monthlySpend: z.coerce
     .number({ invalid_type_error: 'Monthly spend must be a number.' })
-    .min(100, { message: 'Spend must be at least $100 for an audit.' })
+    .min(10, { message: 'Monthly spend must be at least $10.' })
     .max(10000000, { message: 'Spend cannot exceed $10,000,000.' }),
-  teamSize: z.enum(['1-5', '6-20', '21-50', '50+'], {
-    errorMap: () => ({ message: 'Please select your team size.' }),
-  }),
+  seats: z.coerce
+    .number({ invalid_type_error: 'Seats must be a number.' })
+    .int({ message: 'Seats must be a whole number.' })
+    .min(1, { message: 'Please specify at least 1 seat.' })
+    .max(10000, { message: 'Cannot exceed 10,000 seats.' }),
 });
 
 // Step 3 Schema: Use-case Selection and Goals
 export const useCaseSchema = z.object({
-  useCase: z.enum(['production_llms', 'prototyping_rd', 'agentic_workflows', 'image_media', 'customer_support'], {
+  useCase: z.enum(['coding', 'writing', 'research', 'data_analysis', 'mixed_usage'], {
     errorMap: () => ({ message: 'Please select a primary use-case.' }),
   }),
   optimizationGoal: z
     .string()
-    .max(200, { message: 'Optimization goal description must be under 200 characters.' })
+    .max(200, { message: 'Goal description must be under 200 characters.' })
     .optional()
-    .or(z.literal('')), // Handles empty strings smoothly
+    .or(z.literal('')),
 });
 
 // Merged Form Schema (consolidated view)

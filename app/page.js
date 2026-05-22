@@ -82,10 +82,10 @@ export default function Home() {
                             timestamp: new Date().toISOString(),
                             payload: {
                               tools: activeAudit.tools,
-                              pricingPlan: activeAudit.plan,
+                              toolPlans: activeAudit.toolPlans,
+                              seatsCount: Number(activeAudit.seats),
                               monthlySpend: Number(activeAudit.monthlySpend),
-                              teamSize: activeAudit.teamSize,
-                              useCase: activeAudit.useCase,
+                              primaryUseCase: activeAudit.useCase,
                               optimizationGoal: activeAudit.optimizationGoal || 'None specified',
                               submittedAt: activeAudit.submittedAt,
                             },

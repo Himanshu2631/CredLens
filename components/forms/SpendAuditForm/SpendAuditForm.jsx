@@ -26,26 +26,26 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
   // Initialize React Hook Form
   const methods = useForm({
     resolver: zodResolver(spendAuditFormSchema),
-    mode: 'onTouch', // Validates on field touch for early feedback
+    mode: 'onTouch',
     defaultValues: {
       tools: [],
-      plan: undefined,
+      toolPlans: {},
       monthlySpend: 1000,
-      teamSize: undefined,
+      seats: 1,
       useCase: undefined,
       optimizationGoal: ''
     }
   });
 
-  const { handleSubmit, trigger, reset, formState: { errors } } = methods;
+  const { handleSubmit, trigger, reset } = methods;
 
-  // Handle forward navigation with validation triggers
+  // Handle forward navigation with validation triggers per step
   const handleNext = async () => {
     let fieldsToValidate = [];
     if (currentStep === 0) {
-      fieldsToValidate = ['tools'];
+      fieldsToValidate = ['tools', 'toolPlans'];
     } else if (currentStep === 1) {
-      fieldsToValidate = ['plan', 'monthlySpend', 'teamSize'];
+      fieldsToValidate = ['monthlySpend', 'seats'];
     }
 
     const isStepValid = await trigger(fieldsToValidate);
@@ -63,7 +63,7 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
   const handleFormSubmit = async (data) => {
     setIsSubmitting(true);
     
-    // Simulate premium pipeline analysis
+    // Simulate premium pipeline analysis delay
     await new Promise((resolve) => setTimeout(resolve, 1800));
     
     setIsSubmitting(false);
@@ -79,9 +79,9 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
     setCurrentStep(0);
     reset({
       tools: [],
-      plan: undefined,
+      toolPlans: {},
       monthlySpend: 1000,
-      teamSize: undefined,
+      seats: 1,
       useCase: undefined,
       optimizationGoal: ''
     });
@@ -114,7 +114,7 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
             AI Spend Optimizer
           </h2>
           <p className="text-muted-premium">
-            Map your LLM tool stack, pricing tiers, and primary models to scan for token leaks.
+            Map your subscriptions, license seats, and workflows to scan for seat redundancy and token bloating.
           </p>
         </div>
 
@@ -141,7 +141,7 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
               Back
             </Button>
           ) : (
-            <div /> // Empty block to align Next/Submit button to the right
+            <div />
           )}
 
           {/* Next / Submit Trigger */}
