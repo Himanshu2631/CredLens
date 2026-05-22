@@ -4,101 +4,87 @@ import { Cpu, Layers, Sparkles, Database, Zap, Code, Bot, MessageSquare, Check }
 import FormField from './FormField';
 import { cn } from '@/lib/utils';
 
-// AI tools list with specific plans, descriptions, icons, and colors
-const AI_TOOLS = [
-  {
-    id: 'chatgpt',
-    name: 'ChatGPT',
+import { PRICING_REGISTRY } from '@/data/pricing';
+
+// Decoupled UI-only metadata configurations (styling, icons, and long customer descriptions)
+const UI_METADATA = {
+  chatgpt: {
     desc: 'Copilot chat, writing and data analysis models',
     icon: Bot,
-    color: 'text-emerald-400',
-    plans: [
-      { id: 'plus', name: 'Plus ($20/mo)' },
-      { id: 'team', name: 'Team ($30/mo/seat)' },
-      { id: 'enterprise', name: 'Enterprise (Custom)' }
-    ]
+    color: 'text-emerald-400'
   },
-  {
-    id: 'claude',
-    name: 'Claude',
+  claude: {
     desc: 'Artifacts, writing, and code assistant Pro space',
     icon: Layers,
-    color: 'text-orange-400',
-    plans: [
-      { id: 'pro', name: 'Pro ($20/mo)' },
-      { id: 'team', name: 'Team ($30/mo/seat)' }
-    ]
+    color: 'text-orange-400'
   },
-  {
-    id: 'cursor',
-    name: 'Cursor',
+  cursor: {
     desc: 'Sleek agentic AI-powered IDE editor',
     icon: Code,
-    color: 'text-sky-400',
-    plans: [
-      { id: 'pro', name: 'Pro ($20/mo)' },
-      { id: 'business', name: 'Business ($40/mo/seat)' }
-    ]
+    color: 'text-sky-400'
   },
-  {
-    id: 'copilot',
-    name: 'GitHub Copilot',
+  copilot: {
     desc: 'Autocomplete & inline terminal suggestions',
     icon: Cpu,
-    color: 'text-zinc-300',
-    plans: [
-      { id: 'individual', name: 'Individual ($10/mo)' },
-      { id: 'business', name: 'Business ($19/mo/seat)' },
-      { id: 'enterprise', name: 'Enterprise ($39/mo/seat)' }
-    ]
+    color: 'text-zinc-300'
   },
-  {
-    id: 'gemini',
-    name: 'Gemini Workspace',
+  gemini: {
     desc: 'Google Suite integrated AI and chatbot',
     icon: Sparkles,
-    color: 'text-sky-400',
-    plans: [
-      { id: 'advanced', name: 'Advanced ($20/mo)' },
-      { id: 'business', name: 'Business ($30/mo/seat)' },
-      { id: 'enterprise', name: 'Enterprise (Custom)' }
-    ]
+    color: 'text-sky-400'
   },
-  {
-    id: 'openai_api',
-    name: 'OpenAI API',
+  openai_api: {
     desc: 'Raw tokens and endpoints console access',
     icon: Zap,
-    color: 'text-emerald-500',
-    plans: [
-      { id: 'pay_as_you_go', name: 'Pay-as-you-go' },
-      { id: 'tier_grant', name: 'Tier 1-5 Prepaid Grant' }
-    ]
+    color: 'text-emerald-500'
   },
-  {
-    id: 'anthropic_api',
-    name: 'Anthropic API',
+  anthropic_api: {
     desc: 'High-throughput LLM model endpoints keys',
     icon: Database,
-    color: 'text-orange-500',
-    plans: [
-      { id: 'pay_as_you_go', name: 'Pay-as-you-go' },
-      { id: 'scale', name: 'Scale Tier rate-limits' }
-    ]
+    color: 'text-orange-500'
   },
-  {
-    id: 'v0_dev',
-    name: 'v0.dev',
+  v0_dev: {
     desc: 'Interactive UI code and template generation',
     icon: MessageSquare,
-    color: 'text-teal-400',
-    plans: [
-      { id: 'free', name: 'Free Tier' },
-      { id: 'premium', name: 'Premium ($20/mo)' },
-      { id: 'enterprise', name: 'Enterprise (Custom)' }
-    ]
+    color: 'text-teal-400'
   }
-];
+};
+
+// Dynamically construct AI_TOOLS registry by merging pricing data with UI layouts
+const AI_TOOLS = Object.keys(PRICING_REGISTRY).map((toolId) => {
+  const tool = PRICING_REGISTRY[toolId];
+  const ui = UI_METADATA[toolId] || {};
+
+  const plans = Object.keys(tool.plans).map((planId) => {
+    const plan = tool.plans[planId];
+    let displayName = plan.name;
+
+    if (plan.pricingType === 'custom' || plan.monthlyCost === null) {
+      displayName += ' (Custom)';
+    } else if (plan.pricingType === 'usage_based') {
+      displayName += ' (Pay-as-you-go)';
+    } else if (plan.pricingType === 'prepaid') {
+      displayName += ' (Prepaid)';
+    } else {
+      displayName += ` ($${plan.monthlyCost}/mo${plan.seatPricing ? '/seat' : ''})`;
+    }
+
+    return {
+      id: planId,
+      name: displayName
+    };
+  });
+
+  return {
+    id: toolId,
+    name: tool.name,
+    desc: ui.desc || '',
+    icon: ui.icon || Bot,
+    color: ui.color || 'text-zinc-400',
+    plans
+  };
+});
+
 
 export default function ToolSelection() {
   const { watch, setValue, formState: { errors } } = useFormContext();
