@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { RotateCcw, CheckCircle2, SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import SummaryMetricsRow from './SummaryMetricsRow';
+import AuditOverviewSection from './AuditOverviewSection';
 import AuditRecommendationCard from './AuditRecommendationCard';
 import AuditEmptyState from './AuditEmptyState';
 
@@ -123,10 +123,13 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         </Button>
       </div>
 
-      {/* ── 2. Summary Metrics Strip ─────────────────────────────────────────
-          4-KPI row. Carries the "what this audit found" headline numbers.
-      ─────────────────────────────────────────────────────────────────────── */}
-      <SummaryMetricsRow summary={summary} />
+      {/* ── 2. Audit Overview & Savings Summary Section ────────────────────── */}
+      <AuditOverviewSection
+        summary={summary}
+        recommendations={recommendations}
+        formData={formData}
+        auditDate={auditDate}
+      />
 
       {/* ── 3 & 4. Recommendations ───────────────────────────────────────────
           Header row with filter tabs, then the recommendation list.
