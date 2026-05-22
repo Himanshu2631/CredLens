@@ -10,7 +10,7 @@ import SocialProof from '@/components/sections/SocialProof';
 import Features from '@/components/sections/Features';
 import HowItWorks from '@/components/sections/HowItWorks';
 import CTA from '@/components/sections/CTA';
-import AuditForm from '@/components/forms/AuditForm';
+import SpendAuditForm from '@/components/forms/SpendAuditForm/SpendAuditForm';
 import { OPTIMIZATION_RULES } from '@/data/rules';
 import { AlertCircle, Terminal, HelpCircle, Code, Database } from 'lucide-react';
 
@@ -41,7 +41,7 @@ export default function Home() {
           <ContentWrapper cols={12}>
             {/* Left Panel: Audit Configuration Form */}
             <div className="lg:col-span-5 space-y-6">
-              <AuditForm onSubmitSuccess={handleAuditSubmit} />
+              <SpendAuditForm onSubmitSuccess={handleAuditSubmit} />
 
               {/* Platform Constraints Callout */}
               <div className="rounded-xl border border-border bg-card/30 p-4 space-y-2">
@@ -81,12 +81,15 @@ export default function Home() {
                             event: 'SUBMIT_AUDIT_REQUEST',
                             timestamp: new Date().toISOString(),
                             payload: {
-                              projectName: activeAudit.projectName,
-                              monthlyBudget: Number(activeAudit.monthlyBudget),
-                              primaryProvider: activeAudit.primaryProvider,
-                              fileName: activeAudit.fileName,
+                              tools: activeAudit.tools,
+                              pricingPlan: activeAudit.plan,
+                              monthlySpend: Number(activeAudit.monthlySpend),
+                              teamSize: activeAudit.teamSize,
+                              useCase: activeAudit.useCase,
+                              optimizationGoal: activeAudit.optimizationGoal || 'None specified',
+                              submittedAt: activeAudit.submittedAt,
                             },
-                            dbAction: 'await Audit.create(payload)'
+                            dbAction: 'await SpendAudit.create(payload)'
                           },
                           null,
                           2
