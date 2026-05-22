@@ -48,11 +48,15 @@ assertEquals(recA_ids.includes('rule-copilot-cursor-overlap'), true, 'Should tri
 assertEquals(recA_ids.includes('rule-chatgpt-team-min-seat'), true, 'Should trigger ChatGPT Team 1-seat downgrade rule');
 
 const copilotRec = resultA.recommendations.find(r => r.id === 'rule-copilot-cursor-overlap');
-assertEquals(copilotRec.estimatedSavings, 19, 'Copilot overlap savings should be $19');
+assertEquals(copilotRec.estimatedMonthlySavings, 19, 'Copilot overlap monthly savings should be $19');
+assertEquals(copilotRec.estimatedYearlySavings, 228, 'Copilot overlap yearly savings should be $228');
+assertEquals(copilotRec.optimizedMonthlyCost, 0, 'Copilot overlap optimized cost should be $0');
 assertEquals(copilotRec.priority, 'high', 'Copilot overlap priority should be high');
 
 const chatgptRec = resultA.recommendations.find(r => r.id === 'rule-chatgpt-team-min-seat');
-assertEquals(chatgptRec.estimatedSavings, 40, 'ChatGPT downgrade savings should be $40');
+assertEquals(chatgptRec.estimatedMonthlySavings, 40, 'ChatGPT downgrade monthly savings should be $40');
+assertEquals(chatgptRec.estimatedYearlySavings, 480, 'ChatGPT downgrade yearly savings should be $480');
+assertEquals(chatgptRec.optimizedMonthlyCost, 20, 'ChatGPT downgrade optimized cost should be $20');
 assertEquals(chatgptRec.priority, 'medium', 'ChatGPT downgrade priority should be medium');
 
 assertEquals(resultA.summary.totalPotentialSavings, 59, 'Total potential savings should be $59');
@@ -104,19 +108,24 @@ assertEquals(recB_ids.includes('rule-openai-mini-migration'), true, 'Should trig
 assertEquals(recB_ids.includes('rule-openai-context-pruning'), true, 'Should trigger OpenAI context pruning rule');
 
 const generalChatRec = resultB.recommendations.find(r => r.id === 'rule-general-chat-overlap');
-assertEquals(generalChatRec.estimatedSavings, 80, 'General chat overlap savings should be $80');
+assertEquals(generalChatRec.estimatedMonthlySavings, 80, 'General chat overlap savings should be $80');
+assertEquals(generalChatRec.estimatedYearlySavings, 960, 'General chat overlap yearly savings should be $960');
 
 const claudeMinSeatRec = resultB.recommendations.find(r => r.id === 'rule-claude-team-min-seat');
-assertEquals(claudeMinSeatRec.estimatedSavings, 70, 'Claude min-seat savings should be $70');
+assertEquals(claudeMinSeatRec.estimatedMonthlySavings, 70, 'Claude min-seat savings should be $70');
+assertEquals(claudeMinSeatRec.estimatedYearlySavings, 840, 'Claude min-seat yearly savings should be $840');
 
 const anthropicCacheRec = resultB.recommendations.find(r => r.id === 'rule-anthropic-prompt-caching');
-assertEquals(anthropicCacheRec.estimatedSavings, 905, 'Anthropic prompt caching savings should be $905');
+assertEquals(anthropicCacheRec.estimatedMonthlySavings, 905, 'Anthropic prompt caching savings should be $905');
+assertEquals(anthropicCacheRec.estimatedYearlySavings, 10860, 'Anthropic prompt caching yearly savings should be $10860');
 
 const openaiMiniRec = resultB.recommendations.find(r => r.id === 'rule-openai-mini-migration');
-assertEquals(openaiMiniRec.estimatedSavings, 528, 'OpenAI mini migration savings should be $528');
+assertEquals(openaiMiniRec.estimatedMonthlySavings, 528, 'OpenAI mini migration savings should be $528');
+assertEquals(openaiMiniRec.estimatedYearlySavings, 6336, 'OpenAI mini migration yearly savings should be $6336');
 
 const openaiPruneRec = resultB.recommendations.find(r => r.id === 'rule-openai-context-pruning');
-assertEquals(openaiPruneRec.estimatedSavings, 226, 'OpenAI context pruning savings should be $226');
+assertEquals(openaiPruneRec.estimatedMonthlySavings, 226, 'OpenAI context pruning savings should be $226');
+assertEquals(openaiPruneRec.estimatedYearlySavings, 2712, 'OpenAI context pruning yearly savings should be $2712');
 
 
 // ----------------------------------------------------
@@ -148,11 +157,13 @@ assertEquals(recC_ids.includes('rule-oversized-enterprise-v0_dev'), true, 'Shoul
 assertEquals(recC_ids.includes('rule-gemini-workspace-licensing'), false, 'Should NOT trigger Gemini Workspace licensing downgrade for 8 seats');
 
 const chatgptEntRec = resultC.recommendations.find(r => r.id === 'rule-oversized-enterprise-chatgpt');
-assertEquals(chatgptEntRec.estimatedSavings, 960, 'ChatGPT Enterprise downgrade savings should be $960');
+assertEquals(chatgptEntRec.estimatedMonthlySavings, 960, 'ChatGPT Enterprise downgrade savings should be $960');
+assertEquals(chatgptEntRec.estimatedYearlySavings, 11520, 'ChatGPT Enterprise downgrade yearly savings should be $11520');
 assertEquals(chatgptEntRec.priority, 'high', 'ChatGPT Enterprise downgrade priority should be high');
 
 const v0EntRec = resultC.recommendations.find(r => r.id === 'rule-oversized-enterprise-v0_dev');
-assertEquals(v0EntRec.estimatedSavings, 340, 'v0.dev Enterprise downgrade savings should be $340');
+assertEquals(v0EntRec.estimatedMonthlySavings, 340, 'v0.dev Enterprise downgrade savings should be $340');
+assertEquals(v0EntRec.estimatedYearlySavings, 4080, 'v0.dev Enterprise downgrade yearly savings should be $4080');
 
 console.log('\n--- TEST SUITE COMPLETE: ALL AUDIT ENGINE TESTS PASSED ---');
 process.exit(0);
