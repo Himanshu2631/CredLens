@@ -66,9 +66,11 @@ export default function UseCaseSelection() {
                 type="button"
                 onClick={() => handleUseCaseSelect(uc.id)}
                 className={cn(
-                  "flex items-start text-left p-3 rounded-lg border transition-all duration-150 group cursor-pointer select-none",
+                  "flex items-start text-left w-full p-3 rounded-lg border transition-all duration-150 group cursor-pointer select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:border-zinc-500",
                   isSelected
                     ? "bg-zinc-900 border-zinc-200 shadow-[0_0_12px_rgba(255,255,255,0.04)]"
+                    : errors.useCase
+                    ? "bg-zinc-950/20 border-red-500/25 hover:border-red-500/45 hover:bg-zinc-950"
                     : "bg-zinc-950/40 border-border/60 hover:bg-zinc-950 hover:border-zinc-800"
                 )}
               >

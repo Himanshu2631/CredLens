@@ -57,7 +57,11 @@ export default function SpendMetrics() {
                 placeholder="e.g. 5000"
                 value={currentSpend === '' ? '' : currentSpend}
                 onChange={handleInputChange}
-                className="pl-7 h-9 border-border bg-background/50 text-xs placeholder:text-zinc-650 focus-visible:ring-1 focus-visible:ring-ring"
+                aria-invalid={errors.monthlySpend ? "true" : "false"}
+                className={cn(
+                  "pl-7 h-9 border-border bg-background/50 text-xs placeholder:text-zinc-650 focus-visible:ring-1 focus-visible:ring-ring",
+                  errors.monthlySpend && "border-red-500/25 focus-visible:ring-red-500/30"
+                )}
               />
             </div>
             <div className="text-[10px] font-mono text-muted-foreground px-2 bg-secondary/80 border border-border/50 h-8 flex items-center rounded-md shrink-0">
@@ -97,7 +101,12 @@ export default function SpendMetrics() {
       >
         <div className="flex items-center gap-3 mt-2">
           {/* Stepper Wrapper */}
-          <div className="flex items-center bg-zinc-950/60 rounded-lg border border-border/50 p-1 w-full max-w-[160px]">
+          <div className={cn(
+            "flex items-center bg-zinc-950/60 rounded-lg border p-1 w-full max-w-[160px] transition-all",
+            errors.seats 
+              ? "border-red-500/25 focus-within:border-red-500/40" 
+              : "border-border/50 focus-within:border-zinc-500"
+          )}>
             <button
               type="button"
               onClick={handleDecrementSeats}
@@ -110,6 +119,7 @@ export default function SpendMetrics() {
               type="number"
               value={currentSeats === '' ? '' : currentSeats}
               onChange={handleSeatsChange}
+              aria-invalid={errors.seats ? "true" : "false"}
               className="w-full text-center bg-transparent border-0 text-xs font-semibold text-white focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <button

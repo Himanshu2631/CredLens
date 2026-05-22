@@ -145,13 +145,16 @@ export default function ToolSelection() {
             const defaultPlanId = tool.plans[0].id;
 
             return (
-              <div
+              <button
                 key={tool.id}
+                type="button"
                 onClick={() => handleToggleTool(tool.id, defaultPlanId)}
                 className={cn(
-                  "relative flex flex-col p-3.5 rounded-lg border transition-all duration-200 group cursor-pointer select-none",
+                  "relative flex flex-col text-left w-full p-3.5 rounded-lg border transition-all duration-200 group cursor-pointer select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:border-zinc-500",
                   isSelected
                     ? "bg-zinc-900 border-zinc-200 shadow-[0_0_12px_rgba(255,255,255,0.06)]"
+                    : errors.tools
+                    ? "bg-zinc-950/20 border-red-500/25 hover:border-red-500/40 hover:bg-zinc-950"
                     : "bg-zinc-950/40 border-border/60 hover:bg-zinc-950 hover:border-zinc-800"
                 )}
               >
@@ -168,7 +171,7 @@ export default function ToolSelection() {
                 </div>
 
                 {/* Card Main Info */}
-                <div className="flex items-start">
+                <div className="flex items-start w-full">
                   <div className={cn(
                     "mr-3 flex h-8 w-8 items-center justify-center rounded-lg border bg-background transition-colors",
                     isSelected ? "bg-zinc-950 border-zinc-700" : "bg-transparent border-border/40"
@@ -192,8 +195,8 @@ export default function ToolSelection() {
                 {/* Conditional Dropdown Section */}
                 {isSelected && (
                   <div
-                    className="mt-3.5 pt-3 border-t border-zinc-800/80 animate-in fade-in slide-in-from-top-1.5 duration-200"
-                    onClick={(e) => e.stopPropagation()} // Stop propagation to avoid deselecting the card
+                    className="mt-3.5 pt-3 border-t border-zinc-800/80 w-full animate-in fade-in slide-in-from-top-1.5 duration-200"
+                    onClick={(e) => e.stopPropagation()} // Stop propagation to avoid deselecting the card on click
                   >
                     <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
                       Pricing Plan / Tier
@@ -202,7 +205,7 @@ export default function ToolSelection() {
                       <select
                         value={selectedPlan || ''}
                         onChange={(e) => handlePlanChange(tool.id, e.target.value)}
-                        className="w-full appearance-none rounded-md border border-zinc-800/80 bg-zinc-950 px-2.5 py-1.5 text-[11px] text-zinc-300 ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-600 focus-visible:border-zinc-650 cursor-pointer"
+                        className="w-full appearance-none rounded-md border border-zinc-800/80 bg-zinc-950 px-2.5 py-1.5 text-[11px] text-zinc-300 ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-650 cursor-pointer"
                       >
                         {tool.plans.map((p) => (
                           <option key={p.id} value={p.id}>
@@ -217,7 +220,7 @@ export default function ToolSelection() {
                     </div>
                   </div>
                 )}
-              </div>
+              </button>
             );
           })}
         </div>
