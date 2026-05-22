@@ -168,3 +168,51 @@
     @apply font-sans antialiased scroll-smooth h-full;
   }
 }
+
+@media print {
+  /* Keep exact dark/light colors on printed media / PDFs */
+  body {
+    background: #0a0a0a !important;
+    color: #f4f4f5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Hide layout headers, footers, CTAs, and marketing landing sections */
+  header, 
+  footer, 
+  #hero, 
+  #social-proof, 
+  #features, 
+  #how-it-works, 
+  #cta-section {
+    display: none !important;
+  }
+
+  /* Adjust padding for clean single page margins */
+  #audit-workspace {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  /* Hide the configuration setup form during print */
+  .lg\:col-span-5 {
+    display: none !important;
+  }
+
+  /* Expand results report panel to full screen print width */
+  .lg\:col-span-7 {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-column: span 12 / span 12 !important;
+  }
+
+  /* Hide interactive toolbar actions and collapse indicators */
+  button, 
+  .flex-wrap.items-center.justify-between.gap-3.pt-3,
+  svg.lucide-chevron-down {
+    display: none !important;
+  }
+}

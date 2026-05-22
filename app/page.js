@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageContainer from '@/components/layout/PageContainer';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import ContentWrapper from '@/components/layout/ContentWrapper';
@@ -18,11 +18,34 @@ import { AlertCircle, HelpCircle } from 'lucide-react';
 
 export default function Home() {
   const [activeAudit, setActiveAudit] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Load audit state from localStorage after mount to prevent SSR mismatch
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsMounted(true);
+      try {
+        const savedAudit = localStorage.getItem('credlens_active_audit');
+        if (savedAudit) {
+          setActiveAudit(JSON.parse(savedAudit));
+        }
+      } catch (e) {
+        console.error('[CredLens] Failed to load persisted active audit:', e);
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Run the audit engine synchronously on form submit and store the full result.
   const handleAuditSubmit = (formData) => {
     const auditResult = runSpendAudit(formData);
-    setActiveAudit({ ...formData, auditResult });
+    const auditData = { ...formData, auditResult };
+    setActiveAudit(auditData);
+    try {
+      localStorage.setItem('credlens_active_audit', JSON.stringify(auditData));
+    } catch (e) {
+      console.error('[CredLens] Failed to save active audit to localStorage:', e);
+    }
     // Scroll the workspace section into view so results are visible on mobile
     document.getElementById('audit-workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -30,6 +53,11 @@ export default function Home() {
   // Clear audit state to return to the idle/form state
   const handleAuditReset = () => {
     setActiveAudit(null);
+    try {
+      localStorage.removeItem('credlens_active_audit');
+    } catch (e) {
+      console.error('[CredLens] Failed to remove active audit from localStorage:', e);
+    }
   };
 
   return (
@@ -74,7 +102,7 @@ export default function Home() {
 
             {/* Right Column: Results Panel or Rules Catalog */}
             <div className="lg:col-span-7 space-y-6">
-              {activeAudit ? (
+              {isMounted && activeAudit ? (
                 /* ── Live Audit Results ──────────────────────────────────────── */
                 <AuditResultsPanel
                   auditResult={activeAudit.auditResult}
