@@ -2,11 +2,13 @@
   "name": "credlens",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node tests/test-savings-calculator.mjs && node tests/test-audit-engine.mjs && node tests/test-pricing-utils.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

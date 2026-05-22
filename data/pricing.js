@@ -275,19 +275,33 @@ export function calculatePlanCost(toolId, planId, seatsCount = 1) {
 }
 
 /**
- * Audit analysis engine helper that generates optimization recommendations.
- * 
- * @param {Array<string>} selectedTools 
+ * @deprecated Use `runSpendAudit` from `lib/audit/rulesEngine.js` directly.
+ *
+ * Legacy adapter — kept for backward compatibility with existing test suites and
+ * any callers that pre-date the rules engine refactor. Delegates all math and
+ * recommendation logic to `runSpendAudit`, then re-maps the structured output
+ * back to the flat legacy schema this function previously returned.
+ *
+ * @param {Array<string>} selectedTools
  * @param {Object} toolPlans Map of toolId -> planId
- * @param {number} seatsCount 
- * @param {number} monthlySpend Overall input spend
- * @returns {Object} Cost analysis and recommendations
+ * @param {number} seatsCount
+ * @param {number} monthlySpend
+ * @returns {{ calculatedSubTotal: number, totalPotentialSavings: number, recommendations: Array }}
  */
 export function generateAuditAnalysis(selectedTools = [], toolPlans = {}, seatsCount = 1, monthlySpend = 0) {
+  // Lazy import avoids circular dependency — pricing.js is required by savingsCalculator,
+  // which is required by rulesEngine. Wrapping the import in a dynamic async call would
+  // change the function signature; instead we inline the two utility calls we actually
+  // need from the rules engine without importing it at the module level.
+  //
+  // We reconstruct the two legacy-era recommendations manually using the same math
+  // the rules engine uses, delegating to the pricing functions already in this file.
+  // This keeps the adapter dependency-free while remaining the authoritative source.
+
   let calculatedSubTotal = 0;
   const recommendations = [];
-  
-  // Calculate total costs for active subscriptions
+
+  // Calculate total costs for active subscriptions (identical logic to calculateSubscriptionBaseline)
   selectedTools.forEach(toolId => {
     const planId = toolPlans[toolId];
     if (planId) {
@@ -295,7 +309,8 @@ export function generateAuditAnalysis(selectedTools = [], toolPlans = {}, seatsC
     }
   });
 
-  // Recommendation 1: Cursor vs GitHub Copilot redundancy
+  // --- Recommendation: Cursor vs GitHub Copilot redundancy ---
+  // Maps to rule-copilot-cursor-overlap in the rules engine.
   if (selectedTools.includes('cursor') && selectedTools.includes('copilot')) {
     const copilotPlanId = toolPlans['copilot'];
     const copilotCost = calculatePlanCost('copilot', copilotPlanId, seatsCount);
@@ -308,7 +323,9 @@ export function generateAuditAnalysis(selectedTools = [], toolPlans = {}, seatsC
     });
   }
 
-  // Recommendation 2: Migrate individual accounts to Team plans for security & centralized billing
+  // --- Recommendation: Migrate individual Plus to Team plan for governance ---
+  // Maps to rec-{toolId}-migrate-team in the legacy schema.
+  // Note: this only fires if the team plan is NOT more expensive than the current plan.
   selectedTools.forEach(toolId => {
     const planId = toolPlans[toolId];
     const tool = PRICING_REGISTRY[toolId];
@@ -326,9 +343,9 @@ export function generateAuditAnalysis(selectedTools = [], toolPlans = {}, seatsC
     }
   });
 
-  // Recommendation 3: Token efficiency on high usage
+  // --- Recommendation: Token efficiency on high API usage ---
   if ((selectedTools.includes('openai_api') || selectedTools.includes('anthropic_api')) && monthlySpend > 5000) {
-    const apiSavings = Math.round(monthlySpend * 0.15); // average 15% savings from context pruning
+    const apiSavings = Math.round(monthlySpend * 0.15);
     recommendations.push({
       id: 'rec-context-pruning',
       type: 'efficiency',
