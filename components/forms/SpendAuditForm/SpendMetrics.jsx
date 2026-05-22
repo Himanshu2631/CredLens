@@ -46,22 +46,21 @@ export default function SpendMetrics() {
         label="Estimated Monthly AI Spend ($)"
         description="Your approximate aggregate API billing or model subscription overhead across tools."
         error={errors.monthlySpend}
+        htmlFor="monthlySpend"
       >
         <div className="space-y-4 mt-2 p-4 rounded-lg border border-border/50 bg-zinc-950/40">
           <div className="flex items-center gap-3">
             <div className="relative flex-1">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-mono font-medium">$</span>
               <Input
+                id="monthlySpend"
                 type="number"
                 min={0}
                 placeholder="e.g. 5000"
                 value={currentSpend === '' ? '' : currentSpend}
                 onChange={handleInputChange}
                 aria-invalid={errors.monthlySpend ? "true" : "false"}
-                className={cn(
-                  "pl-7 h-9 border-border bg-background/50 text-xs placeholder:text-zinc-650 focus-visible:ring-1 focus-visible:ring-ring",
-                  errors.monthlySpend && "border-red-500/25 focus-visible:ring-red-500/30"
-                )}
+                className="pl-7 h-9 bg-zinc-950/20 text-xs placeholder:text-zinc-500 border-border"
               />
             </div>
             <div className="text-[10px] font-mono text-muted-foreground px-2 bg-secondary/80 border border-border/50 h-8 flex items-center rounded-md shrink-0">
@@ -72,12 +71,14 @@ export default function SpendMetrics() {
           <div className="space-y-2">
             <input
               type="range"
+              id="monthlySpendRange"
+              aria-label="Monthly spend range slider"
               min={10}
               max={100000}
               step={10}
               value={currentSpend > 100000 ? 100000 : currentSpend || 10}
               onChange={handleSliderChange}
-              className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-white hover:accent-zinc-200 transition-all"
+              className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-white hover:accent-zinc-200 transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400"
               style={{
                 background: `linear-gradient(to right, #fff 0%, #fff ${Math.min(100, ((currentSpend - 10) / 99990) * 100)}%, #27272a ${Math.min(100, ((currentSpend - 10) / 99990) * 100)}%, #27272a 100%)`
               }}
@@ -98,6 +99,7 @@ export default function SpendMetrics() {
         label="Number of Seats / Team Members"
         description="Specify the count of user licenses, developer workspaces, or active developer accounts."
         error={errors.seats}
+        htmlFor="seats"
       >
         <div className="flex items-center gap-3 mt-2">
           {/* Stepper Wrapper */}
@@ -111,11 +113,13 @@ export default function SpendMetrics() {
               type="button"
               onClick={handleDecrementSeats}
               disabled={currentSeats <= 1}
-              className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-800 bg-background text-zinc-400 hover:text-white hover:bg-zinc-900 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer font-mono font-medium text-xs select-none"
+              aria-label="Decrement seats"
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-800 bg-background text-zinc-400 hover:text-white hover:bg-zinc-900 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer font-mono font-medium text-xs select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
             >
               —
             </button>
             <input
+              id="seats"
               type="number"
               value={currentSeats === '' ? '' : currentSeats}
               onChange={handleSeatsChange}
@@ -125,7 +129,8 @@ export default function SpendMetrics() {
             <button
               type="button"
               onClick={handleIncrementSeats}
-              className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-800 bg-background text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all cursor-pointer font-mono font-medium text-xs select-none"
+              aria-label="Increment seats"
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-800 bg-background text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all cursor-pointer font-mono font-medium text-xs select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
             >
               +
             </button>

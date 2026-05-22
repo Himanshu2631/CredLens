@@ -14,11 +14,12 @@ export default function FormField({
   required,
   children,
   className = '',
+  htmlFor,
 }) {
   return (
     <div className={cn("space-y-1.5 w-full", className)}>
       {label && (
-        <Label className="text-zinc-300 font-medium text-[13px] flex items-center">
+        <Label htmlFor={htmlFor} className="text-zinc-300 font-medium text-[13px] flex items-center">
           {label}
           {required && <span className="text-zinc-500 ml-1 font-mono">*</span>}
         </Label>

@@ -55,7 +55,11 @@ export default function UseCaseSelection() {
         description="Select the workload category where your team spends the most model tokens or monthly subscriptions."
         error={errors.useCase}
       >
-        <div className="flex flex-col gap-2 mt-2">
+        <div
+          role="radiogroup"
+          aria-label="Primary AI Workload"
+          className="flex flex-col gap-2 mt-2"
+        >
           {USE_CASES.map((uc) => {
             const isSelected = currentUseCase === uc.id;
             const Icon = uc.icon;
@@ -64,14 +68,16 @@ export default function UseCaseSelection() {
               <button
                 key={uc.id}
                 type="button"
+                role="radio"
+                aria-checked={isSelected}
                 onClick={() => handleUseCaseSelect(uc.id)}
                 className={cn(
-                  "flex items-start text-left w-full p-3 rounded-lg border transition-all duration-150 group cursor-pointer select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:border-zinc-500",
+                  "flex items-start text-left w-full p-3 rounded-lg border transition-all duration-150 group cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400",
                   isSelected
                     ? "bg-zinc-900 border-zinc-200 shadow-[0_0_12px_rgba(255,255,255,0.04)]"
                     : errors.useCase
-                    ? "bg-zinc-950/20 border-red-500/25 hover:border-red-500/45 hover:bg-zinc-950"
-                    : "bg-zinc-950/40 border-border/60 hover:bg-zinc-950 hover:border-zinc-800"
+                    ? "bg-zinc-950/20 border-red-500/25 hover:border-red-500/45"
+                    : "bg-zinc-950/40 border-border/60 hover:border-zinc-800"
                 )}
               >
                 <div className={cn(
@@ -102,12 +108,13 @@ export default function UseCaseSelection() {
         label="Target Optimization Goals (Optional)"
         description="Detail any specific goals, concerns, or bottlenecks you want our audit to target."
         error={errors.optimizationGoal}
+        htmlFor="optimizationGoal"
       >
         <textarea
           id="optimizationGoal"
           placeholder="e.g. Consolidate ChatGPT seats into Cursor, reduce duplicate copilot accounts..."
           rows={2}
-          className="w-full mt-2 rounded-lg border border-border bg-background/50 px-3 py-2 text-xs text-zinc-300 placeholder:text-zinc-650 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring transition-colors outline-none resize-none"
+          className="w-full mt-2 rounded-lg border border-border bg-background/50 px-3 py-2 text-xs text-zinc-300 placeholder:text-zinc-500 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 transition-colors outline-none resize-none"
           {...register('optimizationGoal')}
         />
       </FormField>

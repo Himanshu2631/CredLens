@@ -137,7 +137,11 @@ export default function ToolSelection() {
         description="Choose the subscriptions and API access points in your current workflow. We'll identify seat redundancy and token optimization opportunities."
         error={errors.tools}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+        <div
+          role="group"
+          aria-label="Select AI Tools in Use"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2"
+        >
           {AI_TOOLS.map((tool) => {
             const isSelected = selectedTools.includes(tool.id);
             const selectedPlan = toolPlans[tool.id];
@@ -145,67 +149,74 @@ export default function ToolSelection() {
             const defaultPlanId = tool.plans[0].id;
 
             return (
-              <button
+              <div
                 key={tool.id}
-                type="button"
-                onClick={() => handleToggleTool(tool.id, defaultPlanId)}
                 className={cn(
-                  "relative flex flex-col text-left w-full p-3.5 rounded-lg border transition-all duration-200 group cursor-pointer select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:border-zinc-500",
+                  "relative flex flex-col justify-between w-full p-3.5 rounded-lg border transition-all duration-200 group",
                   isSelected
                     ? "bg-zinc-900 border-zinc-200 shadow-[0_0_12px_rgba(255,255,255,0.06)]"
                     : errors.tools
-                    ? "bg-zinc-950/20 border-red-500/25 hover:border-red-500/40 hover:bg-zinc-950"
-                    : "bg-zinc-950/40 border-border/60 hover:bg-zinc-950 hover:border-zinc-800"
+                    ? "bg-zinc-950/20 border-red-500/25 hover:border-red-500/40"
+                    : "bg-zinc-950/40 border-border/60 hover:border-zinc-800"
                 )}
               >
-                {/* Visual Checkmark Badge */}
-                <div
-                  className={cn(
-                    "absolute top-3 right-3 flex items-center justify-center h-4 w-4 rounded-full border transition-all duration-150",
-                    isSelected
-                      ? "bg-white border-white text-black"
-                      : "bg-transparent border-zinc-800 text-transparent opacity-0 group-hover:opacity-40"
-                  )}
+                {/* Button to toggle selection */}
+                <button
+                  type="button"
+                  onClick={() => handleToggleTool(tool.id, defaultPlanId)}
+                  aria-pressed={isSelected}
+                  className="flex items-start text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 rounded-md cursor-pointer"
                 >
-                  <Check className="h-2.5 w-2.5 stroke-[3]" />
-                </div>
-
-                {/* Card Main Info */}
-                <div className="flex items-start w-full">
-                  <div className={cn(
-                    "mr-3 flex h-8 w-8 items-center justify-center rounded-lg border bg-background transition-colors",
-                    isSelected ? "bg-zinc-950 border-zinc-700" : "bg-transparent border-border/40"
-                  )}>
-                    <Icon className={cn("h-4 w-4", tool.color)} />
-                  </div>
-
-                  <div className="space-y-0.5 pr-4 flex-1">
-                    <h4 className={cn(
-                      "text-xs font-semibold transition-colors duration-100",
-                      isSelected ? "text-white" : "text-zinc-300 group-hover:text-white"
+                  {/* Card Main Info */}
+                  <div className="flex items-start w-full pr-6">
+                    <div className={cn(
+                      "mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border bg-background transition-colors",
+                      isSelected ? "bg-zinc-950 border-zinc-700" : "bg-transparent border-border/40"
                     )}>
-                      {tool.name}
-                    </h4>
-                    <p className="text-[10px] text-muted-foreground leading-normal font-normal">
-                      {tool.desc}
-                    </p>
+                      <Icon className={cn("h-4 w-4", tool.color)} />
+                    </div>
+
+                    <div className="space-y-0.5 flex-1 min-w-0">
+                      <h4 className={cn(
+                        "text-xs font-semibold transition-colors duration-100",
+                        isSelected ? "text-white" : "text-zinc-300 group-hover:text-white"
+                      )}>
+                        {tool.name}
+                      </h4>
+                      <p className="text-[10px] text-muted-foreground leading-normal font-normal break-words">
+                        {tool.desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
+
+                  {/* Visual Checkmark Badge */}
+                  <div
+                    className={cn(
+                      "absolute top-3.5 right-3.5 flex items-center justify-center h-4 w-4 rounded-full border transition-all duration-150",
+                      isSelected
+                        ? "bg-white border-white text-black"
+                        : "bg-transparent border-zinc-800 text-transparent opacity-0 group-hover:opacity-40"
+                    )}
+                  >
+                    <Check className="h-2.5 w-2.5 stroke-[3]" />
+                  </div>
+                </button>
 
                 {/* Conditional Dropdown Section */}
                 {isSelected && (
-                  <div
-                    className="mt-3.5 pt-3 border-t border-zinc-800/80 w-full animate-in fade-in slide-in-from-top-1.5 duration-200"
-                    onClick={(e) => e.stopPropagation()} // Stop propagation to avoid deselecting the card on click
-                  >
-                    <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
+                  <div className="mt-3.5 pt-3 border-t border-zinc-800/80 w-full animate-in fade-in slide-in-from-top-1.5 duration-200">
+                    <label
+                      htmlFor={`plan-select-${tool.id}`}
+                      className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block mb-1"
+                    >
                       Pricing Plan / Tier
                     </label>
                     <div className="relative">
                       <select
+                        id={`plan-select-${tool.id}`}
                         value={selectedPlan || ''}
                         onChange={(e) => handlePlanChange(tool.id, e.target.value)}
-                        className="w-full appearance-none rounded-md border border-zinc-800/80 bg-zinc-950 px-2.5 py-1.5 text-[11px] text-zinc-300 ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-650 cursor-pointer"
+                        className="w-full appearance-none rounded-md border border-zinc-800/80 bg-zinc-950 px-2.5 py-1.5 text-[11px] text-zinc-300 ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 cursor-pointer"
                       >
                         {tool.plans.map((p) => (
                           <option key={p.id} value={p.id}>
@@ -220,7 +231,7 @@ export default function ToolSelection() {
                     </div>
                   </div>
                 )}
-              </button>
+              </div>
             );
           })}
         </div>

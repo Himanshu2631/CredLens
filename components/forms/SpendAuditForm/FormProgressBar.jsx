@@ -9,16 +9,26 @@ import { cn } from '@/lib/utils';
  */
 export default function FormProgressBar({ currentStep, steps }) {
   return (
-    <div className="w-full select-none py-1">
+    <div
+      role="progressbar"
+      aria-valuemin={1}
+      aria-valuemax={steps.length}
+      aria-valuenow={currentStep + 1}
+      aria-valuetext={`Step ${currentStep + 1} of ${steps.length}: ${steps[currentStep].label}`}
+      className="w-full select-none py-1 px-4"
+    >
       <div className="relative flex items-center justify-between w-full">
-        {/* Background track line */}
-        <div className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 bg-zinc-800/80 rounded-full" />
+        {/* Track lines container - centered between the node centers */}
+        <div className="absolute left-3 right-3 top-1/2 h-[2px] -translate-y-1/2 pointer-events-none">
+          {/* Background track line */}
+          <div className="absolute inset-0 bg-zinc-800/80 rounded-full" />
 
-        {/* Active progress track indicator */}
-        <div
-          className="absolute left-0 top-1/2 h-[2px] -translate-y-1/2 bg-white transition-all duration-500 ease-out rounded-full"
-          style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
-        />
+          {/* Active progress track indicator */}
+          <div
+            className="absolute left-0 top-0 h-full bg-white transition-all duration-500 ease-out rounded-full"
+            style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+          />
+        </div>
 
         {steps.map((step, idx) => {
           const isCompleted = currentStep > idx;
@@ -47,7 +57,7 @@ export default function FormProgressBar({ currentStep, steps }) {
               {/* Step Title Label */}
               <span
                 className={cn(
-                  "absolute top-7 whitespace-nowrap text-[9px] font-bold tracking-widest uppercase transition-all duration-200",
+                  "absolute top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-bold tracking-widest uppercase transition-all duration-200",
                   isActive
                     ? "text-white"
                     : isCompleted

@@ -183,7 +183,6 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
               variant="outline"
               onClick={handleBack}
               disabled={isSubmitting}
-              className="h-9 px-4 text-xs font-semibold cursor-pointer"
             >
               <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
               Back
@@ -197,7 +196,7 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
             <Button
               type="button"
               onClick={handleNext}
-              className="h-9 px-4 text-xs font-semibold bg-primary hover:bg-zinc-200 cursor-pointer ml-auto"
+              className="ml-auto"
             >
               Continue
               <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
@@ -206,7 +205,7 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="h-9 px-5 text-xs font-semibold bg-primary hover:bg-zinc-200 cursor-pointer ml-auto"
+              className="ml-auto"
             >
               {isSubmitting ? (
                 <>
