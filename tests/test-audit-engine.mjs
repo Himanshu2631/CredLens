@@ -165,5 +165,90 @@ const v0EntRec = resultC.recommendations.find(r => r.id === 'rule-oversized-ente
 assertEquals(v0EntRec.estimatedMonthlySavings, 340, 'v0.dev Enterprise downgrade savings should be $340');
 assertEquals(v0EntRec.estimatedYearlySavings, 4080, 'v0.dev Enterprise downgrade yearly savings should be $4080');
 
+// ----------------------------------------------------
+// Test Case 4: Fixture D (New schema assertions & explicit inactive seats)
+// ----------------------------------------------------
+console.log('\n--- Test Case 4: Schema Assertions & Explicit Inactive Seats ---');
+const fixtureD = {
+  tools: ['cursor', 'chatgpt'],
+  toolPlans: {
+    cursor: 'business', // $40/seat
+    chatgpt: 'team'     // $30/seat (min 2 seats = $60, or for 6 seats = $180)
+  },
+  seats: 6,
+  inactiveSeats: 2, // Explicitly pass 2 inactive seats
+  monthlySpend: 420, // Cursor Business ($40 * 6 = $240) + ChatGPT Team ($30 * 6 = $180) = $420
+  useCase: 'coding'
+};
+
+const resultD = runSpendAudit(fixtureD);
+const recD_ids = resultD.recommendations.map(r => r.id);
+
+assertEquals(recD_ids.includes('rule-unused-seats'), true, 'Should trigger Inactive Seats rule');
+
+const unusedSeatsRec = resultD.recommendations.find(r => r.id === 'rule-unused-seats');
+// Savings math: 2 inactive seats prunes:
+// Cursor Business: $40 * 2 = $80 savings
+// ChatGPT Team: $30 * 2 = $60 savings
+// Total savings = $80 + $60 = $140
+assertEquals(unusedSeatsRec.estimatedMonthlySavings, 140, 'Inactive seats deactivation monthly savings should be $140');
+assertEquals(unusedSeatsRec.estimatedSavings.monthly, 140, 'New schema: estimatedSavings.monthly should be 140');
+assertEquals(unusedSeatsRec.estimatedSavings.formattedMonthly, '$140/mo', 'New schema: formattedMonthly should be $140/mo');
+assertEquals(unusedSeatsRec.estimatedImpact, 'Medium', 'New schema: estimatedImpact should be Medium');
+assertEquals(typeof unusedSeatsRec.whyItMatters, 'string', 'New schema: whyItMatters should be a string');
+assertEquals(unusedSeatsRec.whyItMatters.includes('ghost licenses'), true, 'whyItMatters should contain logical copywriting');
+assertEquals(Array.isArray(unusedSeatsRec.actionableSteps), true, 'actionableSteps should be an array');
+assertEquals(unusedSeatsRec.actionableSteps.length > 0, true, 'actionableSteps should not be empty');
+
+// Verify recommendationExplanations catalog presence
+assertEquals(typeof resultD.recommendationExplanations, 'object', 'Audit result should include recommendationExplanations mapping');
+assertEquals(resultD.recommendationExplanations['rule-unused-seats'].title, 'Prune Inactive Member Seats', 'Explanation mapping title matches');
+assertEquals(resultD.recommendationExplanations['rule-unused-seats'].monthlySavings, '$140/mo', 'Explanation mapping savings matches');
+
+
+// ----------------------------------------------------
+// Test Case 5: Fixture E (Zero recommendations / minimal savings edge case)
+// ----------------------------------------------------
+console.log('\n--- Test Case 5: Zero Recommendations / Minimal Spend Edge Case ---');
+const fixtureE = {
+  tools: ['cursor'],
+  toolPlans: {
+    cursor: 'pro' // $20/mo, 1 seat
+  },
+  seats: 1,
+  monthlySpend: 20,
+  useCase: 'coding'
+};
+
+const resultE = runSpendAudit(fixtureE);
+assertEquals(resultE.recommendations.length, 0, 'Should return zero recommendations for an already optimal setup');
+assertEquals(resultE.summary.totalEstimatedSavings, 0, 'Total savings should be $0');
+assertEquals(resultE.summary.formattedEstimatedSavings, '$0/mo', 'Formatted savings should be $0/mo');
+assertEquals(resultE.summary.optimizedSpendEstimate, 20, 'Optimized spend should equal current spend');
+
+
+// ----------------------------------------------------
+// Test Case 6: Fixture F (Estimated/default inactive seats)
+// ----------------------------------------------------
+console.log('\n--- Test Case 6: Estimated Inactive Seats (Implicit 20% rule) ---');
+const fixtureF = {
+  tools: ['cursor'],
+  toolPlans: {
+    cursor: 'business' // $40/seat
+  },
+  seats: 10, // Team of 10 users, no explicit inactive seats passed
+  monthlySpend: 400, // $40 * 10
+  useCase: 'coding'
+};
+
+const resultF = runSpendAudit(fixtureF);
+const recF_ids = resultF.recommendations.map(r => r.id);
+
+assertEquals(recF_ids.includes('rule-unused-seats'), true, 'Should trigger Inactive Seats rule via implicit 20% baseline');
+const estimatedSeatsRec = resultF.recommendations.find(r => r.id === 'rule-unused-seats');
+// 20% of 10 seats = 2 seats. Cursor Business = $40/seat * 2 seats = $80 savings.
+assertEquals(estimatedSeatsRec.estimatedMonthlySavings, 80, 'Estimated inactive seats savings should be $80');
+assertEquals(estimatedSeatsRec.estimatedSavings.formattedMonthly, '$80/mo', 'Estimated inactive seats formatted savings matches');
+
 console.log('\n--- TEST SUITE COMPLETE: ALL AUDIT ENGINE TESTS PASSED ---');
 process.exit(0);
