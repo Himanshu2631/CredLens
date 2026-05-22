@@ -72,7 +72,6 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
     [recommendations]
   );
 
-  const toolCount = formData?.tools?.length ?? 0;
   const submittedAt = formData?.submittedAt;
   const auditDate = useMemo(() => {
     if (!submittedAt) return 'Recent';
@@ -107,7 +106,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
           </div>
           <span className="h-3 w-px bg-border/60 shrink-0" aria-hidden="true" />
           <span className="text-[10px] font-mono text-zinc-600 truncate">
-            {toolCount} tool{toolCount !== 1 ? 's' : ''} audited · {auditDate}
+            {(formData?.tools?.length ?? 0)} tool{(formData?.tools?.length ?? 0) !== 1 ? 's' : ''} audited · {auditDate}
           </span>
         </div>
 
@@ -116,7 +115,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
           variant="ghost"
           size="sm"
           onClick={onReset}
-          className="h-7 gap-1.5 text-[10px] text-zinc-600 hover:text-zinc-300 shrink-0"
+          className="h-7 gap-1.5 text-[10px] text-zinc-600 hover:text-zinc-300 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
         >
           <RotateCcw className="h-3 w-3" />
           Re-run
@@ -137,7 +136,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
       <div className="p-5 md:p-6 space-y-4">
 
         {/* Section header + filter tabs */}
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between items-start gap-3">
           {/* Section heading */}
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="h-3 w-3 text-zinc-700" aria-hidden="true" />
@@ -168,7 +167,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
                     aria-selected={isActive}
                     onClick={() => setActiveFilter(tab)}
                     className={cn(
-                      'inline-flex items-center gap-1 rounded px-2 py-1 text-[9px] font-mono uppercase tracking-wider border transition-all duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer',
+                      'inline-flex items-center gap-1 rounded px-2 py-1 text-[9px] font-mono uppercase tracking-wider border transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer',
                       isActive
                         ? 'bg-zinc-800 text-zinc-200 border-zinc-700'
                         : 'bg-transparent text-zinc-600 border-transparent hover:text-zinc-400 hover:border-zinc-800'

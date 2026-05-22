@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import React from 'react';
+import { ChevronDown, ArrowRight, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ProviderIcon from '@/components/audit/ProviderIcon';
 import ImpactBadge from './ImpactBadge';
@@ -50,7 +50,8 @@ const IMPACT_ACCENT = {
  * @param {number} index           0-based position for staggered CSS animation delay
  */
 export default function AuditRecommendationCard({ recommendation, index = 0 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isReviewed, setIsReviewed] = React.useState(false);
 
   const {
     title,
@@ -78,7 +79,8 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
         // Hover / open states
         isExpanded
           ? 'border-border/60 bg-zinc-950/50 shadow-[0_2px_12px_rgba(0,0,0,0.25)]'
-          : 'hover:border-border/60 hover:bg-zinc-950/40'
+          : 'hover:border-border/60 hover:bg-zinc-950/40',
+        isReviewed && 'opacity-50 saturate-50 hover:opacity-75'
       )}
       style={{ animationDelay: `${index * 55}ms` }}
     >
@@ -90,10 +92,10 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
         type="button"
         onClick={() => setIsExpanded((p) => !p)}
         aria-expanded={isExpanded}
-        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} recommendation: ${title}`}
+        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} recommendation: ${title}${isReviewed ? ' (Reviewed)' : ''}`}
         className={cn(
           'flex w-full items-center gap-3.5 px-4 py-3.5 text-left',
-          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-lg',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded-lg',
           'cursor-pointer'
         )}
       >
@@ -103,18 +105,24 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
         {/* Identity column — title + category tag */}
         <div className="flex-1 min-w-0 space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[12.5px] font-semibold text-zinc-100 leading-none group-hover:text-white transition-colors">
+            <span className={cn(
+              "text-[12.5px] font-semibold leading-none transition-colors",
+              isReviewed ? "line-through text-zinc-500" : "text-zinc-100 group-hover:text-white"
+            )}>
               {title}
             </span>
             {categoryLabel && (
-              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-600 border border-zinc-800 rounded px-1 py-0.5 shrink-0">
+              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-600 border border-zinc-800/80 rounded px-1 py-0.5 shrink-0">
                 {categoryLabel}
               </span>
             )}
           </div>
           {/* Explanation one-liner — shown collapsed so the list stays readable,
               but at a lighter weight than the title so it doesn't compete. */}
-          <p className="text-[11px] text-zinc-500 leading-snug line-clamp-1 pr-2">
+          <p className={cn(
+            "text-[11px] leading-snug line-clamp-1 pr-2 transition-colors",
+            isReviewed ? "text-zinc-600" : "text-zinc-500"
+          )}>
             {explanation}
           </p>
         </div>
@@ -225,11 +233,33 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
           )}
 
           {/* CTA affordance — keeps the card actionable without being pushy */}
-          <div className="flex items-center gap-1.5 pt-1">
-            <span className="text-[10px] font-mono text-zinc-700 uppercase tracking-widest">
-              Mark as reviewed
-            </span>
-            <ArrowRight className="h-2.5 w-2.5 text-zinc-700" aria-hidden="true" />
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsReviewed((r) => !r);
+              }}
+              aria-label={isReviewed ? "Mark recommendation as active" : "Mark recommendation as reviewed"}
+              className={cn(
+                "inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider py-1 px-2 rounded border focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-600 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-900 cursor-pointer transition-colors duration-150",
+                isReviewed 
+                  ? "text-emerald-400 border-emerald-950/60 bg-emerald-950/20 hover:text-emerald-300 hover:bg-emerald-950/40" 
+                  : "text-zinc-500 border-zinc-800 bg-zinc-900/30 hover:text-zinc-300 hover:bg-zinc-900/60"
+              )}
+            >
+              {isReviewed ? (
+                <>
+                  <span>Reviewed</span>
+                  <Check className="h-2.5 w-2.5 text-emerald-400" aria-hidden="true" />
+                </>
+              ) : (
+                <>
+                  <span>Mark as reviewed</span>
+                  <ArrowRight className="h-2.5 w-2.5" aria-hidden="true" />
+                </>
+              )}
+            </button>
           </div>
         </div>
       )}
