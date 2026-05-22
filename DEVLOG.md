@@ -114,3 +114,51 @@
 - Wire the form's `onSubmitSuccess` callback to populate the results panel
 - Add subtle transition animations between form submission and results reveal
 - Consider: PDF/CSV export of the audit report using the `recommendationExplanations` catalog
+
+---
+
+## Day 4
+
+**Hours worked:** 5
+
+**What I did:**
+
+### Audit Results Page Structure
+- Created a new `components/results/` directory with 5 focused components:
+  - `ImpactBadge.jsx` — reusable High/Medium/Low priority indicator pill
+  - `AuditMetricTile.jsx` — single KPI cell: mono label + large tabular-nums value + subtext
+  - `SummaryMetricsRow.jsx` — 4-KPI strip (current spend → optimized → monthly savings → annual savings), 2×2 on mobile / 1×4 on desktop
+  - `AuditRecommendationCard.jsx` — expand-on-click card: collapsed = scan line, expanded = `whyItMatters` + numbered `actionableSteps` + savings breakdown footer
+  - `AuditEmptyState.jsx` — zero-recommendation positive state ("Your AI stack looks lean")
+- Composed all sub-components into `AuditResultsPanel.jsx`:
+  - Report header: audit date, tool count, status indicator, "Re-run Audit" ghost button
+  - `SummaryMetricsRow` consumes `auditResult.summary` directly
+  - Recommendations sorted High → Medium → Low before rendering
+  - Footer shows subscription baseline cost for engineering accountability
+
+### page.js Integration
+- Replaced the dev-only JSON inspector block with `AuditResultsPanel`
+- Right column now conditionally renders: idle → rules catalog, post-submit → results panel
+- Wired `onReset` to clear `activeAudit` state and return to form view
+- Added `scrollIntoView` on submit for mobile UX
+
+### ProviderIcon Expansion
+- Extended `ProviderIcon` from 3 providers (openai, anthropic, default) to 9:
+  - `chatgpt`, `claude`, `cursor`, `copilot`, `gemini`, `openai_api`, `anthropic_api`, `v0_dev`, `all`
+  - Each has a distinct SVG icon mark and accent color for instant visual differentiation at 28px
+
+### Engineering Quality
+- Zero ESLint errors on all new components
+- Dev server starts clean with no compilation errors
+- Every rendered number comes from `runSpendAudit()` output — no hardcoded demo data
+
+**What I learned:**
+- `tabular-nums` in Tailwind is essential for financial values — prevents layout shifts as digits change between recommendations
+- Expand-on-click (Linear pattern) keeps a long recommendation list scannable without modals or extra navigation
+- Conditional right-column rendering (form idle state → results state) is cleaner UX than showing both simultaneously — the form recedes, the report takes focus
+
+**Plan for Day 5:**
+- Add filter tabs (All / High / Medium / Low) above the recommendation list
+- Wire a "Copy Report" button that serializes the `recommendationExplanations` dict to clipboard
+- Add a print/PDF stylesheet for a clean export-ready format
+- Consider persisting the last audit result to `localStorage` so users can return to their report
