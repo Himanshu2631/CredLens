@@ -196,4 +196,32 @@ try {
   process.exitCode = 1;
 }
 
+// --- 5. AI Service Orchestrator Routing Tests ---
+try {
+  console.log('\n--- 5. AI Service Orchestrator Routing Tests ---');
+
+  process.env.AI_PROVIDER = 'gemini';
+  process.env.GEMINI_API_KEY = ''; // Empty key to trigger fallback
+
+  const auditDataForOrchestrator = {
+    projectName: 'Acme LLC',
+    seats: 4,
+    summary: {
+      totalCurrentSpend: 800,
+      optimizedSpendEstimate: 600,
+      totalEstimatedSavings: 200,
+      runwayRestoredPercent: 25
+    },
+    recommendations: []
+  };
+
+  const summaryResult = await generateAuditSummary(auditDataForOrchestrator);
+  assert(summaryResult.provider === 'mock', 'Should gracefully fall back to mock builder when GEMINI_API_KEY is missing');
+  assert(summaryResult.executiveSummary.includes('Acme LLC'), 'Fallback summary should still contain calculation details');
+
+} catch (e) {
+  console.error('AI Service Orchestrator Routing Tests crashed:', e);
+  process.exitCode = 1;
+}
+
 console.log(`\n--- TEST SUITE COMPLETE: ${passedTests}/${totalTests} TESTS PASSED ---`);

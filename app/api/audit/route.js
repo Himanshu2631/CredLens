@@ -77,7 +77,7 @@ export async function POST(request) {
       );
     }
 
-    if (!optimizationGoal || typeof optimizationGoal !== 'string') {
+    if (optimizationGoal === undefined || optimizationGoal === null || typeof optimizationGoal !== 'string') {
       return NextResponse.json(
         { error: 'Optimization goal is required.' },
         { status: 400 }

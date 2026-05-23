@@ -23,6 +23,18 @@ export default function AuditOverviewSection({ summary, recommendations = [], fo
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
 
+  // Client-side debugging: Log the source of the audit summary
+  React.useEffect(() => {
+    if (aiSummary) {
+      console.log(`[CredLens Debug] Rendering summary. Provider: "${aiSummary.provider}"`);
+      console.log(`[CredLens Debug] Summary text:`, aiSummary.executiveSummary);
+    } else {
+      console.log('[CredLens Debug] Rendering static fallback summary (No AI summary provided).');
+    }
+  }, [aiSummary]);
+
+  const isRealAi = aiSummary && aiSummary.provider !== 'mock';
+
   const hasSavings = summary.totalEstimatedSavings > 0;
   const toolCount = formData?.tools?.length ?? 0;
 
@@ -110,7 +122,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
       {/* ── 1. Executive Narrative Summary ── */}
       <div className="space-y-3">
         <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
-          {aiSummary ? 'AI Generated Audit Summary' : 'Executive Summary'}
+          {isRealAi ? 'AI Generated Audit Summary' : 'Executive Summary'}
         </span>
         <p className="text-zinc-300 text-xs md:text-sm leading-relaxed max-w-3xl">
           {aiSummary?.executiveSummary || (
