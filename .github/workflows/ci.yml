@@ -1,0 +1,99 @@
+name: Continuous Integration
+
+# Triggers: Run checks on push to main or pull requests targeting main
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+# Ensure that only one workflow run is active for the same branch/PR at a time,
+# canceling any previous in-progress runs to save GitHub Action minutes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-assurance:
+    name: Code Quality & Build Verification
+    runs-on: ubuntu-latest
+
+    # Set environment variables required for the Next.js build.
+    # We provide mock values here so that compiling database routes
+    # and AI modules does not require connecting to external servers or failing.
+    env:
+      MONGODB_URI: mongodb://localhost:27017/credlens_mock
+      GEMINI_API_KEY: mock_gemini_api_key_for_ci
+      AI_PROVIDER: mock
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          # Enable dependency caching to speed up workflows
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "Installing dependencies using 'npm ci' for deterministic builds..."
+            npm ci || { echo "npm ci failed, falling back to npm install"; npm install; }
+          else
+            echo "No package-lock.json found. Installing with 'npm install'..."
+            npm install
+          fi
+
+      - name: Lint Codebase
+        run: npm run lint
+
+      - name: Build Next.js Application
+        run: npm run build
+
+      # =========================================================================
+      # FUTURE SCALABILITY: Uncomment and adapt the steps below to integrate
+      # automated testing, security checks, or automated deployments.
+      # =========================================================================
+
+      # -------------------------------------------------------------------------
+      # 1. Automated Testing (Unit & Integration Tests)
+      # -------------------------------------------------------------------------
+      # To run tests that require MongoDB, you can use the GitHub Actions service
+      # container defined below. Uncomment the service and the test run step.
+      #
+      # services:
+      #   mongodb:
+      #     image: mongo:6.0
+      #     ports:
+      #       - 27017:27017
+      #
+      # - name: Run Test Suite
+      #   env:
+      #     MONGODB_URI: mongodb://localhost:27017/credlens_test
+      #   run: npm test
+
+      # -------------------------------------------------------------------------
+      # 2. Security Audits
+      # -------------------------------------------------------------------------
+      # Run static vulnerability checks against third-party dependencies.
+      # - name: Security Audit
+      #   run: npm audit --audit-level=high
+
+      # -------------------------------------------------------------------------
+      # 3. Preview/Production Deployments
+      # -------------------------------------------------------------------------
+      # Automated deployments (e.g. Vercel, AWS, etc.) can be configured to
+      # trigger after the build and lint steps succeed.
+      # - name: Deploy Preview
+      #   if: github.event_name == 'pull_request'
+      #   run: echo "Deploying preview for PR..."
+      # - name: Deploy Production
+      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      #   run: echo "Deploying to production..."
