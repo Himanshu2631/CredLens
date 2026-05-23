@@ -40,6 +40,7 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!email || !email.trim()) {
       setErrorMsg('Please enter a valid business email.');
       return;
@@ -128,28 +129,30 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Company Name Input */}
           <div className="relative">
-            <Building className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" />
+            <Building className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" aria-hidden="true" />
             <input
               type="text"
               placeholder="Company Name"
+              aria-label="Company Name"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               disabled={isSubmitting}
-              className="w-full bg-zinc-950/50 border border-border/80 rounded px-9 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-700 transition-colors"
+              className="w-full bg-zinc-950/50 border border-border/80 rounded px-9 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors"
               required
             />
           </div>
 
           {/* Email Input */}
           <div className="relative">
-            <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" />
+            <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" aria-hidden="true" />
             <input
               type="email"
               placeholder="Business Email"
+              aria-label="Business Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isSubmitting}
-              className="w-full bg-zinc-950/50 border border-border/80 rounded px-9 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-700 transition-colors"
+              className="w-full bg-zinc-950/50 border border-border/80 rounded px-9 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors"
               required
             />
           </div>
