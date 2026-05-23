@@ -65,7 +65,7 @@ const AuditSchema = new mongoose.Schema(
     },
     optimizationGoal: {
       type: String,
-      required: true,
+      default: '',
     },
     
     // Output calculations & audit results

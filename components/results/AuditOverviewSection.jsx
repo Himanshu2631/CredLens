@@ -119,17 +119,17 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
     });
   };
 
-  // Real share URL generation based on backend shareToken
+  // Real share URL generation based on backend shareToken or MongoDB _id
+  const shareId = formData?.shareToken || summary?.shareToken || formData?._id;
+  
   const handleShareReport = () => {
-    const shareToken = formData?.shareToken || summary?.shareToken;
-    
-    if (!shareToken) {
-      // No token available — audit was run in browser-only fallback mode
-      console.warn('[CredLens] Share unavailable: no shareToken (audit not persisted to database).');
+    if (!shareId) {
+      // No token or ID available — audit was run in browser-only fallback mode
+      console.warn('[CredLens] Share unavailable: audit not persisted to database.');
       return;
     }
     
-    const url = `${window.location.origin}/share/${shareToken}`;
+    const url = `${window.location.origin}/share/${shareId}`;
     navigator.clipboard.writeText(url).then(() => {
       setShared(true);
       setTimeout(() => setShared(false), 2000);
@@ -391,7 +391,9 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             variant="secondary"
             size="sm"
             onClick={handleShareReport}
-            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none"
+            disabled={!shareId}
+            title={!shareId ? 'Share unavailable — audit was not saved to database' : 'Copy shareable link'}
+            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {shared ? (
               <>
