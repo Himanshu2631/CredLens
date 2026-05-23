@@ -103,36 +103,36 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
   // Submit consolidated form data
   const handleFormSubmit = async (data) => {
     setIsSubmitting(true);
-    
-    // Simulate premium pipeline analysis delay
-    await new Promise((resolve) => setTimeout(resolve, 1800));
-    
-    setIsSubmitting(false);
-
-    if (onSubmitSuccess) {
-      onSubmitSuccess({
-        ...data,
-        submittedAt: new Date().toISOString()
-      });
-    }
-
-    // Clear local storage key on successful submission so they start fresh next time
     try {
-      localStorage.removeItem('credlens_spend_audit_flow');
-    } catch (e) {
-      console.error('[CredLens] Failed to clear local storage key:', e);
-    }
+      if (onSubmitSuccess) {
+        await onSubmitSuccess({
+          ...data,
+          submittedAt: new Date().toISOString()
+        });
+      }
 
-    // Reset flow and form states
-    setCurrentStep(0);
-    reset({
-      tools: [],
-      toolPlans: {},
-      monthlySpend: 1000,
-      seats: 1,
-      useCase: undefined,
-      optimizationGoal: ''
-    });
+      // Clear local storage key on successful submission so they start fresh next time
+      try {
+        localStorage.removeItem('credlens_spend_audit_flow');
+      } catch (e) {
+        console.error('[CredLens] Failed to clear local storage key:', e);
+      }
+
+      // Reset flow and form states
+      setCurrentStep(0);
+      reset({
+        tools: [],
+        toolPlans: {},
+        monthlySpend: 1000,
+        seats: 1,
+        useCase: undefined,
+        optimizationGoal: ''
+      });
+    } catch (err) {
+      console.error('[SpendAuditForm] Submission error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Render active step component

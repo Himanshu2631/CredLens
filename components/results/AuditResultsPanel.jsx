@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import AuditOverviewSection from './AuditOverviewSection';
 import AuditRecommendationCard from './AuditRecommendationCard';
 import AuditEmptyState from './AuditEmptyState';
+import LeadCaptureCard from './LeadCaptureCard';
 
 /**
  * Priority sort order: High → Medium → Low → anything else.
@@ -129,6 +130,17 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         formData={formData}
         auditDate={auditDate}
       />
+
+      {/* ── Lead Capture Persistence Sync Card ── */}
+      {formData?._id && (
+        <div className="border-b border-border/40 p-5 md:p-6 bg-zinc-950/10">
+          <LeadCaptureCard 
+            auditId={formData._id}
+            teamSize={formData.seats}
+            activeSpend={summary.totalCurrentSpend}
+          />
+        </div>
+      )}
 
       {/* ── 3 & 4. Recommendations ───────────────────────────────────────────
           Header row with filter tabs, then the recommendation list.

@@ -14,6 +14,7 @@ import SpendAuditForm from '@/components/forms/SpendAuditForm/SpendAuditForm';
 import AuditResultsPanel from '@/components/results/AuditResultsPanel';
 import { OPTIMIZATION_RULES } from '@/data/rules';
 import { runSpendAudit } from '@/lib/audit/rulesEngine';
+import { createSpendAudit } from '@/lib/api';
 import { AlertCircle, HelpCircle } from 'lucide-react';
 
 export default function Home() {
@@ -36,18 +37,57 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Run the audit engine synchronously on form submit and store the full result.
-  const handleAuditSubmit = (formData) => {
-    const auditResult = runSpendAudit(formData);
-    const auditData = { ...formData, auditResult };
-    setActiveAudit(auditData);
+  const [auditError, setAuditError] = useState(null);
+
+  // Run the audit engine dynamically via backend API and store full response.
+  // Falls back to browser execution gracefully if database connection is unreachable.
+  const handleAuditSubmit = async (formData) => {
+    setAuditError(null);
     try {
-      localStorage.setItem('credlens_active_audit', JSON.stringify(auditData));
-    } catch (e) {
-      console.error('[CredLens] Failed to save active audit to localStorage:', e);
+      const savedAudit = await createSpendAudit({
+        projectName: `${formData.useCase || 'Startup'}_AI_Audit`,
+        tools: formData.tools,
+        toolPlans: formData.toolPlans,
+        seats: formData.seats,
+        monthlySpend: formData.monthlySpend,
+        useCase: formData.useCase,
+        optimizationGoal: formData.optimizationGoal,
+      });
+
+      const auditData = {
+        ...formData,
+        _id: savedAudit._id,
+        shareToken: savedAudit.shareToken,
+        submittedAt: savedAudit.createdAt,
+        auditResult: savedAudit
+      };
+
+      setActiveAudit(auditData);
+      try {
+        localStorage.setItem('credlens_active_audit', JSON.stringify(auditData));
+      } catch (e) {
+        console.error('[CredLens] Failed to save active audit to localStorage:', e);
+      }
+      
+      document.getElementById('audit-workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      console.warn('[CredLens] Persistence failed, running browser fallback:', err);
+      
+      try {
+        const auditResult = runSpendAudit(formData);
+        const auditData = {
+          ...formData,
+          submittedAt: new Date().toISOString(),
+          auditResult
+        };
+        setActiveAudit(auditData);
+        setAuditError('Running in local offline mode. Report is viewable but was not persisted.');
+        document.getElementById('audit-workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (fallbackErr) {
+        setAuditError(err.message || 'Failed to process spend audit. Please check your network connection.');
+        throw err;
+      }
     }
-    // Scroll the workspace section into view so results are visible on mobile
-    document.getElementById('audit-workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   // Clear audit state to return to the idle/form state
@@ -84,18 +124,27 @@ export default function Home() {
 
             {/* Left Column: Configuration Form + Architecture Note */}
             <div className="lg:col-span-5 space-y-6">
+              {auditError && (
+                <div className="rounded-xl border border-amber-950/20 bg-amber-950/5 p-4 text-xs text-amber-500 flex items-start gap-2.5">
+                  <AlertCircle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
+                  <div>
+                    <strong className="font-semibold block mb-0.5">Audit Environment Notice</strong>
+                    {auditError}
+                  </div>
+                </div>
+              )}
+              
               <SpendAuditForm onSubmitSuccess={handleAuditSubmit} />
 
               {/* Platform scope reminder — honest engineering callout */}
               <div className="rounded-xl border border-border bg-card/30 p-4 space-y-2">
                 <div className="flex items-center gap-2 text-body-premium font-medium text-zinc-300">
                   <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                  How This Works
+                  Data Persistence
                 </div>
                 <p className="text-muted-premium">
-                  Audit logic runs entirely in the browser using the Day 3 rules engine. No data
-                  leaves your device. Database persistence and backend API dispatch will be wired
-                  in a future phase.
+                  Audit reports are evaluated securely. Stack setups, calculated savings, and 
+                  recommendations are saved to MongoDB Atlas to support report sharing and CRM linking.
                 </p>
               </div>
             </div>
