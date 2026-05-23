@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/db';
-import Audit from '@/models/Audit';
-import { runSpendAudit } from '@/lib/audit/rulesEngine';
+import { NextResponse } from 'next/server.js';
+import dbConnect from '../../../lib/db.js';
+import Audit from '../../../models/Audit.js';
+import { runSpendAudit } from '../../../lib/audit/rulesEngine.js';
 
 export async function POST(request) {
   try {
@@ -35,7 +35,10 @@ export async function POST(request) {
       inactiveSeats,
       monthlySpend,
       useCase,
-      optimizationGoal
+      optimizationGoal,
+      isPublic,
+      ownerId,
+      metadata
     } = body;
 
     // 3. Validation
@@ -80,6 +83,20 @@ export async function POST(request) {
       );
     }
 
+    if (isPublic !== undefined && isPublic !== null && typeof isPublic !== 'boolean') {
+      return NextResponse.json(
+        { error: 'isPublic must be a boolean.' },
+        { status: 400 }
+      );
+    }
+
+    if (ownerId !== undefined && ownerId !== null && typeof ownerId !== 'string') {
+      return NextResponse.json(
+        { error: 'ownerId must be a string.' },
+        { status: 400 }
+      );
+    }
+
     // 4. Run rules engine calculations
     const auditResult = runSpendAudit({
       projectName,
@@ -104,7 +121,10 @@ export async function POST(request) {
       optimizationGoal,
       summary: auditResult.summary,
       recommendations: auditResult.recommendations,
-      recommendationExplanations: auditResult.recommendationExplanations
+      recommendationExplanations: auditResult.recommendationExplanations,
+      isPublic: isPublic !== undefined ? isPublic : false,
+      ownerId: ownerId || null,
+      metadata: metadata || {}
     });
 
     await newAudit.save();

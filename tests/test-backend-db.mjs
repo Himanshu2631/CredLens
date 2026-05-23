@@ -42,15 +42,9 @@ async function runTests() {
   } catch (err) {
     console.log('⚠ Warning: Connection to primary MONGODB_URI failed. Trying local fallback...');
     try {
-      await mongoose.disconnect();
-      const localUri = 'mongodb://127.0.0.1:27017/credlens_test';
-      console.log(`[Database] Connecting to local fallback MongoDB: ${localUri}`);
-      await mongoose.connect(localUri, {
-        maxPoolSize: 10,
-        serverSelectionTimeoutMS: 2000,
-        socketTimeoutMS: 45000,
-        bufferCommands: false,
-      });
+      process.env.MONGODB_URI = 'mongodb://127.0.0.1:27017/credlens_test';
+      global.mongoose = { conn: null, promise: null };
+      db = await dbConnect();
       console.log('✓ Success: Connected to local fallback MongoDB.');
     } catch (fallbackErr) {
       console.error('✗ Failure: Failed to connect to MongoDB (both primary and local fallback failed). Make sure MongoDB is running.');

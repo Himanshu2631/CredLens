@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server.js';
 import mongoose from 'mongoose';
-import dbConnect from '@/lib/db';
-import Lead from '@/models/Lead';
-import Audit from '@/models/Audit';
+import dbConnect from '../../../lib/db.js';
+import Lead from '../../../models/Lead.js';
+import Audit from '../../../models/Audit.js';
 
 export async function POST(request) {
   try {
@@ -152,6 +152,63 @@ export async function POST(request) {
     console.error('[API Leads] Server error:', error);
     return NextResponse.json(
       { error: 'Internal server error storing lead information.' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * GET handler to retrieve leads.
+ * If ?email=email@example.com query parameter is provided, returns that single lead.
+ * Otherwise, returns all leads sorted descending by creation date.
+ * Populates linked Audit relationships (auditId and auditHistory) for both paths.
+ * 
+ * @param {Request} request 
+ * @returns {NextResponse}
+ */
+export async function GET(request) {
+  try {
+    // 1. Establish database connection
+    try {
+      await dbConnect();
+    } catch (dbErr) {
+      console.error('[API Leads GET] Database connection failure:', dbErr);
+      return NextResponse.json(
+        { error: 'Database connection failed. Please try again later.' },
+        { status: 503 }
+      );
+    }
+
+    // 2. Parse search query parameters
+    const searchParams = request.nextUrl.searchParams;
+    const email = searchParams.get('email');
+
+    // 3. Conditional search or listing
+    if (email) {
+      const lead = await Lead.findOne({ email: email.toLowerCase().trim() })
+        .populate('auditId')
+        .populate('auditHistory');
+      
+      if (!lead) {
+        return NextResponse.json(
+          { error: 'Lead not found.' },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json(lead, { status: 200 });
+    }
+
+    // Retrieve all leads for admin dashboard / CRM sync
+    const leads = await Lead.find({})
+      .populate('auditId')
+      .populate('auditHistory')
+      .sort({ createdAt: -1 });
+
+    return NextResponse.json(leads, { status: 200 });
+  } catch (error) {
+    console.error('[API Leads GET] Server error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error retrieving lead information.' },
       { status: 500 }
     );
   }
