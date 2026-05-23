@@ -7,6 +7,37 @@ import { Button } from '@/components/ui/button';
 import { PRICING_REGISTRY } from '@/data/pricing';
 
 /**
+ * Helper to dynamically scan text for currency values and percentages,
+ * wrapping them in clean inline monospaced badges for structural emphasis.
+ * 
+ * @param {string} text 
+ * @returns {React.ReactNode}
+ */
+export function highlightTelemetryText(text) {
+  if (!text || typeof text !== 'string') return text;
+  
+  // Regular expression to match:
+  // - currency like $100, $1,500/mo, $2,450/seat, $0, etc.
+  // - percentage rates like 20%, 15.5%
+  const regex = /(\$\d{1,3}(?:,\d{3})*(?:\/\w+)?|\d+(?:\.\d+)?%)/g;
+  const parts = text.split(regex);
+  
+  return parts.map((part, index) => {
+    if (regex.test(part)) {
+      return (
+        <span 
+          key={index} 
+          className="font-mono bg-zinc-950 border border-zinc-800/80 px-1.5 py-0.5 rounded text-white text-[11px] font-semibold select-all mx-0.5"
+        >
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+}
+
+/**
  * AuditOverviewSection — a polished, startup-grade financial SaaS reporting panel.
  * 
  * Design Philosophy:
@@ -34,7 +65,6 @@ export default function AuditOverviewSection({ summary, recommendations = [], fo
   }, [aiSummary]);
 
   const isRealAi = aiSummary && aiSummary.provider !== 'mock';
-
   const hasSavings = summary.totalEstimatedSavings > 0;
   const toolCount = formData?.tools?.length ?? 0;
 
@@ -120,32 +150,47 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
     <div className="border-b border-border/50 bg-zinc-950/20 p-5 md:p-6 space-y-6">
       
       {/* ── 1. Executive Narrative Summary ── */}
-      <div className="space-y-3">
-        <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
-          {isRealAi ? 'AI Generated Audit Summary' : 'Executive Summary'}
-        </span>
-        <p className="text-zinc-300 text-xs md:text-sm leading-relaxed max-w-3xl">
-          {aiSummary?.executiveSummary || (
+      <div className="space-y-3.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
+            {isRealAi ? 'AI Generated Audit Summary' : 'Executive Summary'}
+          </span>
+          <span className="text-[9px] font-mono text-zinc-650 bg-zinc-950/50 border border-border/20 px-2 py-0.5 rounded">
+            Audit Date: {auditDate}
+          </span>
+        </div>
+        
+        <p className="text-zinc-300 text-xs md:text-sm leading-[1.65] max-w-3xl font-normal">
+          {aiSummary?.executiveSummary ? (
+            highlightTelemetryText(aiSummary.executiveSummary)
+          ) : (
             <>
-              Based on an analysis of <strong className="text-white font-medium">{toolCount} active AI tools</strong> and a team size of <strong className="text-white font-medium">{formData?.seats || 1}</strong>, we identified <strong className="text-emerald-400 font-medium">{hasSavings ? summary.formattedEstimatedSavings : '$0'}</strong> in potential monthly spend optimization. Addressing these issues consolidates your run-rate from <strong className="text-zinc-400 font-medium">{summary.formattedCurrentSpend}</strong> to <strong className="text-white font-medium">{summary.formattedOptimizedSpend}</strong>, recovering <strong className="text-emerald-400 font-medium">{hasSavings ? summary.runwayRestoredPercent : 0}%</strong> of active AI spend and securing <strong className="text-emerald-400 font-medium">{hasSavings ? summary.formattedEstimatedYearlySavings : '$0'}</strong> in annualized runway.
+              Based on an analysis of <strong className="text-white font-medium">{toolCount} active AI tools</strong> and a team size of <strong className="text-white font-medium">{formData?.seats || 1}</strong>, we identified <strong className="text-emerald-450 font-medium">{hasSavings ? summary.formattedEstimatedSavings : '$0'}</strong> in potential monthly spend optimization. Addressing these issues consolidates your run-rate from <strong className="text-zinc-450 font-medium">{summary.formattedCurrentSpend}</strong> to <strong className="text-white font-medium">{summary.formattedOptimizedSpend}</strong>, recovering <strong className="text-emerald-405 font-medium">{hasSavings ? summary.runwayRestoredPercent : 0}%</strong> of active AI spend and securing <strong className="text-emerald-455 font-medium">{hasSavings ? summary.formattedEstimatedYearlySavings : '$0'}</strong> in annualized runway.
             </>
           )}
         </p>
 
-        {/* ── Key Insights List ── */}
+        {/* ── Key Insights Ledger ── */}
         {aiSummary?.keyInsights && aiSummary.keyInsights.length > 0 && (
-          <div className="mt-4 pt-3 border-t border-border/20 space-y-2">
-            <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase block mb-1">
-              Key Insights
+          <div className="mt-5 pt-4 border-t border-border/10 space-y-3">
+            <span className="text-[9px] font-mono tracking-widest text-zinc-550 uppercase block mb-1">
+              Key Insights & Observations
             </span>
-            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="space-y-2">
               {aiSummary.keyInsights.map((insight, idx) => (
-                <li key={idx} className="flex gap-2 text-[11px] text-zinc-400 bg-zinc-950/30 border border-border/20 rounded p-2.5">
-                  <span className="text-emerald-400 font-mono shrink-0 select-none">0{idx + 1}.</span>
-                  <span className="leading-snug">{insight}</span>
-                </li>
+                <div 
+                  key={idx} 
+                  className="group/insight flex items-start gap-3.5 text-zinc-400 hover:text-zinc-200 transition-colors duration-150 py-2 border-b border-border/10 last:border-0"
+                >
+                  <span className="flex items-center justify-center h-4.5 w-4.5 rounded font-mono text-[9px] font-bold bg-zinc-950 border border-zinc-850/80 text-zinc-500 group-hover/insight:text-emerald-400 group-hover/insight:border-emerald-950/60 transition-colors shrink-0 select-none">
+                    0{idx + 1}
+                  </span>
+                  <span className="leading-relaxed flex-1 text-xs">
+                    {highlightTelemetryText(insight)}
+                  </span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </div>
@@ -156,43 +201,43 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
         <div className="grid grid-cols-1 sm:grid-cols-3 border border-border/40 rounded-lg overflow-hidden bg-zinc-950/40">
           
           {/* Current Spend */}
-          <div className="flex flex-col gap-1 p-4 border-b sm:border-b-0 sm:border-r border-border/30 select-none">
+          <div className="group/tile flex flex-col gap-1 p-4 border-b sm:border-b-0 sm:border-r border-border/30 hover:bg-zinc-900/10 transition-colors select-none">
             <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase flex items-center gap-1">
               Current Monthly Spend
             </span>
             <div className="text-lg md:text-xl font-semibold tracking-tight text-zinc-400 tabular-nums">
               {summary.formattedCurrentSpend}
             </div>
-            <span className="text-[9.5px] text-zinc-600">
+            <span className="text-[9.5px] text-zinc-650">
               Active operating baseline
             </span>
           </div>
 
           {/* After Optimization */}
-          <div className="flex flex-col gap-1 p-4 border-b sm:border-b-0 sm:border-r border-border/30 select-none">
+          <div className="group/tile flex flex-col gap-1 p-4 border-b sm:border-b-0 sm:border-r border-border/30 hover:bg-zinc-900/10 transition-colors select-none">
             <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase">
               Target Monthly Spend
             </span>
             <div className="text-lg md:text-xl font-semibold tracking-tight text-white tabular-nums">
               {summary.formattedOptimizedSpend}
             </div>
-            <span className="text-[9.5px] text-zinc-600">
+            <span className="text-[9.5px] text-zinc-650">
               Post-optimization target
             </span>
           </div>
 
           {/* Monthly Savings */}
-          <div className="flex flex-col gap-1 p-4 select-none">
+          <div className="group/tile flex flex-col gap-1 p-4 hover:bg-zinc-900/10 transition-colors select-none">
             <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase">
               Net Monthly Savings
             </span>
             <div className={cn(
               "text-lg md:text-xl font-semibold tracking-tight tabular-nums",
-              hasSavings ? "text-emerald-400" : "text-zinc-600"
+              hasSavings ? "text-emerald-400" : "text-zinc-650"
             )}>
               {hasSavings ? summary.formattedEstimatedSavings : '$0/mo'}
             </div>
-            <span className="text-[9.5px] text-zinc-600">
+            <span className="text-[9.5px] text-zinc-650">
               {hasSavings ? `${summary.runwayRestoredPercent}% overhead reduction` : 'Stack fully optimized'}
             </span>
           </div>
@@ -205,8 +250,8 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
           <div className={cn(
             "rounded-lg p-5 flex flex-col justify-between border select-none transition-all duration-200",
             hasSavings 
-              ? "bg-emerald-950/5 border-emerald-900/30 shadow-[inset_0_1px_1px_rgba(16,185,129,0.05)]" 
-              : "bg-zinc-900/10 border-border/40"
+              ? "bg-emerald-950/5 border-emerald-900/30 shadow-[inset_0_1px_1px_rgba(16,185,129,0.05)] hover:border-emerald-800/40" 
+              : "bg-zinc-900/10 border-border/40 hover:border-zinc-800"
           )}>
             <div className="space-y-1">
               <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase block">
@@ -219,34 +264,38 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
                 {hasSavings ? summary.formattedEstimatedYearlySavings : '$0/yr'}
               </div>
             </div>
-            <p className="mt-3 text-[10px] text-zinc-500 leading-normal">
-              {aiSummary?.runwayImpact || (hasSavings 
-                ? "This is the annualized capital recovery available to extend runway or reinvest in core software capabilities."
-                : "No redundancies detected. Your subscription plans match team seat allocations and API configurations.")}
+            <p className="mt-3.5 text-[10.5px] text-zinc-500 leading-relaxed font-normal">
+              {aiSummary?.runwayImpact ? (
+                highlightTelemetryText(aiSummary.runwayImpact)
+              ) : hasSavings ? (
+                "This is the annualized capital recovery available to extend runway or reinvest in core software capabilities."
+              ) : (
+                "No redundancies detected. Your subscription plans match team seat allocations and API configurations."
+              )}
             </p>
           </div>
 
           {/* Audit Coverage (Audit Scope Card) */}
-          <div className="rounded-lg p-5 border border-border/40 bg-zinc-900/10 flex flex-col justify-between select-none">
+          <div className="rounded-lg p-5 border border-border/40 bg-zinc-900/10 hover:border-zinc-800 transition-colors flex flex-col justify-between select-none">
             <div className="space-y-1">
               <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase block">
                 Audit Scope Coverage
               </span>
-              <div className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-300 tabular-nums">
+              <div className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-350 tabular-nums">
                 {toolCount} Tool{toolCount !== 1 ? 's' : ''}
               </div>
             </div>
 
             {/* List of audited badges */}
-            <div className="mt-3 flex flex-wrap gap-1.5 max-h-[48px] overflow-y-auto pr-1">
+            <div className="mt-4 flex flex-wrap gap-1.5 max-h-[56px] overflow-y-auto pr-1 select-none">
               {auditedTools.map((t) => (
                 <span 
                   key={t.id}
                   title={`Tool: ${t.name} (Plan: ${t.plan})`}
-                  className="inline-flex items-center rounded bg-zinc-900 border border-border/80 px-1.5 py-0.5 text-[8.5px] font-medium text-zinc-400 hover:text-zinc-200 hover:border-zinc-700 transition-colors select-none cursor-help"
+                  className="inline-flex items-center rounded bg-zinc-950/60 border border-border/60 hover:border-zinc-700 px-2 py-0.5 text-[8.5px] font-medium text-zinc-400 hover:text-zinc-200 transition-colors cursor-help"
                 >
                   {t.name}
-                  <span className="mx-1 text-zinc-700">·</span>
+                  <span className="mx-1.5 text-zinc-700">·</span>
                   <span className="text-zinc-500">{t.plan}</span>
                 </span>
               ))}
@@ -255,59 +304,59 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
         </div>
       </div>
 
-      {/* ── 3. Spend Breakdown Visualizer (Future Scalability) ── */}
-      <div className="space-y-3 pt-2 border-t border-border/30">
+      {/* ── 3. Spend Breakdown Visualizer ── */}
+      <div className="space-y-3 pt-4 border-t border-border/20">
         <div className="flex items-center justify-between text-[9px] font-mono text-zinc-500 uppercase">
           <span className="flex items-center gap-1.5">
             <Layers className="h-3 w-3" />
             Spend Distribution Breakdown
           </span>
-          <span className="text-zinc-600">
+          <span className="text-zinc-650">
             Subscriptions vs APIs
           </span>
         </div>
 
         {/* Stacked bar */}
-        <div className="h-2 w-full rounded-full overflow-hidden bg-zinc-800 flex">
+        <div className="h-2.5 w-full rounded-full overflow-hidden bg-zinc-900 border border-zinc-850/60 flex p-[1px]">
           {spendBreakdown.hasData ? (
             <>
               <div 
-                className="bg-zinc-400 h-full transition-all duration-300" 
+                className="bg-zinc-400 h-full rounded-l-full transition-all duration-300" 
                 style={{ width: `${spendBreakdown.subPercent}%` }}
                 title={`Subscriptions: ${spendBreakdown.subPercent}%`}
               />
               <div 
-                className="bg-zinc-600 h-full transition-all duration-300" 
+                className="bg-zinc-650 h-full rounded-r-full transition-all duration-300 -ml-[1px]" 
                 style={{ width: `${spendBreakdown.apiPercent}%` }}
                 title={`API Volumetrics: ${spendBreakdown.apiPercent}%`}
               />
             </>
           ) : (
-            <div className="w-full h-full bg-zinc-900" />
+            <div className="w-full h-full bg-zinc-950 rounded-full" />
           )}
         </div>
 
         {/* Breakdown subtext labels */}
-        <div className="flex items-center justify-between text-[10px]">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between text-[10px] select-none">
+          <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-zinc-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
-              Subscriptions: <strong className="text-zinc-300 tabular-nums">${(summary.subscriptionCost || 0).toLocaleString()}/mo</strong>
+              <span className="h-1.5 w-1.5 rounded-full bg-zinc-450" />
+              Subscriptions: <strong className="text-zinc-350 tabular-nums font-semibold">${(summary.subscriptionCost || 0).toLocaleString()}/mo</strong>
             </span>
             <span className="flex items-center gap-1.5 text-zinc-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
-              APIs: <strong className="text-zinc-300 tabular-nums">${(summary.apiSpend || 0).toLocaleString()}/mo</strong>
+              <span className="h-1.5 w-1.5 rounded-full bg-zinc-650" />
+              APIs: <strong className="text-zinc-350 tabular-nums font-semibold">${(summary.apiSpend || 0).toLocaleString()}/mo</strong>
             </span>
           </div>
-          <span className="text-[9px] text-zinc-600 flex items-center gap-0.5">
+          <span className="text-[9px] text-zinc-600 flex items-center gap-1">
             <Info className="h-2.5 w-2.5" />
-            Pricing models updated daily
+            Telemetry models synchronized hourly
           </span>
         </div>
       </div>
 
-      {/* ── 4. Actionable Toolbar (Future Scalability) ── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/30">
+      {/* ── 4. Actionable Toolbar ── */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border/20">
         
         {/* Active Clipboard Functions */}
         <div className="flex items-center gap-2">
@@ -317,7 +366,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             variant="secondary"
             size="sm"
             onClick={handleCopySummary}
-            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border/60 hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none"
+            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none"
           >
             {copied ? (
               <>
@@ -338,7 +387,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             variant="secondary"
             size="sm"
             onClick={handleShareReport}
-            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border/60 hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none"
+            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none"
           >
             {shared ? (
               <>
@@ -355,25 +404,25 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
         </div>
 
         {/* Future Scalability Placeholders (Muted) */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5 select-none">
           {/* CSV Export */}
           <span 
-            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[9px] font-mono uppercase tracking-wider text-zinc-600 border border-zinc-900 bg-zinc-950/20 select-none"
+            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-650"
             title="CSV Export capability planned for future updates"
           >
-            <FileDown className="h-3 w-3" />
+            <FileDown className="h-3 w-3 text-zinc-700" />
             Export CSV
-            <span className="text-[8px] bg-zinc-900 text-zinc-500 px-1 rounded">Beta</span>
+            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-550 px-1 rounded">Beta</span>
           </span>
 
           {/* PDF Export */}
           <span 
-            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[9px] font-mono uppercase tracking-wider text-zinc-600 border border-zinc-900 bg-zinc-950/20 select-none"
+            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-650"
             title="PDF Export scheduled for next release"
           >
-            <FileDown className="h-3 w-3" />
+            <FileDown className="h-3 w-3 text-zinc-700" />
             PDF Report
-            <span className="text-[8px] bg-zinc-900 text-zinc-500 px-1 rounded">Scheduled</span>
+            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-550 px-1 rounded">Scheduled</span>
           </span>
         </div>
       </div>

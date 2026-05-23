@@ -12,6 +12,7 @@ import HowItWorks from '@/components/sections/HowItWorks';
 import CTA from '@/components/sections/CTA';
 import SpendAuditForm from '@/components/forms/SpendAuditForm/SpendAuditForm';
 import AuditResultsPanel from '@/components/results/AuditResultsPanel';
+import AuditOverviewSkeleton from '@/components/results/AuditOverviewSkeleton';
 import { OPTIMIZATION_RULES } from '@/data/rules';
 import { runSpendAudit } from '@/lib/audit/rulesEngine';
 import { createSpendAudit } from '@/lib/api';
@@ -20,6 +21,7 @@ import { AlertCircle, HelpCircle } from 'lucide-react';
 export default function Home() {
   const [activeAudit, setActiveAudit] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // Load audit state from localStorage after mount to prevent SSR mismatch
   useEffect(() => {
@@ -43,6 +45,7 @@ export default function Home() {
   // Falls back to browser execution gracefully if database connection is unreachable.
   const handleAuditSubmit = async (formData) => {
     setAuditError(null);
+    setIsGenerating(true);
     try {
       const savedAudit = await createSpendAudit({
         projectName: `${formData.useCase || 'Startup'}_AI_Audit`,
@@ -87,6 +90,8 @@ export default function Home() {
         setAuditError(err.message || 'Failed to process spend audit. Please check your network connection.');
         throw err;
       }
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -151,7 +156,10 @@ export default function Home() {
 
             {/* Right Column: Results Panel or Rules Catalog */}
             <div className="lg:col-span-7 space-y-6">
-              {isMounted && activeAudit ? (
+              {isGenerating ? (
+                /* ── Loading Skeleton State ── */
+                <AuditOverviewSkeleton />
+              ) : isMounted && activeAudit ? (
                 /* ── Live Audit Results ──────────────────────────────────────── */
                 <AuditResultsPanel
                   auditResult={activeAudit.auditResult}

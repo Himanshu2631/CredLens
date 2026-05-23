@@ -34,7 +34,8 @@ if (process.env.GEMINI_API_KEY) {
   console.log('GEMINI_API_KEY preview:', key.substring(0, 8) + '...' + key.substring(key.length - 4));
 }
 
-import { generateAuditSummary } from '../lib/ai/aiService.js';
+// Dynamic import after env variables are populated so that config.js reads them correctly
+const { generateAuditSummary } = await import('../lib/ai/aiService.js');
 
 const mockAuditData = {
   projectName: 'Live Gemini Test Startup',
