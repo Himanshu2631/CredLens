@@ -58,6 +58,12 @@ export default function AuditOverviewSection({ summary, recommendations = [], fo
   React.useEffect(() => {
     if (aiSummary) {
       console.log(`[CredLens Debug] Rendering summary. Provider: "${aiSummary.provider}"`);
+      if (aiSummary.debugProvider) {
+        console.log(`[CredLens Debug] Target Provider: "${aiSummary.debugProvider}"`);
+      }
+      if (aiSummary.debugError) {
+        console.warn(`[CredLens Debug] AI Summary Error: "${aiSummary.debugError}"`);
+      }
       console.log(`[CredLens Debug] Summary text:`, aiSummary.executiveSummary);
     } else {
       console.log('[CredLens Debug] Rendering static fallback summary (No AI summary provided).');
@@ -156,9 +162,16 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
       {/* ── 1. Executive Narrative Summary ── */}
       <div className="space-y-3.5">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
-            {isRealAi ? 'AI Generated Audit Summary' : 'Executive Summary'}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
+              {isRealAi ? 'AI Generated Audit Summary' : 'Executive Summary'}
+            </span>
+            {aiSummary?.debugError && (
+              <span className="text-[9px] font-mono text-red-400 bg-red-950/30 border border-red-900/30 px-1.5 py-0.5 rounded cursor-help" title={aiSummary.debugError}>
+                AI Error: {aiSummary.debugError.length > 50 ? `${aiSummary.debugError.substring(0, 47)}...` : aiSummary.debugError}
+              </span>
+            )}
+          </div>
           <span className="text-[9px] font-mono text-zinc-400 bg-zinc-950/50 border border-border/20 px-2 py-0.5 rounded">
             Audit Date: {auditDate}
           </span>
