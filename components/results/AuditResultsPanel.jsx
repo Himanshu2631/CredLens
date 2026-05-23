@@ -129,6 +129,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         recommendations={recommendations}
         formData={formData}
         auditDate={auditDate}
+        aiSummary={auditResult.aiSummary}
       />
 
       {/* ── Lead Capture Persistence Sync Card ── */}

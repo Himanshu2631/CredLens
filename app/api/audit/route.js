@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server.js';
 import dbConnect from '../../../lib/db.js';
 import Audit from '../../../models/Audit.js';
 import { runSpendAudit } from '../../../lib/audit/rulesEngine.js';
+import { generateAuditSummary } from '../../../lib/ai/aiService.js';
 
 export async function POST(request) {
   try {
@@ -109,6 +110,17 @@ export async function POST(request) {
       optimizationGoal
     });
 
+    // 4.5. Run AI summary generator (provider-agnostic, falls back to Mock builder on any error)
+    const aiSummary = await generateAuditSummary({
+      projectName,
+      seats,
+      monthlySpend,
+      useCase,
+      optimizationGoal,
+      summary: auditResult.summary,
+      recommendations: auditResult.recommendations
+    });
+
     // 5. Create and save Mongoose document
     const newAudit = new Audit({
       projectName,
@@ -122,6 +134,7 @@ export async function POST(request) {
       summary: auditResult.summary,
       recommendations: auditResult.recommendations,
       recommendationExplanations: auditResult.recommendationExplanations,
+      aiSummary,
       isPublic: isPublic !== undefined ? isPublic : false,
       ownerId: ownerId || null,
       metadata: metadata || {}

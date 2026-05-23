@@ -121,6 +121,15 @@ const AuditSchema = new mongoose.Schema(
       index: true
     },
     
+    // AI Audit Summary
+    aiSummary: {
+      executiveSummary: { type: String, default: '' },
+      keyInsights: { type: [String], default: [] },
+      runwayImpact: { type: String, default: '' },
+      provider: { type: String, default: 'mock' },
+      generatedAt: { type: Date, default: null }
+    },
+
     // Future Analytics Optimization (Rollup Cache)
     categorySavings: {
       type: Map,
