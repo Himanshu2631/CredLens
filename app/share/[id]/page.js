@@ -103,18 +103,7 @@ export default function ShareReportPage() {
               </div>
               <AuditResultsPanel
                 auditResult={{
-                  summary: {
-                    totalCurrentSpend: audit.summary?.totalCurrentSpend || audit.monthlySpend,
-                    totalEstimatedSavings: audit.summary?.totalEstimatedSavings || 0,
-                    totalOptimizedSpend: audit.summary?.totalOptimizedSpend || audit.monthlySpend,
-                    formattedCurrentSpend: audit.summary?.formattedCurrentSpend || `$${audit.monthlySpend.toLocaleString()}/mo`,
-                    formattedOptimizedSpend: audit.summary?.formattedOptimizedSpend || `$${audit.monthlySpend.toLocaleString()}/mo`,
-                    formattedEstimatedSavings: audit.summary?.formattedEstimatedSavings || '$0/mo',
-                    formattedEstimatedYearlySavings: audit.summary?.formattedEstimatedYearlySavings || '$0/yr',
-                    runwayRestoredPercent: audit.summary?.runwayRestoredPercent || 0,
-                    subscriptionCost: audit.summary?.subscriptionCost || 0,
-                    apiSpend: audit.summary?.apiSpend || 0,
-                  },
+                  summary: audit.summary,
                   recommendations: audit.recommendations || [],
                   aiSummary: audit.aiSummary,
                 }}
@@ -123,6 +112,8 @@ export default function ShareReportPage() {
                   toolPlans: audit.toolPlans,
                   seats: audit.seats,
                   submittedAt: audit.createdAt,
+                  shareToken: audit.shareToken,
+                  _id: audit._id,
                 }}
                 onReset={null} // Hides the re-run button for shared views
               />

@@ -135,7 +135,7 @@ export async function POST(request) {
       recommendations: auditResult.recommendations,
       recommendationExplanations: auditResult.recommendationExplanations,
       aiSummary,
-      isPublic: isPublic !== undefined ? isPublic : false,
+      isPublic: isPublic !== undefined ? isPublic : true,
       ownerId: ownerId || null,
       metadata: metadata || {}
     });

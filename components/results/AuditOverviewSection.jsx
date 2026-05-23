@@ -122,10 +122,14 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
   // Real share URL generation based on backend shareToken
   const handleShareReport = () => {
     const shareToken = formData?.shareToken || summary?.shareToken;
-    const url = shareToken 
-      ? `${window.location.origin}/share/${shareToken}`
-      : `${window.location.origin}/share/audit-${Math.random().toString(36).substring(2, 9)}`;
-      
+    
+    if (!shareToken) {
+      // No token available — audit was run in browser-only fallback mode
+      console.warn('[CredLens] Share unavailable: no shareToken (audit not persisted to database).');
+      return;
+    }
+    
+    const url = `${window.location.origin}/share/${shareToken}`;
     navigator.clipboard.writeText(url).then(() => {
       setShared(true);
       setTimeout(() => setShared(false), 2000);

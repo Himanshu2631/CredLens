@@ -18,7 +18,8 @@ export async function GET(request, { params }) {
     try {
       await dbConnect();
     } catch (dbErr) {
-      console.error('[API Audit GET] Database connection failure:', dbErr);
+      console.error('[API Audit GET] Database connection failure:', dbErr.message);
+      console.error('[API Audit GET] MONGODB_URI defined:', !!process.env.MONGODB_URI);
       return NextResponse.json(
         { error: 'Database connection failed. Please try again later.' },
         { status: 503 }
