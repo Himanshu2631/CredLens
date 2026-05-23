@@ -40,6 +40,44 @@ const LeadSchema = new mongoose.Schema(
       ref: 'Audit',
       default: null,
     },
+    
+    // --- Future Scalability & Architecture Fields ---
+    
+    // Optional Team size/company size
+    teamSize: {
+      type: Number,
+      min: [1, 'Team size must be at least 1 user.'],
+      default: null,
+    },
+
+    // Audit History tracking for returning leads
+    auditHistory: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Audit',
+      }
+    ],
+
+    // Pipeline status for internal marketing or sales analytics/CRM
+    status: {
+      type: String,
+      enum: ['new', 'contacted', 'converted', 'churned'],
+      default: 'new',
+    },
+
+    // Future Authentication Link
+    ownerId: {
+      type: String,
+      default: null,
+      index: true,
+    },
+
+    // Integration Metadata (e.g., UTM tracking, CRM Sync status, third party sync mapping)
+    metadata: {
+      type: Map,
+      of: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
   },
   {
     timestamps: true,

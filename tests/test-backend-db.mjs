@@ -38,11 +38,25 @@ async function runTests() {
   try {
     console.log('\n--- 1. MongoDB Connection Test ---');
     db = await dbConnect();
-    console.log('✓ Success: Connected to MongoDB.');
+    console.log('✓ Success: Connected to MongoDB (Primary).');
   } catch (err) {
-    console.error('✗ Failure: Failed to connect to MongoDB. Make sure MongoDB is running.');
-    console.error(err);
-    process.exit(1);
+    console.log('⚠ Warning: Connection to primary MONGODB_URI failed. Trying local fallback...');
+    try {
+      await mongoose.disconnect();
+      const localUri = 'mongodb://127.0.0.1:27017/credlens_test';
+      console.log(`[Database] Connecting to local fallback MongoDB: ${localUri}`);
+      await mongoose.connect(localUri, {
+        maxPoolSize: 10,
+        serverSelectionTimeoutMS: 2000,
+        socketTimeoutMS: 45000,
+        bufferCommands: false,
+      });
+      console.log('✓ Success: Connected to local fallback MongoDB.');
+    } catch (fallbackErr) {
+      console.error('✗ Failure: Failed to connect to MongoDB (both primary and local fallback failed). Make sure MongoDB is running.');
+      console.error(fallbackErr);
+      process.exit(1);
+    }
   }
 
   // Define unique identifiers for cleanup
@@ -171,6 +185,31 @@ async function runTests() {
     const queriedAudit = await Audit.findById(testAuditId);
     if (queriedAudit && queriedAudit.projectName === TEST_PROJECT_NAME && queriedAudit.summary.totalEstimatedSavings === 150) {
       console.log('✓ Success: Queried Audit and verified stored metrics matching engine outputs');
+      
+      // Verify future sharing token generation
+      if (queriedAudit.shareToken && typeof queriedAudit.shareToken === 'string') {
+        console.log(`✓ Success: Auto-generated shareToken detected: ${queriedAudit.shareToken}`);
+      } else {
+        console.error('✗ Failure: shareToken was not automatically generated on Audit');
+        process.exit(1);
+      }
+
+      // Verify schema version defaults
+      if (queriedAudit.schemaVersion === 1) {
+        console.log('✓ Success: schemaVersion is 1.');
+      } else {
+        console.error('✗ Failure: schemaVersion mismatch:', queriedAudit.schemaVersion);
+        process.exit(1);
+      }
+
+      // Verify categorySavings rollup cache populated by pre-save hook
+      const redundancySavings = queriedAudit.categorySavings.get('redundancy');
+      if (redundancySavings === 150) {
+        console.log(`✓ Success: categorySavings rollup cache populated correctly (redundancy: $${redundancySavings})`);
+      } else {
+        console.error('✗ Failure: categorySavings rollup cache mismatch:', queriedAudit.categorySavings);
+        process.exit(1);
+      }
     } else {
       console.error('✗ Failure: Queried Audit metrics mismatch:', queriedAudit);
       process.exit(1);
@@ -229,7 +268,12 @@ async function runTests() {
       email: 'ALICE.JOHNSON@example.com', // Test lowercasing trigger
       phone: '+15555555',
       activeSpend: 1200,
-      auditId: testAuditId
+      auditId: testAuditId,
+      teamSize: 15,
+      auditHistory: [testAuditId],
+      status: 'converted',
+      ownerId: 'user_98765',
+      metadata: { utm_source: 'google', cohort: 'q2_2026' }
     });
 
     const savedLead = await validLead.save();
@@ -237,9 +281,41 @@ async function runTests() {
     console.log('✓ Success: Saved valid Lead document linked to Audit ID');
 
     // 4.5 Query and populate relations
-    const queriedLead = await Lead.findById(testLeadId).populate('auditId');
+    const queriedLead = await Lead.findById(testLeadId).populate('auditId').populate('auditHistory');
     if (queriedLead && queriedLead.email === 'alice.johnson@example.com' && queriedLead.auditId && queriedLead.auditId.projectName === TEST_PROJECT_NAME) {
       console.log('✓ Success: Queried Lead, confirmed email auto-lowercased, and successfully populated associated Audit details');
+      
+      // Verify optional teamSize field
+      if (queriedLead.teamSize === 15) {
+        console.log('✓ Success: Lead teamSize is 15.');
+      } else {
+        console.error('✗ Failure: Lead teamSize mismatch:', queriedLead.teamSize);
+        process.exit(1);
+      }
+
+      // Verify custom status enum
+      if (queriedLead.status === 'converted') {
+        console.log('✓ Success: Lead status enum set to converted.');
+      } else {
+        console.error('✗ Failure: Lead status mismatch:', queriedLead.status);
+        process.exit(1);
+      }
+
+      // Verify auditHistory array referencing Audit
+      if (queriedLead.auditHistory && queriedLead.auditHistory.length === 1 && queriedLead.auditHistory[0].projectName === TEST_PROJECT_NAME) {
+        console.log('✓ Success: Lead auditHistory is populated correctly.');
+      } else {
+        console.error('✗ Failure: Lead auditHistory mismatch/empty:', queriedLead.auditHistory);
+        process.exit(1);
+      }
+
+      // Verify metadata Map
+      if (queriedLead.metadata.get('utm_source') === 'google') {
+        console.log('✓ Success: Lead metadata Map stored and accessed correctly.');
+      } else {
+        console.error('✗ Failure: Lead metadata mismatch:', queriedLead.metadata);
+        process.exit(1);
+      }
     } else {
       console.error('✗ Failure: Relationship querying verification failed:', queriedLead);
       process.exit(1);

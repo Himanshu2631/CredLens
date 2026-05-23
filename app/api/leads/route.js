@@ -34,7 +34,9 @@ export async function POST(request) {
       email,
       phone,
       activeSpend,
-      auditId
+      auditId,
+      teamSize,
+      metadata
     } = body;
 
     // 3. Validation
@@ -100,6 +102,15 @@ export async function POST(request) {
       }
     }
 
+    if (teamSize !== undefined && teamSize !== null) {
+      if (typeof teamSize !== 'number' || teamSize < 1) {
+        return NextResponse.json(
+          { error: 'Team size must be a number greater than or equal to 1.' },
+          { status: 400 }
+        );
+      }
+    }
+
     // 4. Validate Audit ID if provided
     let verifiedAuditId = null;
     if (auditId) {
@@ -127,7 +138,10 @@ export async function POST(request) {
       email,
       phone: phone || '',
       activeSpend: activeSpend || 0,
-      auditId: verifiedAuditId
+      auditId: verifiedAuditId,
+      teamSize: teamSize !== undefined ? teamSize : null,
+      auditHistory: verifiedAuditId ? [verifiedAuditId] : [],
+      metadata: metadata || {}
     });
 
     await newLead.save();

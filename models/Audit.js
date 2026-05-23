@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import crypto from 'crypto';
 
 const RecommendationSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -96,12 +97,68 @@ const AuditSchema = new mongoose.Schema(
     recommendationExplanations: {
       type: mongoose.Schema.Types.Mixed,
       default: {}
+    },
+
+    // --- Future Scalability & Architecture Fields ---
+    
+    // Future Report Sharing
+    shareToken: {
+      type: String,
+      default: () => crypto.randomBytes(16).toString('hex'),
+      unique: true,
+      sparse: true,
+      index: true
+    },
+    isPublic: {
+      type: Boolean,
+      default: false
+    },
+    
+    // Future Authentication
+    ownerId: {
+      type: String,
+      default: null,
+      index: true
+    },
+    
+    // Future Analytics Optimization (Rollup Cache)
+    categorySavings: {
+      type: Map,
+      of: Number,
+      default: {}
+    },
+    
+    // Future Migration Support
+    schemaVersion: {
+      type: Number,
+      default: 1
+    },
+    
+    // Future API Integrations (Slack, Jira, etc. metadata)
+    metadata: {
+      type: Map,
+      of: mongoose.Schema.Types.Mixed,
+      default: {}
     }
   },
   {
     timestamps: true,
   }
 );
+
+// Pre-save middleware to automatically populate categorySavings cache from recommendations
+AuditSchema.pre('save', function () {
+  if (this.recommendations && Array.isArray(this.recommendations)) {
+    const savings = {};
+    this.recommendations.forEach(rec => {
+      const category = rec.category || 'other';
+      const amt = rec.estimatedMonthlySavings || (rec.estimatedSavings && rec.estimatedSavings.monthly) || 0;
+      savings[category] = (savings[category] || 0) + amt;
+    });
+    this.categorySavings = savings;
+  }
+});
+
 
 // Prevents compilation error if model already exists during hot reload
 export default mongoose.models.Audit || mongoose.model('Audit', AuditSchema);
