@@ -22,7 +22,7 @@ export default function AuditEmptyState() {
         <p className="text-sm font-medium text-zinc-300">
           Your AI stack looks lean.
         </p>
-        <p className="text-[11px] text-zinc-600 max-w-xs leading-relaxed">
+        <p className="text-[11px] text-zinc-400 max-w-xs leading-relaxed">
           No significant optimization opportunities were found based on your
           current configuration. This means your tool selection, plan tiers,
           and seat counts are well-matched to your team size.

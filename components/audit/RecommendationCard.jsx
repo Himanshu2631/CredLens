@@ -16,8 +16,8 @@ export default function RecommendationCard({
   className = ''
 }) {
   const impactStyles = {
-    High: 'bg-emerald-950/20 text-emerald-450 border border-emerald-900/30',
-    Medium: 'bg-zinc-850/40 text-zinc-350 border border-border/30',
+    High: 'bg-emerald-950/20 text-emerald-400 border border-emerald-900/30',
+    Medium: 'bg-zinc-800/40 text-zinc-300 border border-border/30',
     Low: 'bg-zinc-900 text-zinc-500 border border-zinc-800'
   };
 

@@ -18,7 +18,7 @@ export default function AuditPreviewCard() {
       provider: 'openai',
       impact: 'High',
       savings: '$1,850/mo',
-      savingsColor: 'text-emerald-450'
+      savingsColor: 'text-emerald-400'
     },
     {
       id: 2,
@@ -48,7 +48,7 @@ export default function AuditPreviewCard() {
         <div className="flex items-center gap-2.5">
           <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">AUDIT PREVIEW</span>
           <span className="h-1 w-1 rounded-full bg-zinc-700" />
-          <span className="text-xs text-zinc-350 font-medium">AcmeLabs_May_Audit.json</span>
+          <span className="text-xs text-zinc-300 font-medium">AcmeLabs_May_Audit.json</span>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="success" dot>
@@ -73,8 +73,8 @@ export default function AuditPreviewCard() {
           value="$11,530"
           valueClassName="text-white"
           subtext={
-            <span className="text-zinc-455 font-medium flex items-center gap-1">
-              <span className="text-emerald-450 font-mono">-$2,710</span> savings identified
+            <span className="text-zinc-400 font-medium flex items-center gap-1">
+              <span className="text-emerald-400 font-mono">-$2,710</span> savings identified
             </span>
           }
         />
@@ -83,9 +83,9 @@ export default function AuditPreviewCard() {
         <MetricItem
           label="Runway Restored"
           value="19.1%"
-          valueClassName="text-emerald-455"
+          valueClassName="text-emerald-400"
           subtext="Avg. payback period: < 24 hours"
-          className="bg-zinc-955/35"
+          className="bg-zinc-900/35"
         />
 
       </div>

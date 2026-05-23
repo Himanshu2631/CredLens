@@ -59,7 +59,7 @@ export default function AuditOverviewSkeleton() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[1, 2, 3].map((idx) => (
                 <div key={idx} className="flex gap-2.5 bg-zinc-950/30 border border-border/10 rounded p-3 h-14">
-                  <div className="h-3 w-5 bg-zinc-850 rounded shrink-0 mt-0.5" />
+                  <div className="h-3 w-5 bg-zinc-800 rounded shrink-0 mt-0.5" />
                   <div className="space-y-1.5 flex-1">
                     <div className="h-2.5 w-[90%] bg-zinc-800/30 rounded" />
                     <div className="h-2 w-[60%] bg-zinc-800/20 rounded" />
@@ -88,7 +88,7 @@ export default function AuditOverviewSkeleton() {
               <div key={idx} className="rounded-lg p-5 border border-border/20 bg-zinc-900/10 h-24 flex flex-col justify-between">
                 <div className="space-y-1.5">
                   <div className="h-2 w-24 bg-zinc-800/40 rounded" />
-                  <div className="h-5 w-20 bg-zinc-850/50 rounded" />
+                  <div className="h-5 w-20 bg-zinc-800/50 rounded" />
                 </div>
                 <div className="h-3 w-[80%] bg-zinc-800/20 rounded" />
               </div>
@@ -143,7 +143,7 @@ export default function AuditOverviewSkeleton() {
                   <div className="h-2 w-[35%] bg-zinc-800/20 rounded" />
                 </div>
               </div>
-              <div className="h-4.5 w-16 bg-zinc-850/50 rounded" />
+              <div className="h-4.5 w-16 bg-zinc-800/50 rounded" />
             </div>
           ))}
         </div>
@@ -151,8 +151,8 @@ export default function AuditOverviewSkeleton() {
 
       {/* ── 7. Chrome Footer skeleton ── */}
       <div className="border-t border-border/40 px-5 py-3 flex items-center justify-between bg-zinc-950/20">
-        <div className="h-2 w-32 bg-zinc-850/40 rounded" />
-        <div className="h-2 w-48 bg-zinc-850/40 rounded" />
+        <div className="h-2 w-32 bg-zinc-800/40 rounded" />
+        <div className="h-2 w-48 bg-zinc-800/40 rounded" />
       </div>
     </div>
   );

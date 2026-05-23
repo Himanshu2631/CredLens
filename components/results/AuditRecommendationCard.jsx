@@ -112,7 +112,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
               {title}
             </span>
             {categoryLabel && (
-              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-600 border border-zinc-800/80 rounded px-1 py-0.5 shrink-0">
+              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 border border-zinc-800/80 rounded px-1 py-0.5 shrink-0">
                 {categoryLabel}
               </span>
             )}
@@ -134,18 +134,18 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
               <div className="text-[12px] font-mono font-semibold text-emerald-400 tabular-nums leading-none">
                 {estimatedSavings.formattedMonthly}
               </div>
-              <div className="text-[9px] font-mono text-zinc-700 mt-0.5">
+              <div className="text-[9px] font-mono text-zinc-500 mt-0.5">
                 {estimatedSavings.formattedYearly}/yr
               </div>
             </div>
           ) : (
             /* Governance / operational recs that have no direct $ savings */
-            <span className="text-[10px] font-mono text-zinc-600">Operational</span>
+            <span className="text-[10px] font-mono text-zinc-400">Operational</span>
           )}
           <ImpactBadge impact={estimatedImpact} />
           <ChevronDown
             className={cn(
-              'h-3.5 w-3.5 text-zinc-600 transition-transform duration-200 shrink-0',
+              'h-3.5 w-3.5 text-zinc-500 transition-transform duration-200 shrink-0',
               isExpanded && 'rotate-180'
             )}
             aria-hidden="true"
@@ -188,7 +188,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
                         rest of the card so it doesn't shout over the content */}
                     <span
                       aria-hidden="true"
-                      className="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-zinc-950 text-[9px] font-mono font-medium text-zinc-500"
+                      className="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-zinc-950 text-[9px] font-mono font-medium text-zinc-400"
                     >
                       {i + 1}
                     </span>
@@ -220,10 +220,10 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
                 {/* Savings math logic — the "show your work" line */}
                 {estimatedSavings.logic && (
                   <div className="flex-1 min-w-0 border-l border-border/30 pl-5 hidden sm:block">
-                    <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-700 block mb-1">
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 block mb-1">
                       Calculation
                     </span>
-                    <p className="text-[10px] font-mono text-zinc-600 leading-relaxed">
+                    <p className="text-[10px] font-mono text-zinc-400 leading-relaxed">
                       {estimatedSavings.logic}
                     </p>
                   </div>
@@ -270,12 +270,13 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
 /* ── Sub-components ─────────────────────────────────────────────────────────
    Tiny presentational primitives used only inside this file.
    Keeping them local avoids importing bloat for single-use patterns.
+   * Changed SectionLabel text color to text-zinc-400 (was text-zinc-600)
 ────────────────────────────────────────────────────────────────────────── */
 
 /** Section label — mono uppercase, no decoration. Used as a micro-heading. */
 function SectionLabel({ children }) {
   return (
-    <span className="block text-[9px] font-mono uppercase tracking-widest text-zinc-600">
+    <span className="block text-[9px] font-mono uppercase tracking-widest text-zinc-400">
       {children}
     </span>
   );
@@ -285,7 +286,7 @@ function SectionLabel({ children }) {
 function SavingsStat({ label, value, highlight = false }) {
   return (
     <div>
-      <span className="block text-[9px] font-mono uppercase tracking-widest text-zinc-700 mb-0.5">
+      <span className="block text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-0.5">
         {label}
       </span>
       <span

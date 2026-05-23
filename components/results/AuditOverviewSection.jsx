@@ -155,7 +155,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
           <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
             {isRealAi ? 'AI Generated Audit Summary' : 'Executive Summary'}
           </span>
-          <span className="text-[9px] font-mono text-zinc-650 bg-zinc-950/50 border border-border/20 px-2 py-0.5 rounded">
+          <span className="text-[9px] font-mono text-zinc-400 bg-zinc-950/50 border border-border/20 px-2 py-0.5 rounded">
             Audit Date: {auditDate}
           </span>
         </div>
@@ -165,7 +165,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             highlightTelemetryText(aiSummary.executiveSummary)
           ) : (
             <>
-              Based on an analysis of <strong className="text-white font-medium">{toolCount} active AI tools</strong> and a team size of <strong className="text-white font-medium">{formData?.seats || 1}</strong>, we identified <strong className="text-emerald-450 font-medium">{hasSavings ? summary.formattedEstimatedSavings : '$0'}</strong> in potential monthly spend optimization. Addressing these issues consolidates your run-rate from <strong className="text-zinc-450 font-medium">{summary.formattedCurrentSpend}</strong> to <strong className="text-white font-medium">{summary.formattedOptimizedSpend}</strong>, recovering <strong className="text-emerald-405 font-medium">{hasSavings ? summary.runwayRestoredPercent : 0}%</strong> of active AI spend and securing <strong className="text-emerald-455 font-medium">{hasSavings ? summary.formattedEstimatedYearlySavings : '$0'}</strong> in annualized runway.
+              Based on an analysis of <strong className="text-white font-medium">{toolCount} active AI tools</strong> and a team size of <strong className="text-white font-medium">{formData?.seats || 1}</strong>, we identified <strong className="text-emerald-400 font-medium">{hasSavings ? summary.formattedEstimatedSavings : '$0'}</strong> in potential monthly spend optimization. Addressing these issues consolidates your run-rate from <strong className="text-zinc-400 font-medium">{summary.formattedCurrentSpend}</strong> to <strong className="text-white font-medium">{summary.formattedOptimizedSpend}</strong>, recovering <strong className="text-emerald-400 font-medium">{hasSavings ? summary.runwayRestoredPercent : 0}%</strong> of active AI spend and securing <strong className="text-emerald-400 font-medium">{hasSavings ? summary.formattedEstimatedYearlySavings : '$0'}</strong> in annualized runway.
             </>
           )}
         </p>
@@ -173,7 +173,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
         {/* ── Key Insights Ledger ── */}
         {aiSummary?.keyInsights && aiSummary.keyInsights.length > 0 && (
           <div className="mt-5 pt-4 border-t border-border/10 space-y-3">
-            <span className="text-[9px] font-mono tracking-widest text-zinc-550 uppercase block mb-1">
+            <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase block mb-1">
               Key Insights & Observations
             </span>
             <div className="space-y-2">
@@ -182,7 +182,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
                   key={idx} 
                   className="group/insight flex items-start gap-3.5 text-zinc-400 hover:text-zinc-200 transition-colors duration-150 py-2 border-b border-border/10 last:border-0"
                 >
-                  <span className="flex items-center justify-center h-4.5 w-4.5 rounded font-mono text-[9px] font-bold bg-zinc-950 border border-zinc-850/80 text-zinc-500 group-hover/insight:text-emerald-400 group-hover/insight:border-emerald-950/60 transition-colors shrink-0 select-none">
+                  <span className="flex items-center justify-center h-4.5 w-4.5 rounded font-mono text-[9px] font-bold bg-zinc-950 border border-zinc-800/80 text-zinc-500 group-hover/insight:text-emerald-400 group-hover/insight:border-emerald-950/60 transition-colors shrink-0 select-none">
                     0{idx + 1}
                   </span>
                   <span className="leading-relaxed flex-1 text-xs">
@@ -208,7 +208,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             <div className="text-lg md:text-xl font-semibold tracking-tight text-zinc-400 tabular-nums">
               {summary.formattedCurrentSpend}
             </div>
-            <span className="text-[9.5px] text-zinc-650">
+            <span className="text-[9.5px] text-zinc-500">
               Active operating baseline
             </span>
           </div>
@@ -221,7 +221,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             <div className="text-lg md:text-xl font-semibold tracking-tight text-white tabular-nums">
               {summary.formattedOptimizedSpend}
             </div>
-            <span className="text-[9.5px] text-zinc-650">
+            <span className="text-[9.5px] text-zinc-500">
               Post-optimization target
             </span>
           </div>
@@ -233,11 +233,11 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             </span>
             <div className={cn(
               "text-lg md:text-xl font-semibold tracking-tight tabular-nums",
-              hasSavings ? "text-emerald-400" : "text-zinc-650"
+              hasSavings ? "text-emerald-400" : "text-zinc-500"
             )}>
               {hasSavings ? summary.formattedEstimatedSavings : '$0/mo'}
             </div>
-            <span className="text-[9.5px] text-zinc-650">
+            <span className="text-[9.5px] text-zinc-500">
               {hasSavings ? `${summary.runwayRestoredPercent}% overhead reduction` : 'Stack fully optimized'}
             </span>
           </div>
@@ -259,7 +259,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
               </span>
               <div className={cn(
                 "text-2xl md:text-3xl font-semibold tracking-tight tabular-nums",
-                hasSavings ? "text-emerald-400" : "text-zinc-600"
+                hasSavings ? "text-emerald-400" : "text-zinc-400"
               )}>
                 {hasSavings ? summary.formattedEstimatedYearlySavings : '$0/yr'}
               </div>
@@ -281,7 +281,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
               <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase block">
                 Audit Scope Coverage
               </span>
-              <div className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-350 tabular-nums">
+              <div className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-300 tabular-nums">
                 {toolCount} Tool{toolCount !== 1 ? 's' : ''}
               </div>
             </div>
@@ -295,8 +295,8 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
                   className="inline-flex items-center rounded bg-zinc-950/60 border border-border/60 hover:border-zinc-700 px-2 py-0.5 text-[8.5px] font-medium text-zinc-400 hover:text-zinc-200 transition-colors cursor-help"
                 >
                   {t.name}
-                  <span className="mx-1.5 text-zinc-700">·</span>
-                  <span className="text-zinc-500">{t.plan}</span>
+                  <span className="mx-1.5 text-zinc-500">·</span>
+                  <span className="text-zinc-400">{t.plan}</span>
                 </span>
               ))}
             </div>
@@ -311,13 +311,13 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
             <Layers className="h-3 w-3" />
             Spend Distribution Breakdown
           </span>
-          <span className="text-zinc-650">
+          <span className="text-zinc-500">
             Subscriptions vs APIs
           </span>
         </div>
 
         {/* Stacked bar */}
-        <div className="h-2.5 w-full rounded-full overflow-hidden bg-zinc-900 border border-zinc-850/60 flex p-[1px]">
+        <div className="h-2.5 w-full rounded-full overflow-hidden bg-zinc-900 border border-zinc-800/60 flex p-[1px]">
           {spendBreakdown.hasData ? (
             <>
               <div 
@@ -326,7 +326,7 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
                 title={`Subscriptions: ${spendBreakdown.subPercent}%`}
               />
               <div 
-                className="bg-zinc-650 h-full rounded-r-full transition-all duration-300 -ml-[1px]" 
+                className="bg-zinc-600 h-full rounded-r-full transition-all duration-300 -ml-[1px]" 
                 style={{ width: `${spendBreakdown.apiPercent}%` }}
                 title={`API Volumetrics: ${spendBreakdown.apiPercent}%`}
               />
@@ -340,15 +340,15 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
         <div className="flex items-center justify-between text-[10px] select-none">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-zinc-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-zinc-450" />
-              Subscriptions: <strong className="text-zinc-350 tabular-nums font-semibold">${(summary.subscriptionCost || 0).toLocaleString()}/mo</strong>
+              <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+              Subscriptions: <strong className="text-zinc-300 tabular-nums font-semibold">${(summary.subscriptionCost || 0).toLocaleString()}/mo</strong>
             </span>
             <span className="flex items-center gap-1.5 text-zinc-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-zinc-650" />
-              APIs: <strong className="text-zinc-350 tabular-nums font-semibold">${(summary.apiSpend || 0).toLocaleString()}/mo</strong>
+              <span className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
+              APIs: <strong className="text-zinc-300 tabular-nums font-semibold">${(summary.apiSpend || 0).toLocaleString()}/mo</strong>
             </span>
           </div>
-          <span className="text-[9px] text-zinc-600 flex items-center gap-1">
+          <span className="text-[9px] text-zinc-400 flex items-center gap-1">
             <Info className="h-2.5 w-2.5" />
             Telemetry models synchronized hourly
           </span>
@@ -407,22 +407,22 @@ Volumetric API Spend:       $${(summary.apiSpend || 0).toLocaleString()}/mo`;
         <div className="flex items-center gap-1.5 select-none">
           {/* CSV Export */}
           <span 
-            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-650"
+            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-500"
             title="CSV Export capability planned for future updates"
           >
-            <FileDown className="h-3 w-3 text-zinc-700" />
+            <FileDown className="h-3 w-3 text-zinc-500" />
             Export CSV
-            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-550 px-1 rounded">Beta</span>
+            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-400 px-1 rounded">Beta</span>
           </span>
 
           {/* PDF Export */}
           <span 
-            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-650"
+            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-500"
             title="PDF Export scheduled for next release"
           >
-            <FileDown className="h-3 w-3 text-zinc-700" />
+            <FileDown className="h-3 w-3 text-zinc-500" />
             PDF Report
-            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-550 px-1 rounded">Scheduled</span>
+            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-400 px-1 rounded">Scheduled</span>
           </span>
         </div>
       </div>

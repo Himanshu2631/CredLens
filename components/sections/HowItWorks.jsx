@@ -45,13 +45,13 @@ export default function HowItWorks() {
           {steps.map((step) => (
             <div key={step.number} className="border-t border-border/60 pt-5 space-y-3">
               {/* Step number indicator */}
-              <div className="text-xs font-mono font-bold text-emerald-450 uppercase tracking-wide">
+              <div className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wide">
                 STEP {step.number}
               </div>
               <h4 className="text-xs font-semibold text-white tracking-tight">
                 {step.title}
               </h4>
-              <p className="text-zinc-500 text-[11px] leading-relaxed">
+              <p className="text-zinc-400 text-[11px] leading-relaxed">
                 {step.description}
               </p>
             </div>

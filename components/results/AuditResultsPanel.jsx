@@ -101,26 +101,28 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         <div className="flex items-center gap-3 min-w-0">
           <div className="flex items-center gap-1.5 shrink-0">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" strokeWidth={2} />
-            <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">
+            <span className="text-[10px] font-mono tracking-wider text-zinc-400 uppercase">
               Audit Complete
             </span>
           </div>
           <span className="h-3 w-px bg-border/60 shrink-0" aria-hidden="true" />
-          <span className="text-[10px] font-mono text-zinc-600 truncate">
+          <span className="text-[10px] font-mono text-zinc-400 truncate">
             {(formData?.tools?.length ?? 0)} tool{(formData?.tools?.length ?? 0) !== 1 ? 's' : ''} audited · {auditDate}
           </span>
         </div>
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={onReset}
-          className="h-7 gap-1.5 text-[10px] text-zinc-600 hover:text-zinc-300 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-        >
-          <RotateCcw className="h-3 w-3" />
-          Re-run
-        </Button>
+        {onReset && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={onReset}
+            className="h-7 gap-1.5 text-[10px] text-zinc-400 hover:text-zinc-300 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+          >
+            <RotateCcw className="h-3 w-3" />
+            Re-run
+          </Button>
+        )}
       </div>
 
       {/* ── 2. Audit Overview & Savings Summary Section ────────────────────── */}
@@ -152,8 +154,8 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between items-start gap-3">
           {/* Section heading */}
           <div className="flex items-center gap-2">
-            <SlidersHorizontal className="h-3 w-3 text-zinc-700" aria-hidden="true" />
-            <h3 className="text-[10px] font-mono tracking-widest text-zinc-600 uppercase">
+            <SlidersHorizontal className="h-3 w-3 text-zinc-500" aria-hidden="true" />
+            <h3 className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase">
               {hasSavings
                 ? `${recommendations.length} Optimization${recommendations.length !== 1 ? 's' : ''}`
                 : 'Optimization Review'}
@@ -183,14 +185,14 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
                       'inline-flex items-center gap-1 rounded px-2 py-1 text-[9px] font-mono uppercase tracking-wider border transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer',
                       isActive
                         ? 'bg-zinc-800 text-zinc-200 border-zinc-700'
-                        : 'bg-transparent text-zinc-600 border-transparent hover:text-zinc-400 hover:border-zinc-800'
+                        : 'bg-transparent text-zinc-400 border-transparent hover:text-zinc-200 hover:border-zinc-800'
                     )}
                   >
                     {tab}
                     <span
                       className={cn(
                         'tabular-nums',
-                        isActive ? 'text-zinc-400' : 'text-zinc-700'
+                        isActive ? 'text-zinc-300' : 'text-zinc-500'
                       )}
                     >
                       {count}
@@ -218,13 +220,13 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         ) : (
           /* Filtered to zero — different from no recommendations at all */
           <div className="py-8 text-center">
-            <p className="text-[11px] text-zinc-600">
+            <p className="text-[11px] text-zinc-400">
               No {activeFilter.toLowerCase()} impact recommendations in this audit.
             </p>
             <button
               type="button"
               onClick={() => setActiveFilter('All')}
-              className="mt-2 text-[10px] font-mono text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer underline underline-offset-2"
+              className="mt-2 text-[10px] font-mono text-zinc-400 hover:text-zinc-300 transition-colors cursor-pointer underline underline-offset-2"
             >
               Show all
             </button>
@@ -236,11 +238,11 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
           Intentionally low-contrast. Engineering accountability line.
       ─────────────────────────────────────────────────────────────────────── */}
       <div className="border-t border-border/40 px-5 py-3 flex items-center justify-between bg-zinc-950/20">
-        <span className="text-[9px] font-mono text-zinc-700">
+        <span className="text-[9px] font-mono text-zinc-500">
           CredLens Audit Engine · Rules v3
         </span>
         {summary.subscriptionCost > 0 && (
-          <span className="text-[9px] font-mono text-zinc-700 tabular-nums">
+          <span className="text-[9px] font-mono text-zinc-500 tabular-nums">
             ${summary.subscriptionCost.toLocaleString()}/mo subscription baseline
           </span>
         )}

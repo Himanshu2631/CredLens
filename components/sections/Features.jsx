@@ -37,7 +37,7 @@ export default function Features() {
                   <span className="h-2 w-2 rounded-full bg-red-500" />
                   <span className="text-[10px] text-zinc-500">anomaly_detector.js</span>
                 </div>
-                <span className="text-[9px] text-zinc-600">Cost Alert: Leak Detected</span>
+                <span className="text-[9px] text-zinc-400">Cost Alert: Leak Detected</span>
               </div>
               <pre className="text-zinc-400 leading-normal space-y-1">
                 <div>{`{`}</div>
@@ -74,7 +74,7 @@ export default function Features() {
             <MockCard>
               <div className="flex items-center justify-between border-b border-border/50 pb-3 mb-4">
                 <span className="text-[10px] font-mono text-zinc-500">SEAT AUDITING & MATCHING</span>
-                <span className="text-[9px] font-mono text-zinc-600">Workspace: Acme Design</span>
+                <span className="text-[9px] font-mono text-zinc-400">Workspace: Acme Design</span>
               </div>
               <div className="space-y-3">
                 {/* Active Member Row */}
@@ -88,7 +88,7 @@ export default function Features() {
                       <div className="text-[9px] text-zinc-500 font-mono">Product Design</div>
                     </div>
                   </div>
-                  <div className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-950/25 border border-emerald-900/30 text-emerald-450">
+                  <div className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-950/25 border border-emerald-900/30 text-emerald-400">
                     Active on Figma & Midjourney
                   </div>
                 </div>
@@ -100,7 +100,7 @@ export default function Features() {
                       MW
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-zinc-350">Mark Wu</div>
+                      <div className="text-xs font-semibold text-zinc-300">Mark Wu</div>
                       <div className="text-[9px] text-zinc-500 font-mono">Marketing Lead</div>
                     </div>
                   </div>
@@ -111,7 +111,7 @@ export default function Features() {
               </div>
               <div className="mt-4 pt-3 border-t border-border/40 flex justify-between items-center">
                 <span className="text-[9px] text-zinc-500 font-mono">2 Inactive seats found</span>
-                <span className="text-[9px] font-semibold text-emerald-450 uppercase">Saving: $120/mo</span>
+                <span className="text-[9px] font-semibold text-emerald-400 uppercase">Saving: $120/mo</span>
               </div>
             </MockCard>
           }
@@ -126,7 +126,7 @@ export default function Features() {
             <MockCard className="flex flex-col gap-4">
               <div className="flex items-center justify-between border-b border-border/50 pb-3">
                 <span className="text-[10px] font-mono text-zinc-500">SHARE DIAGNOSTICS</span>
-                <span className="text-[9px] font-mono text-emerald-450 flex items-center gap-1">
+                <span className="text-[9px] font-mono text-emerald-400 flex items-center gap-1">
                   <span className="h-1 w-1 rounded-full bg-emerald-500" />
                   Link Sharing Enabled
                 </span>
@@ -140,8 +140,8 @@ export default function Features() {
                   aria-label="Copy sharing link to clipboard"
                   className={`h-7.5 px-3 rounded text-[10px] font-mono border transition-all duration-150 cursor-pointer shrink-0 ${
                     copied
-                      ? 'bg-emerald-950/30 border-emerald-900/40 text-emerald-450'
-                      : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-850'
+                      ? 'bg-emerald-950/30 border-emerald-900/40 text-emerald-400'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800'
                   }`}
                 >
                   {copied ? 'Copied!' : 'Copy Link'}

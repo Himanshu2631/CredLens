@@ -82,7 +82,7 @@ export default function UseCaseSelection() {
               >
                 <div className={cn(
                   "mr-3 flex h-7 w-7 items-center justify-center rounded-lg border bg-background transition-colors",
-                  isSelected ? "bg-zinc-950 border-zinc-700 text-white" : "border-border/40 text-muted-foreground group-hover:text-zinc-350"
+                  isSelected ? "bg-zinc-950 border-zinc-700 text-white" : "border-border/40 text-muted-foreground group-hover:text-zinc-300"
                 )}>
                   <Icon className="h-3.5 w-3.5" />
                 </div>
