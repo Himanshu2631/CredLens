@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Mail, Building, Loader2, CheckCircle2, AlertCircle, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createLead } from '@/lib/api';
@@ -13,43 +13,51 @@ import { createLead } from '@/lib/api';
  * @param {number} teamSize    — Pre-populated seat count from the audit
  * @param {number} activeSpend — Pre-populated monthly spend from the audit
  */
+/**
+ * Read the persisted audit link state from localStorage once.
+ * Using lazy initializers avoids calling setState inside a useEffect,
+ * which would trigger a cascading re-render cycle.
+ */
+function readLinkedState(auditId) {
+  if (!auditId || typeof window === 'undefined') {
+    return { isLinked: false, emailSentStatus: null, linkedEmail: '' };
+  }
+  try {
+    const linkedAudits = localStorage.getItem('credlens_linked_audits');
+    if (!linkedAudits) return { isLinked: false, emailSentStatus: null, linkedEmail: '' };
+
+    const parsed = JSON.parse(linkedAudits);
+    if (!parsed.includes(auditId)) return { isLinked: false, emailSentStatus: null, linkedEmail: '' };
+
+    const emailStatuses = localStorage.getItem('credlens_email_statuses');
+    const emailSentStatus = emailStatuses
+      ? (JSON.parse(emailStatuses)[auditId] || 'success')
+      : null;
+
+    const linkedEmails = localStorage.getItem('credlens_linked_emails');
+    const linkedEmail = linkedEmails
+      ? (JSON.parse(linkedEmails)[auditId] || '')
+      : '';
+
+    return { isLinked: true, emailSentStatus, linkedEmail };
+  } catch (e) {
+    console.error('[LeadCaptureCard] Failed to read linked audits from storage:', e);
+    return { isLinked: false, emailSentStatus: null, linkedEmail: '' };
+  }
+}
+
 export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
   const [email, setEmail] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [isLinked, setIsLinked] = useState(false);
-  const [emailSentStatus, setEmailSentStatus] = useState(null); // 'success' | 'failed' | null
+
+  // Lazy initializers read localStorage exactly once on mount — no effect, no re-render.
+  const [isLinked, setIsLinked] = useState(() => readLinkedState(auditId).isLinked);
+  const [emailSentStatus, setEmailSentStatus] = useState(() => readLinkedState(auditId).emailSentStatus);
+  const [linkedEmail, setLinkedEmail] = useState(() => readLinkedState(auditId).linkedEmail);
+
   const [copied, setCopied] = useState(false);
-  const [linkedEmail, setLinkedEmail] = useState('');
-
-  // Check if this specific audit report is already linked to a lead in localStorage
-  useEffect(() => {
-    if (!auditId) return;
-    try {
-      const linkedAudits = localStorage.getItem('credlens_linked_audits');
-      if (linkedAudits) {
-        const parsed = JSON.parse(linkedAudits);
-        if (parsed.includes(auditId)) {
-          setIsLinked(true);
-
-          const emailStatuses = localStorage.getItem('credlens_email_statuses');
-          if (emailStatuses) {
-            const parsedStatuses = JSON.parse(emailStatuses);
-            setEmailSentStatus(parsedStatuses[auditId] || 'success');
-          }
-
-          const linkedEmails = localStorage.getItem('credlens_linked_emails');
-          if (linkedEmails) {
-            const parsedEmails = JSON.parse(linkedEmails);
-            setLinkedEmail(parsedEmails[auditId] || '');
-          }
-        }
-      }
-    } catch (e) {
-      console.error('[LeadCaptureCard] Failed to read linked audits from storage:', e);
-    }
-  }, [auditId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

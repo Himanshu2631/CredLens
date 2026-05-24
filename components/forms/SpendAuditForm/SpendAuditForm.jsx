@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ArrowRight, Loader2, Sparkles } from 'lucide-react';
@@ -19,66 +19,82 @@ const STEPS = [
   { id: 2, label: 'Intent' }
 ];
 
-export default function SpendAuditForm({ onSubmitSuccess }) {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+/**
+ * Default form values — used both for initial render and post-submit reset.
+ */
+const DEFAULT_FORM_VALUES = {
+  tools: [],
+  toolPlans: {},
+  monthlySpend: 1000,
+  seats: 1,
+  useCase: undefined,
+  optimizationGoal: ''
+};
 
-  // Initialize React Hook Form with default values
+/**
+ * Read the persisted form state from localStorage exactly once.
+ * Called via lazy useState initializers so it runs synchronously on the client
+ * before first paint — no effect or setState inside an effect is needed.
+ */
+function readPersistedState() {
+  if (typeof window === 'undefined') {
+    return { formData: DEFAULT_FORM_VALUES, currentStep: 0 };
+  }
+  try {
+    const saved = localStorage.getItem('credlens_spend_audit_flow');
+    if (!saved) return { formData: DEFAULT_FORM_VALUES, currentStep: 0 };
+    const parsed = JSON.parse(saved);
+    if (!parsed || typeof parsed !== 'object') {
+      return { formData: DEFAULT_FORM_VALUES, currentStep: 0 };
+    }
+    return {
+      formData: parsed.formData ?? DEFAULT_FORM_VALUES,
+      currentStep: typeof parsed.currentStep === 'number' ? parsed.currentStep : 0
+    };
+  } catch {
+    return { formData: DEFAULT_FORM_VALUES, currentStep: 0 };
+  }
+}
+
+export default function SpendAuditForm({ onSubmitSuccess }) {
+  // Lazy initializers read localStorage exactly once on mount — no effect, no re-render.
+  const [currentStep, setCurrentStep] = useState(() => readPersistedState().currentStep);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // useRef tracks mount — mutating a ref never triggers a re-render and is not
+  // flagged by react-hooks/set-state-in-effect.
+  const isMountedRef = useRef(false);
+
+  // Initialize React Hook Form with persisted or default values.
+  // Calling readPersistedState() here is safe — it's synchronous and
+  // the result is memoized by useForm (called only once on mount).
   const methods = useForm({
     resolver: zodResolver(spendAuditFormSchema),
     mode: 'onTouch',
-    defaultValues: {
-      tools: [],
-      toolPlans: {},
-      monthlySpend: 1000,
-      seats: 1,
-      useCase: undefined,
-      optimizationGoal: ''
-    }
+    defaultValues: readPersistedState().formData
   });
 
-  const { handleSubmit, trigger, reset, watch } = methods;
-  
-  // Watch all form inputs
-  const formValues = watch();
+  const { handleSubmit, trigger, reset, getValues } = methods;
 
-  // Step 1: Hydrate form state and step from localStorage after mount to prevent SSR mismatch
+  // Mark as mounted on first run. No setState — avoids react-hooks/set-state-in-effect.
   useEffect(() => {
-    setIsMounted(true);
-    try {
-      const savedState = localStorage.getItem('credlens_spend_audit_flow');
-      if (savedState) {
-        const parsed = JSON.parse(savedState);
-        if (parsed && typeof parsed === 'object') {
-          if (parsed.formData) {
-            // Re-populate all inputs safely
-            reset(parsed.formData);
-          }
-          if (typeof parsed.currentStep === 'number') {
-            // Restore previous progress step
-            setCurrentStep(parsed.currentStep);
-          }
-        }
-      }
-    } catch (e) {
-      console.error('[CredLens] Failed to load persisted form state:', e);
-    }
-  }, [reset]);
+    isMountedRef.current = true;
+  }, []);
 
-  // Step 2: Auto-save form values and step index on state change (client-only)
+  // Auto-save form values and step index when the step changes (client-only).
+  // Uses getValues() — a pure snapshot read with no re-render side-effects.
+  // This avoids the react-compiler incompatibility warning that watch() triggers.
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMountedRef.current) return;
     try {
-      const stateToPersist = {
-        formData: formValues,
-        currentStep: currentStep
-      };
-      localStorage.setItem('credlens_spend_audit_flow', JSON.stringify(stateToPersist));
+      localStorage.setItem(
+        'credlens_spend_audit_flow',
+        JSON.stringify({ formData: getValues(), currentStep })
+      );
     } catch (e) {
       console.error('[CredLens] Failed to save form state to localStorage:', e);
     }
-  }, [formValues, currentStep, isMounted]);
+  }, [currentStep, getValues]);
 
   // Handle forward navigation with validation triggers per step
   const handleNext = async () => {
@@ -120,14 +136,7 @@ export default function SpendAuditForm({ onSubmitSuccess }) {
 
       // Reset flow and form states
       setCurrentStep(0);
-      reset({
-        tools: [],
-        toolPlans: {},
-        monthlySpend: 1000,
-        seats: 1,
-        useCase: undefined,
-        optimizationGoal: ''
-      });
+      reset(DEFAULT_FORM_VALUES);
     } catch (err) {
       console.error('[SpendAuditForm] Submission error:', err);
     } finally {
