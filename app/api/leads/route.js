@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dbConnect from '../../../lib/db.js';
 import Lead from '../../../models/Lead.js';
 import Audit from '../../../models/Audit.js';
+import { sendAuditSummaryEmail } from '../../../lib/email/emailService.js';
 
 export async function POST(request) {
   try {
@@ -146,8 +147,48 @@ export async function POST(request) {
 
     await newLead.save();
 
-    // 6. Return response
-    return NextResponse.json(newLead, { status: 201 });
+    // 5.5. Send professional audit summary email via Resend
+    let emailSent = false;
+    let emailError = null;
+
+    if (verifiedAuditId) {
+      try {
+        const audit = await Audit.findById(verifiedAuditId);
+        if (audit) {
+          // Construct absolute share link dynamically based on the request origin
+          const host = request.headers.get('host') || 'localhost:3000';
+          const protocol = request.headers.get('x-forwarded-proto') || 'http';
+          const shareUrl = `${protocol}://${host}/share/${audit.shareToken || audit._id}`;
+
+          console.log(`[API Leads] Dispatching audit report summary email to ${email} for company ${companyName}. URL: ${shareUrl}`);
+          const emailResult = await sendAuditSummaryEmail({
+            to: email,
+            companyName,
+            audit,
+            shareUrl
+          });
+
+          emailSent = emailResult.success;
+          emailError = emailResult.error || null;
+        } else {
+          console.warn(`[API Leads] Warning: Audit report with ID ${verifiedAuditId} was not found. Bypassing email delivery.`);
+          emailError = 'Associated audit report not found.';
+        }
+      } catch (emailErr) {
+        console.error('[API Leads] Failed to execute email dispatch flow:', emailErr);
+        emailError = emailErr.message || 'Unknown email dispatch error.';
+      }
+    } else {
+      console.log('[API Leads] Lead created without associated audit report. Bypassing email delivery.');
+    }
+
+    // 6. Return response with lead details and email status
+    return NextResponse.json({
+      success: true,
+      lead: newLead,
+      emailSent,
+      emailError
+    }, { status: 201 });
   } catch (error) {
     console.error('[API Leads] Server error:', error);
     return NextResponse.json(

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Mail, Building, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Mail, Building, Loader2, CheckCircle2, AlertCircle, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createLead } from '@/lib/api';
 
@@ -19,6 +19,9 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isLinked, setIsLinked] = useState(false);
+  const [emailSentStatus, setEmailSentStatus] = useState(null); // 'success' | 'failed' | null
+  const [copied, setCopied] = useState(false);
+  const [linkedEmail, setLinkedEmail] = useState('');
 
   // Check if this specific audit report is already linked to a lead in localStorage
   useEffect(() => {
@@ -28,9 +31,19 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
       if (linkedAudits) {
         const parsed = JSON.parse(linkedAudits);
         if (parsed.includes(auditId)) {
-          setTimeout(() => {
-            setIsLinked(true);
-          }, 0);
+          setIsLinked(true);
+
+          const emailStatuses = localStorage.getItem('credlens_email_statuses');
+          if (emailStatuses) {
+            const parsedStatuses = JSON.parse(emailStatuses);
+            setEmailSentStatus(parsedStatuses[auditId] || 'success');
+          }
+
+          const linkedEmails = localStorage.getItem('credlens_linked_emails');
+          if (linkedEmails) {
+            const parsedEmails = JSON.parse(linkedEmails);
+            setLinkedEmail(parsedEmails[auditId] || '');
+          }
         }
       }
     } catch (e) {
@@ -54,7 +67,7 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
     setErrorMsg('');
 
     try {
-      await createLead({
+      const res = await createLead({
         companyName: companyName.trim(),
         email: email.trim(),
         auditId: auditId || null,
@@ -64,6 +77,9 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
         metadata: { source: 'post_audit_card' }
       });
 
+      const sentStatus = res.emailSent ? 'success' : 'failed';
+      setEmailSentStatus(sentStatus);
+      setLinkedEmail(email.trim());
       setIsLinked(true);
 
       // Record this auditId as linked in localStorage so they don't see the form on reload
@@ -74,6 +90,16 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
           parsed.push(auditId);
           localStorage.setItem('credlens_linked_audits', JSON.stringify(parsed));
         }
+
+        const emailStatuses = localStorage.getItem('credlens_email_statuses') || '{}';
+        const parsedStatuses = JSON.parse(emailStatuses);
+        parsedStatuses[auditId] = sentStatus;
+        localStorage.setItem('credlens_email_statuses', JSON.stringify(parsedStatuses));
+
+        const linkedEmails = localStorage.getItem('credlens_linked_emails') || '{}';
+        const parsedEmails = JSON.parse(linkedEmails);
+        parsedEmails[auditId] = email.trim();
+        localStorage.setItem('credlens_linked_emails', JSON.stringify(parsedEmails));
       } catch (storageErr) {
         console.error('[LeadCaptureCard] Failed to save linked status to storage:', storageErr);
       }
@@ -85,24 +111,97 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
     }
   };
 
+  const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/share/${auditId}` : '';
+
+  const handleCopyLink = () => {
+    if (!shareUrl) return;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   // If already linked, render a polished success state
   if (isLinked) {
     return (
-      <div className="rounded-lg border border-emerald-900/30 bg-emerald-950/5 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <h4 className="text-xs font-semibold text-zinc-200">
-              Audit Report Successfully Linked
-            </h4>
-            <p className="text-[11px] text-zinc-400 leading-normal max-w-md">
-              Your AI optimization stack has been synced with MongoDB. You can now use the &quot;Share Report&quot; 
-              link to share your diagnostic results.
-            </p>
+      <div className="rounded-lg border border-zinc-800 bg-zinc-950/40 p-5 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/20 pb-4">
+          <div className="flex items-start gap-3">
+            <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <h4 className="text-xs font-semibold text-zinc-200">
+                Audit Report Persisted Successfully
+              </h4>
+              <p className="text-[11px] text-zinc-400 leading-normal max-w-md">
+                Your AI spend optimization stack is now synced to MongoDB and secure sharing is enabled.
+              </p>
+            </div>
+          </div>
+          <div className="text-[10px] font-mono text-emerald-400 bg-emerald-950/20 px-2.5 py-1 rounded border border-emerald-900/30 self-start md:self-center shrink-0">
+            Synced & Active
           </div>
         </div>
-        <div className="text-[10px] font-mono text-zinc-500 bg-zinc-950/40 px-2.5 py-1 rounded border border-border/20 self-start sm:self-center">
-          Persisted & Synced
+
+        {/* Email Notification Status */}
+        <div className="rounded border border-border/30 bg-zinc-900/20 p-3.5 flex items-start gap-3">
+          {emailSentStatus === 'success' ? (
+            <>
+              <Mail className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium text-zinc-200 block">
+                  Report Summary Emailed
+                </span>
+                <p className="text-[10px] text-zinc-400 leading-normal">
+                  A professional PDF-grade audit summary has been sent successfully to <strong className="text-zinc-300 font-semibold">{linkedEmail || 'your email'}</strong>.
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium text-zinc-200 block">
+                  Email Notification Pending / Bypassed
+                </span>
+                <p className="text-[10px] text-zinc-400 leading-normal">
+                  The report saved successfully, but the email summary could not be sent (Resend key missing or sandbox limitation). You can still share this audit using the secure link below.
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Share Link copy block */}
+        <div className="space-y-2">
+          <label className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase block">
+            Secure Shareable Report Link
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              readOnly
+              value={shareUrl}
+              className="flex-1 bg-zinc-950/50 border border-border/60 rounded px-3 py-1.5 text-[11px] font-mono text-zinc-300 outline-none select-all"
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleCopyLink}
+              className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider px-3 border border-border hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 cursor-pointer shrink-0"
+            >
+              {copied ? (
+                <>
+                  <Check className="h-3 w-3 text-emerald-400" />
+                  Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3 w-3" />
+                  Copy Link
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     );
