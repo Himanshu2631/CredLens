@@ -137,10 +137,10 @@ async function runTests() {
   }
 
   console.log('\n--- ALL EMAIL DELIVERY TESTS COMPLETED SUCCESSFULLY ---');
-  setTimeout(() => process.exit(0), 100);
+  setTimeout(() => process.exit(0), 500);
 }
 
 runTests().catch(err => {
   console.error('✗ Test suite crash:', err);
-  setTimeout(() => process.exit(1), 100);
+  setTimeout(() => process.exit(1), 500);
 });

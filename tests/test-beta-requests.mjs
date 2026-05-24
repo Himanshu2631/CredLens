@@ -192,10 +192,10 @@ async function runTests() {
   }
 
   console.log('\n--- ALL BETA REQUEST DATABASE & EMAIL TESTS PASSED ---');
-  setTimeout(() => process.exit(0), 100);
+  setTimeout(() => process.exit(0), 500);
 }
 
 runTests().catch(err => {
   console.error('✗ Unhandled crash:', err);
-  setTimeout(() => process.exit(1), 100);
+  setTimeout(() => process.exit(1), 500);
 });
