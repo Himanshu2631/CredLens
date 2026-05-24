@@ -25,93 +25,133 @@ export default function Features() {
     <SectionWrapper className="border-b border-border/30 bg-zinc-950/25">
       <Container className="space-y-24 md:space-y-36">
 
-        {/* Feature 1: API Cost Insights & Visibility */}
+        {/* Feature 1: Stack Visibility */}
         <FeatureRow
-          badge="API Cost Insights"
-          title="Granular model execution telemetry"
-          description="Audit token usage, cache hit rates, and prompt/completion payloads down to the exact millisecond. Identify unclosed LLM agent loops, duplicate threads, and high-latency cycles that inflate your production bills."
+          badge="Stack Visibility"
+          title="Consolidated view of your AI spend"
+          description="Get a clear, structured breakdown of your software subscriptions and volumetric API spend. Understand exactly where your capital is going across OpenAI, Anthropic, and specialized AI providers."
           visual={
-            <MockCard className="font-mono text-[11px] text-zinc-400">
-              <div className="flex items-center justify-between border-b border-border/50 pb-3 mb-3.5">
-                <div className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-red-500" />
-                  <span className="text-[10px] text-zinc-500">anomaly_detector.js</span>
-                </div>
-                <span className="text-[9px] text-zinc-400">Cost Alert: Leak Detected</span>
+            <MockCard>
+              <div className="flex items-center justify-between border-b border-border/50 pb-3 mb-4 select-none">
+                <span className="text-[10px] font-mono text-zinc-500">SPEND DISTRIBUTION</span>
+                <span className="text-[9.5px] font-mono text-zinc-400">Monthly Run-rate: $14,240</span>
               </div>
-              <pre className="text-zinc-400 leading-normal space-y-1">
-                <div>{`{`}</div>
-                <div className="pl-4">{`"model": "`}
-                  <span className="text-zinc-200 font-semibold">gpt-4o</span>{`",`}
+
+              {/* Progress bar */}
+              <div className="h-2.5 w-full rounded-full overflow-hidden bg-zinc-900 border border-zinc-800/60 flex p-[1px] mb-5 select-none">
+                <div className="bg-zinc-300 h-full rounded-l-full" style={{ width: '58%' }} />
+                <div className="bg-zinc-600 h-full rounded-r-full -ml-[1px]" style={{ width: '42%' }} />
+              </div>
+
+              <div className="space-y-2.5 select-none">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="flex items-center gap-1.5 text-zinc-400">
+                    <span className="h-2 w-2 rounded-full bg-zinc-300" />
+                    Subscriptions
+                  </span>
+                  <span className="font-semibold text-zinc-200 font-mono">$8,260/mo</span>
                 </div>
-                <div className="pl-4">{`"tokens": {`}</div>
-                <div className="pl-8">{`"prompt": 8192,`}</div>
-                <div className="pl-8">{`"completion": 4096`}</div>
-                <div className="pl-4">{`},`}</div>
-                <div className="pl-4">{`"billing_cost": "`}
-                  <span className="text-red-400 font-semibold">$0.09000</span>{`",`}
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="flex items-center gap-1.5 text-zinc-400">
+                    <span className="h-2 w-2 rounded-full bg-zinc-600" />
+                    API Volumetrics
+                  </span>
+                  <span className="font-semibold text-zinc-200 font-mono">$5,980/mo</span>
                 </div>
-                <div className="pl-4">{`"execution_loop": "`}
-                  <span className="text-red-400 font-medium">RECURSIVE_THREAD_LEAK</span>{`"`}
-                </div>
-                <div>{`}`}</div>
-              </pre>
-              <div className="mt-4 pt-3 border-t border-border/40 text-[9px] text-zinc-500 flex justify-between">
-                <span>Ingest Stream: API Proxy Logs</span>
-                <span className="text-red-400 font-semibold">Leak Impact: -$1,850/mo</span>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-border/40 flex justify-between items-center text-[10px] text-zinc-500 font-mono select-none">
+                <span>Audited Providers</span>
+                <span>OpenAI · Anthropic · Gemini</span>
               </div>
             </MockCard>
           }
         />
 
-        {/* Feature 2: Subscription Consolidation */}
+        {/* Feature 2: Optimization Insights */}
         <FeatureRow
-          badge="Seat Audit Optimization"
-          title="Unify and prune software seats"
-          description="Consolidate overlapping AI applications. Our telemetry engine parses seat engagement logs across tools like Claude Team, ChatGPT Enterprise, and Midjourney to flag seats with zero activity in the last 60 days."
+          badge="Optimization Insights"
+          title="Identify redundant and underutilized subscriptions"
+          description="Detect overlapping AI tools, duplicate developer licenses, and API spend concentrations. Our analysis maps your team footprint against a registry of optimization rules to highlight immediately recoverable waste."
           reverse
           visual={
             <MockCard>
-              <div className="flex items-center justify-between border-b border-border/50 pb-3 mb-4">
-                <span className="text-[10px] font-mono text-zinc-500">SEAT AUDITING & MATCHING</span>
-                <span className="text-[9px] font-mono text-zinc-400">Workspace: Acme Design</span>
+              <div className="flex items-center justify-between border-b border-border/50 pb-3 mb-4 select-none">
+                <span className="text-[10px] font-mono text-zinc-500">OPTIMIZATION INSIGHTS</span>
+                <span className="text-[9.5px] font-mono text-emerald-400 bg-emerald-950/20 border border-emerald-900/30 px-2 py-0.5 rounded">
+                  4 Actions Identified
+                </span>
               </div>
-              <div className="space-y-3">
-                {/* Active Member Row */}
-                <div className="flex items-center justify-between p-2.5 rounded border border-border/30 bg-zinc-950/40">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-6 w-6 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[10px] text-zinc-300 font-semibold">
-                      JD
+
+              <div className="space-y-2.5 select-none">
+                {/* Insight item 1 */}
+                <div className="flex items-start justify-between gap-3 p-2.5 rounded border border-border/30 bg-zinc-950/40">
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
+                      Duplicate Coding Assistants
                     </div>
-                    <div>
-                      <div className="text-xs font-semibold text-zinc-200">Jane Doe</div>
-                      <div className="text-[9px] text-zinc-500 font-mono">Product Design</div>
-                    </div>
+                    <p className="text-[10px] text-zinc-400 leading-normal">
+                      Cursor & GitHub Copilot seats active simultaneously across engineering.
+                    </p>
                   </div>
-                  <div className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-950/25 border border-emerald-900/30 text-emerald-400">
-                    Active on Figma & Midjourney
+                  <div className="text-[9.5px] font-mono font-semibold text-red-400 shrink-0">
+                    -$190/mo
                   </div>
                 </div>
 
-                {/* Inactive Member Row with Flag */}
-                <div className="flex items-center justify-between p-2.5 rounded border border-red-900/30 bg-red-950/5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-6 w-6 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[10px] text-zinc-400 font-semibold">
-                      MW
+                {/* Insight item 2 */}
+                <div className="flex items-start justify-between gap-3 p-2.5 rounded border border-border/30 bg-zinc-950/40">
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                      Oversized Team Tiers
                     </div>
-                    <div>
-                      <div className="text-xs font-semibold text-zinc-300">Mark Wu</div>
-                      <div className="text-[9px] text-zinc-500 font-mono">Marketing Lead</div>
-                    </div>
+                    <p className="text-[10px] text-zinc-400 leading-normal">
+                      Workspace plan exceeds active seat usage baseline.
+                    </p>
                   </div>
-                  <div className="text-[9px] font-mono px-2 py-0.5 rounded bg-red-950/40 border border-red-900/40 text-red-400">
-                    Zero Activity (62 Days)
+                  <div className="text-[9.5px] font-mono font-semibold text-amber-400 shrink-0">
+                    -$60/mo
+                  </div>
+                </div>
+
+                {/* Insight item 3 */}
+                <div className="flex items-start justify-between gap-3 p-2.5 rounded border border-border/30 bg-zinc-950/40">
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
+                      Unused Premium AI Plans
+                    </div>
+                    <p className="text-[10px] text-zinc-400 leading-normal">
+                      Enterprise subscriptions with low engagement detected.
+                    </p>
+                  </div>
+                  <div className="text-[9.5px] font-mono font-semibold text-zinc-400 shrink-0">
+                    -$150/mo
+                  </div>
+                </div>
+
+                {/* Insight item 4 */}
+                <div className="flex items-start justify-between gap-3 p-2.5 rounded border border-border/30 bg-zinc-950/40">
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
+                      API Concentration Risk
+                    </div>
+                    <p className="text-[10px] text-zinc-400 leading-normal">
+                      Single-provider dependency increases billing overhead.
+                    </p>
+                  </div>
+                  <div className="text-[9.5px] font-mono font-semibold text-zinc-400 shrink-0">
+                    -$220/mo
                   </div>
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-border/40 flex justify-between items-center">
-                <span className="text-[9px] text-zinc-500 font-mono">2 Inactive seats found</span>
-                <span className="text-[9px] font-semibold text-emerald-400 uppercase">Saving: $120/mo</span>
+
+              <div className="mt-4 pt-3 border-t border-border/40 flex justify-between items-center text-[10px] text-zinc-500 font-mono select-none">
+                <span>Recoverable AI Cost Run-rate</span>
+                <span className="text-emerald-400 font-semibold">$620/mo</span>
               </div>
             </MockCard>
           }

@@ -30,7 +30,7 @@ export default function CTA() {
             <SectionHeader
               badge="Immediate Diagnostics"
               title="Take control of your AI margins."
-              description="Ingest your model execution logs locally. Flag duplicate licenses, token leaks, and rate tier anomalies in under two minutes."
+              description="Run a private audit of your AI subscriptions in under two minutes. Instantly pinpoint duplicate licenses, over-allocated seats, and misaligned plan tiers."
               align="center"
               titleClassName="text-lg sm:text-2xl max-w-lg"
               descriptionClassName="max-w-md"
@@ -68,7 +68,7 @@ export default function CTA() {
 
             {/* Micro trust-text below */}
             <div className="text-[10px] text-zinc-500 pt-1">
-              No database connections required. Log files remain secure inside your browser context.
+              No database connections or keys required. All audits run securely in your browser context.
             </div>
 
           </div>

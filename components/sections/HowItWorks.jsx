@@ -13,30 +13,30 @@ export default function HowItWorks() {
   const steps = [
     {
       number: '01',
-      title: 'Upload log telemetry',
-      description: 'Drag and drop your model API execution logs or subscription CSV sheets. All files are parsed locally using WebAssembly—no backend data collection occurs.'
+      title: 'Configure Stack Profile',
+      description: 'Select your team’s active AI subscriptions, developer tools, and seat counts. No code integrations or database permissions are required.'
     },
     {
       number: '02',
-      title: 'Analyze cost leaks',
-      description: 'Our rules engine audits your files for seat overlapping, latent token thread leaks, and recursive api loops. Diagnostics are ready in under ten seconds.'
+      title: 'Identify Plan Redundancy',
+      description: 'Our cost intelligence engine evaluates your tools against active pricing models to pinpoint seat overlaps and misaligned subscription tiers.'
     },
     {
       number: '03',
-      title: 'Optimize and share',
-      description: 'Apply the generated savings checklists to prune license pools, fix code loops, and share read-only markdown audit logs with your growth team.'
+      title: 'Optimize and Recover',
+      description: 'Follow the generated recommendations to prune seat allocations, cancel duplicate services, and export shareable reports for your finance team.'
     }
   ];
 
   return (
-    <SectionWrapper className="border-b border-border/30 bg-zinc-950/15">
+    <SectionWrapper className="border-b border-border/30 bg-zinc-950/15 py-20 md:py-24">
       <Container className="space-y-16">
         
         {/* Section Title Header */}
         <SectionHeader
-          badge="Audit Pipeline"
-          title="Audit your spend in three steps"
-          description="A developer-first ingestion pipeline built to identify leaks instantly without exposing database credentials or security environments."
+          badge="Audit Workflow"
+          title="Optimize your spend in three steps"
+          description="A private, browser-based workflow designed to instantly identify software waste without exposing developer credentials or keys."
           descriptionClassName="select-none max-w-lg mt-2"
         />
 

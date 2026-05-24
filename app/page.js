@@ -107,28 +107,32 @@ export default function Home() {
 
   return (
     <PageContainer>
-      {/* Hero */}
+      {/* 1. Hero Section */}
       <Hero />
 
-      {/* Social Proof */}
-      <SocialProof />
-
-      {/* Feature Highlights */}
-      <Features />
-
-      {/* How It Works */}
-      <HowItWorks />
-
-      {/* ── Main Audit Workspace ─────────────────────────────────────────────── */}
+      {/* 2. Main Audit Workspace — Placed high up to establish the audit flow as the dominant narrative */}
       <SectionWrapper
         id="audit-workspace"
-        className="pt-12 scroll-mt-20 border-b border-border/30 bg-zinc-950/5"
+        className="py-20 md:py-24 scroll-mt-20 border-b border-border/30 bg-zinc-950/5 relative"
       >
-        <Container>
-          <ContentWrapper cols={12}>
+        <Container className="space-y-12">
+          {/* Section Introduction */}
+          <div className="max-w-xl mx-auto text-center space-y-3">
+            <span className="text-[10px] font-mono tracking-widest text-emerald-400 uppercase bg-emerald-950/10 border border-emerald-900/30 px-3 py-1 rounded-full">
+              Interactive Ingest Portal
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              Run a Live AI Spend Audit
+            </h2>
+            <p className="text-zinc-400 text-xs md:text-sm font-normal leading-relaxed">
+              Configure your tools, active pricing plans, and seat assignments. Our cost intelligence engine will identify redundancies, licensing mismatches, and inactive seat leaks.
+            </p>
+          </div>
+
+          <ContentWrapper cols={12} className="gap-8 md:gap-10 pt-4">
 
             {/* Left Column: Configuration Form + Architecture Note */}
-            <div className="lg:col-span-5 space-y-6">
+            <div className="col-span-12 lg:col-span-5 space-y-6">
               {auditError && (
                 <div className="rounded-xl border border-amber-950/20 bg-amber-950/5 p-4 text-xs text-amber-500 flex items-start gap-2.5">
                   <AlertCircle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
@@ -141,74 +145,72 @@ export default function Home() {
               
               <SpendAuditForm onSubmitSuccess={handleAuditSubmit} />
 
-              {/* Platform scope reminder — honest engineering callout */}
+              {/* Data & Privacy Note */}
               <div className="rounded-xl border border-border bg-card/30 p-4 space-y-2">
-                <div className="flex items-center gap-2 text-body-premium font-medium text-zinc-300">
-                  <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                  Data Persistence
+                <div className="flex items-center gap-2 text-xs font-semibold text-zinc-300">
+                  <AlertCircle className="h-4 w-4 text-zinc-500" />
+                  Data & Privacy
                 </div>
-                <p className="text-muted-premium">
-                  Audit reports are evaluated securely. Stack setups, calculated savings, and 
-                  recommendations are saved to MongoDB Atlas to support report sharing and CRM linking.
+                <p className="text-[11px] text-zinc-500 leading-relaxed font-normal">
+                  Audits run securely inside your browser session. Stack setups and calculated recommendations are saved to MongoDB to support report sharing and CRM sync.
                 </p>
               </div>
             </div>
 
             {/* Right Column: Results Panel or Rules Catalog */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="col-span-12 lg:col-span-7 space-y-6">
               {isGenerating ? (
                 /* ── Loading Skeleton State ── */
                 <AuditOverviewSkeleton />
               ) : isMounted && activeAudit ? (
-                /* ── Live Audit Results ──────────────────────────────────────── */
+                /* ── Live Audit Results ── */
                 <AuditResultsPanel
                   auditResult={activeAudit.auditResult}
                   formData={activeAudit}
                   onReset={handleAuditReset}
                 />
               ) : (
-                /* ── Idle: Static Optimization Rules Catalog ─────────────────── */
+                /* ── Idle: Static Optimization Rules Catalog ── */
                 <div
                   id="rules-catalog"
-                  className="scroll-mt-20 rounded-xl border border-border bg-card p-6 space-y-4"
+                  className="scroll-mt-20 rounded-xl border border-border/80 bg-zinc-950/30 p-6 space-y-6 backdrop-blur-sm shadow-[0_12px_24px_-10px_rgba(0,0,0,0.5)]"
                 >
-                  <div className="space-y-1">
-                    <h3 className="text-body-premium font-medium text-white flex items-center gap-2">
-                      <HelpCircle className="h-3.5 w-3.5 text-muted-foreground" />
-                      Audit Engine Rules
+                  <div className="space-y-2">
+                    <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-400 flex items-center gap-2">
+                      <HelpCircle className="h-3.5 w-3.5 text-zinc-500" />
+                      Audit Engine Rules ({OPTIMIZATION_RULES.length})
                     </h3>
-                    <p className="text-muted-premium">
-                      These optimization rules are evaluated against your configured tools and spend
-                      profile. Submit the form to run a live analysis.
+                    <p className="text-[11px] text-zinc-400 leading-relaxed font-normal">
+                      CredLens evaluates your AI subscription stack against a specialized registry of optimization rules to pinpoint cost redundancies, license tier mismatches, and inactive seat leaks.
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                     {OPTIMIZATION_RULES.map((rule) => (
                       <div
                         key={rule.id}
-                        className="group rounded-lg border border-border bg-background/20 p-3 hover:border-border/80 transition-colors"
+                        className="group rounded-lg border border-border/40 bg-zinc-950/40 p-4 hover:border-border/80 transition-all duration-200"
                       >
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
+                        <div className="flex items-start justify-between gap-2.5">
+                          <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">
                             {rule.provider} / {rule.category}
                           </span>
                           <span
-                            className={`text-[9px] px-1.5 py-0.5 rounded font-medium border ${
+                            className={`text-[8.5px] font-mono uppercase px-1.5 py-0.5 rounded font-medium border ${
                               rule.impact === 'high'
                                 ? 'bg-emerald-950/20 text-emerald-400 border-emerald-900/30'
                                 : rule.impact === 'medium'
                                 ? 'bg-amber-950/20 text-amber-400 border-amber-900/30'
-                                : 'bg-secondary text-muted-foreground border-border/30'
+                                : 'bg-zinc-900/40 text-zinc-400 border-zinc-800/40'
                             }`}
                           >
                             {rule.impact} impact
                           </span>
                         </div>
-                        <h4 className="mt-2 text-xs font-medium text-zinc-300 group-hover:text-white transition-colors">
+                        <h4 className="mt-3 text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors">
                           {rule.title}
                         </h4>
-                        <p className="mt-1 text-[10px] text-muted-foreground leading-normal">
+                        <p className="mt-1.5 text-[10.5px] text-zinc-400 leading-relaxed font-normal">
                           {rule.description}
                         </p>
                       </div>
@@ -222,7 +224,16 @@ export default function Home() {
         </Container>
       </SectionWrapper>
 
-      {/* Final CTA */}
+      {/* 3. How It Works Section */}
+      <HowItWorks />
+
+      {/* 4. Feature Highlights Section */}
+      <Features />
+
+      {/* 5. Social Proof Section */}
+      <SocialProof />
+
+      {/* 6. Final Call to Action */}
       <CTA />
     </PageContainer>
   );

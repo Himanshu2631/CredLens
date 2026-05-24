@@ -13,8 +13,8 @@ export default function AuditPreviewCard() {
   const recommendations = [
     {
       id: 1,
-      title: 'Optimize API Ingestion',
-      description: 'Consolidate raw OpenAI assistant threads. 14 unclosed session loops are leaking token cycles in production worker threads.',
+      title: 'Consolidate Coding Assistant Seats',
+      description: 'Duplicate Cursor and GitHub Copilot licenses active across engineering team. Standardizing onto a single provider saves duplicate costs.',
       provider: 'openai',
       impact: 'High',
       savings: '$1,850/mo',
