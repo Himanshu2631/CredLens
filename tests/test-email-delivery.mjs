@@ -79,7 +79,8 @@ async function runTests() {
     console.log('✓ Success: HTML email summary template compiled and matched metrics perfectly.');
   } else {
     console.error('✗ Failure: HTML template failed assertions.');
-    process.exit(1);
+    setTimeout(() => process.exit(1), 100);
+    return;
   }
 
   // Test 2: API key verification and initialization
@@ -92,12 +93,14 @@ async function runTests() {
       console.log('✓ Success: Resend client initialized successfully with present API key.');
     } else {
       console.error('✗ Failure: API key exists but Resend client failed to initialize.');
-      process.exit(1);
+      setTimeout(() => process.exit(1), 100);
+      return;
     }
   } else {
     console.log('⚠ Info: RESEND_API_KEY is missing. Skipping client-based delivery dispatch tests.');
     console.log('✓ Success: Service matches bypass conditions correctly.');
-    process.exit(0);
+    setTimeout(() => process.exit(0), 100);
+    return;
   }
 
   // Test 3: Email delivery dispatch
@@ -120,22 +123,24 @@ async function runTests() {
       console.error('✗ Failure: Email delivery failed:', outcome.error);
       // We don't fail the build/test suite strictly here if it is a sandbox limitation (e.g. invalid domain error)
       // but we log it clearly.
-      if (outcome.error.includes('403') || outcome.error.includes('unauthorized') || outcome.error.includes('restricted')) {
+      if (outcome.error.includes('403') || outcome.error.includes('unauthorized') || outcome.error.includes('restricted') || outcome.error.includes('domain')) {
         console.log('⚠ Note: Sandbox restriction detected. This is expected if the recipient is not verified in your Resend account.');
       } else {
-        process.exit(1);
+        setTimeout(() => process.exit(1), 100);
+        return;
       }
     }
   } catch (deliveryErr) {
     console.error('✗ Failure: Unexpected delivery crash:', deliveryErr);
-    process.exit(1);
+    setTimeout(() => process.exit(1), 100);
+    return;
   }
 
   console.log('\n--- ALL EMAIL DELIVERY TESTS COMPLETED SUCCESSFULLY ---');
-  process.exit(0);
+  setTimeout(() => process.exit(0), 100);
 }
 
 runTests().catch(err => {
   console.error('✗ Test suite crash:', err);
-  process.exit(1);
+  setTimeout(() => process.exit(1), 100);
 });

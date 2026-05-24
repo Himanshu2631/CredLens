@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node tests/test-savings-calculator.mjs && node tests/test-audit-engine.mjs && node tests/test-pricing-utils.mjs && node tests/test-backend-db.mjs && node tests/test-ai-summary.mjs && node tests/test-email-delivery.mjs"
+    "test": "node tests/test-savings-calculator.mjs && node tests/test-audit-engine.mjs && node tests/test-pricing-utils.mjs && node tests/test-backend-db.mjs && node tests/test-ai-summary.mjs && node tests/test-beta-requests.mjs && node tests/test-email-delivery.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
