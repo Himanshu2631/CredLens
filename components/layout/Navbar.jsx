@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import Container from './Container';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/ui/Logo';
+import FeedbackModal from './FeedbackModal';
 
 // Modular Desktop NavLink component
 const NavLink = ({ href, children, isActive }) => (
@@ -38,6 +39,7 @@ const MobileNavLink = ({ href, children, isActive, onClick }) => (
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const pathname = usePathname();
 
   const navigation = [
@@ -85,6 +87,7 @@ export default function Navbar() {
             <Button
               variant="outline"
               size="sm"
+              onClick={() => setIsFeedbackOpen(true)}
               className="font-medium text-zinc-300 hover:text-white border-zinc-800/80 bg-zinc-950 hover:bg-zinc-900"
             >
               Feedback
@@ -169,7 +172,10 @@ export default function Navbar() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setIsFeedbackOpen(true);
+              }}
               className="w-full justify-center"
             >
               Feedback
@@ -185,6 +191,10 @@ export default function Navbar() {
           </div>
         </Container>
       </div>
+      <FeedbackModal 
+        isOpen={isFeedbackOpen} 
+        onClose={() => setIsFeedbackOpen(false)} 
+      />
     </header>
   );
 }
