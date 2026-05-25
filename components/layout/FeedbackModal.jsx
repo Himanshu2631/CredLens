@@ -137,7 +137,7 @@ export default function FeedbackModal({ isOpen, onClose }) {
             <div className="space-y-3 pt-2">
               {/* Name */}
               <div className="relative flex items-center">
-                <User className="absolute left-3 h-3.5 w-3.5 text-zinc-500 pointer-events-none" aria-hidden="true" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500 pointer-events-none" aria-hidden="true" />
                 <input
                   type="text"
                   placeholder="Your Name"
@@ -152,7 +152,7 @@ export default function FeedbackModal({ isOpen, onClose }) {
 
               {/* Email */}
               <div className="relative flex items-center">
-                <Mail className="absolute left-3 h-3.5 w-3.5 text-zinc-500 pointer-events-none" aria-hidden="true" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500 pointer-events-none" aria-hidden="true" />
                 <input
                   type="email"
                   placeholder="Business Email"
