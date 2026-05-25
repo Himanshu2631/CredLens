@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Copy, Share2, FileDown, Check, Layers, Info } from 'lucide-react';
+import { Copy, Share2, FileDown, Check, Layers, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PRICING_REGISTRY } from '@/data/pricing';
 import { formatCurrency, localizeText } from '@/lib/currency';
+import { generateAuditPDF } from '@/lib/pdfBuilder';
+import { generateAuditCSV } from '@/lib/csvBuilder';
 
 /**
  * Helper to dynamically scan text for currency values and percentages,
@@ -54,6 +56,52 @@ export function highlightTelemetryText(text) {
 export default function AuditOverviewSection({ summary, recommendations = [], formData, auditDate = 'Recent', aiSummary, currency = 'USD' }) {
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [pdfError, setPdfError] = useState(null);
+  const [isGeneratingCSV, setIsGeneratingCSV] = useState(false);
+  const [csvError, setCsvError] = useState(null);
+
+  const handleDownloadCSV = () => {
+    setIsGeneratingCSV(true);
+    setCsvError(null);
+    try {
+      generateAuditCSV({
+        summary,
+        recommendations,
+        formData,
+        auditDate,
+        currency
+      });
+    } catch (err) {
+      console.error('[CredLens] CSV generation failed:', err);
+      setCsvError('Export failed. Please try again.');
+      setTimeout(() => setCsvError(null), 5000);
+    } finally {
+      setIsGeneratingCSV(false);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    setIsGeneratingPDF(true);
+    setPdfError(null);
+    try {
+      await generateAuditPDF({
+        summary,
+        recommendations,
+        formData,
+        auditDate,
+        aiSummary,
+        currency,
+        shareId: formData?.shareToken || summary?.shareToken || formData?._id
+      });
+    } catch (err) {
+      console.error('[CredLens] PDF generation failed:', err);
+      setPdfError('Export failed. Please try again.');
+      setTimeout(() => setPdfError(null), 5000);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
 
   // Client-side debugging: Log the source of the audit summary
   React.useEffect(() => {
@@ -425,25 +473,60 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
 
         {/* Future Scalability Placeholders (Muted) */}
         <div className="flex items-center gap-1.5 select-none">
+          {pdfError && (
+            <span className="text-[9px] font-mono text-red-400 bg-red-950/20 border border-red-900/30 px-2 py-0.5 rounded animate-pulse shrink-0">
+              {pdfError}
+            </span>
+          )}
+          {csvError && (
+            <span className="text-[9px] font-mono text-red-400 bg-red-950/20 border border-red-900/30 px-2 py-0.5 rounded animate-pulse shrink-0">
+              {csvError}
+            </span>
+          )}
+
           {/* CSV Export */}
-          <span 
-            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-500"
-            title="CSV Export capability planned for future updates"
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleDownloadCSV}
+            disabled={isGeneratingCSV}
+            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <FileDown className="h-3 w-3 text-zinc-500" />
-            Export CSV
-            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-400 px-1 rounded">Beta</span>
-          </span>
+            {isGeneratingCSV ? (
+              <>
+                <Loader2 className="h-3 w-3 animate-spin text-emerald-400" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <FileDown className="h-3 w-3" />
+                Export CSV
+              </>
+            )}
+          </Button>
 
           {/* PDF Export */}
-          <span 
-            className="inline-flex items-center gap-1.5 rounded border border-zinc-900/60 bg-zinc-950/20 px-2 py-1 text-[9.5px] font-mono uppercase tracking-wider text-zinc-500"
-            title="PDF Export scheduled for next release"
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleDownloadPDF}
+            disabled={isGeneratingPDF}
+            className="h-8 gap-1.5 text-[10px] uppercase font-mono tracking-wider border border-border hover:border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <FileDown className="h-3 w-3 text-zinc-500" />
-            PDF Report
-            <span className="text-[8px] bg-zinc-900/60 border border-zinc-800/40 text-zinc-400 px-1 rounded">Scheduled</span>
-          </span>
+            {isGeneratingPDF ? (
+              <>
+                <Loader2 className="h-3 w-3 animate-spin text-emerald-400" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <FileDown className="h-3 w-3" />
+                PDF Report
+              </>
+            )}
+          </Button>
         </div>
       </div>
       
