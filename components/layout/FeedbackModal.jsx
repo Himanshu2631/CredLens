@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { X, CheckCircle2, Loader2, Mail, User, MessageSquare } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { createFeedback } from '@/lib/api';
+import { cn } from '@/lib/utils';
 
 /**
  * FeedbackModal - A polished modal for gathering user feedback on the CredLens platform.
@@ -82,7 +83,7 @@ export default function FeedbackModal({ isOpen, onClose }) {
 
       {/* Modal Card Shell */}
       <div 
-        className="relative w-full max-w-md bg-zinc-950 border border-zinc-800/80 rounded-xl p-6 shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-zinc-950 border border-zinc-800/80 rounded-xl p-6 shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="feedback-modal-title"
@@ -111,13 +112,16 @@ export default function FeedbackModal({ isOpen, onClose }) {
                 Thank you for helping us improve CredLens! Our product team has received your submission.
               </p>
             </div>
-            <Button
+            <button
               type="button"
               onClick={handleResetAndClose}
-              className="mt-2 h-9 text-[10px] uppercase font-mono tracking-wider px-6 cursor-pointer"
+              className={cn(
+                buttonVariants({ variant: 'default', size: 'default' }),
+                "mt-2 h-9 text-[10px] uppercase font-mono tracking-wider px-6 cursor-pointer"
+              )}
             >
               Done
-            </Button>
+            </button>
           </div>
         ) : (
           /* Feedback Input Form */
@@ -188,10 +192,13 @@ export default function FeedbackModal({ isOpen, onClose }) {
               </div>
             )}
 
-            <Button
+            <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-9 text-[10px] uppercase font-mono tracking-wider cursor-pointer"
+              className={cn(
+                buttonVariants({ variant: 'default', size: 'default' }),
+                "w-full h-9 text-[10px] uppercase font-mono tracking-wider cursor-pointer"
+              )}
             >
               {isSubmitting ? (
                 <>
@@ -201,7 +208,7 @@ export default function FeedbackModal({ isOpen, onClose }) {
               ) : (
                 'Submit Feedback'
               )}
-            </Button>
+            </button>
           </form>
         )}
       </div>
