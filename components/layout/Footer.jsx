@@ -33,7 +33,7 @@ export default function Footer() {
             <Link href="#" className="text-xs text-muted-foreground hover:text-white transition-colors">
               Security
             </Link>
-            <Link href="#" className="text-xs text-muted-foreground hover:text-white transition-colors">
+            <Link href="/docs" className="text-xs text-muted-foreground hover:text-white transition-colors">
               Docs
             </Link>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono ml-0 md:ml-4">
