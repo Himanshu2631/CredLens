@@ -41,27 +41,31 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
   const { summary, recommendations = [] } = auditResult;
 
   const [activeFilter, setActiveFilter] = useState('All');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('credlens_currency');
+        if (saved === 'USD' || saved === 'INR') {
+          return saved;
+        }
+      } catch (e) {
+        console.warn('[CredLens] Failed to load currency preference:', e);
+      }
+    }
+    return 'USD';
+  });
 
-  // Load saved currency preference from localStorage in useEffect (SSR-safe)
+  // Persist currency preference to localStorage whenever it changes
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('credlens_currency');
-      if (saved === 'USD' || saved === 'INR') {
-        setCurrency(saved);
-      }
-    } catch (e) {
-      console.warn('[CredLens] Failed to load currency preference:', e);
-    }
-  }, []);
-
-  const handleCurrencyToggle = (newCurrency) => {
-    setCurrency(newCurrency);
-    try {
-      localStorage.setItem('credlens_currency', newCurrency);
+      localStorage.setItem('credlens_currency', currency);
     } catch (e) {
       console.warn('[CredLens] Failed to save currency preference:', e);
     }
+  }, [currency]);
+
+  const handleCurrencyToggle = (newCurrency) => {
+    setCurrency(newCurrency);
   };
 
   // Sort by priority first, then filter
