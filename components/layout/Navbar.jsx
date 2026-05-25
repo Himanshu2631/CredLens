@@ -42,6 +42,15 @@ export default function Navbar() {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const pathname = usePathname();
 
+  const handleAnalyzeCostClick = (e) => {
+    setIsOpen(false);
+    const target = document.getElementById('audit-workspace');
+    if (target && pathname === '/') {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Cost Auditor', href: '/' },
@@ -93,13 +102,15 @@ export default function Navbar() {
               Feedback
             </Button>
             
-            <Button
-              variant="default"
-              size="sm"
-              className="font-medium shadow-[0_1px_2px_rgba(255,255,255,0.05)]"
-            >
-              Analyze Cost
-            </Button>
+            <Link href="/#audit-workspace" onClick={handleAnalyzeCostClick} className="inline-flex shrink-0">
+              <Button
+                variant="default"
+                size="sm"
+                className="font-medium shadow-[0_1px_2px_rgba(255,255,255,0.05)] cursor-pointer"
+              >
+                Analyze Cost
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle button with premium path animations */}
@@ -180,14 +191,15 @@ export default function Navbar() {
             >
               Feedback
             </Button>
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => setIsOpen(false)}
-              className="w-full justify-center"
-            >
-              Analyze Cost
-            </Button>
+            <Link href="/#audit-workspace" onClick={handleAnalyzeCostClick} className="w-full">
+              <Button
+                variant="default"
+                size="sm"
+                className="w-full justify-center cursor-pointer"
+              >
+                Analyze Cost
+              </Button>
+            </Link>
           </div>
         </Container>
       </div>
