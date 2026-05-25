@@ -35,8 +35,13 @@ export default function FeedbackModal({ isOpen, onClose }) {
       setErrorMsg('Please enter your business email.');
       return;
     }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email.trim())) {
+      setErrorMsg('Please enter a valid business email.');
+      return;
+    }
     if (!message.trim()) {
-      setErrorMsg('Please enter a feedback message.');
+      setErrorMsg('Please enter your feedback message.');
       return;
     }
 
@@ -131,8 +136,8 @@ export default function FeedbackModal({ isOpen, onClose }) {
 
             <div className="space-y-3 pt-2">
               {/* Name */}
-              <div className="relative">
-                <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" aria-hidden="true" />
+              <div className="relative flex items-center">
+                <User className="absolute left-3 h-3.5 w-3.5 text-zinc-500 pointer-events-none" aria-hidden="true" />
                 <input
                   type="text"
                   placeholder="Your Name"
@@ -140,14 +145,14 @@ export default function FeedbackModal({ isOpen, onClose }) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={isSubmitting}
-                  className="w-full bg-zinc-950/50 border border-border/80 rounded px-9 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors"
+                  className="w-full bg-zinc-950/50 border border-border/80 rounded pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors disabled:opacity-50"
                   required
                 />
               </div>
 
               {/* Email */}
-              <div className="relative">
-                <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" aria-hidden="true" />
+              <div className="relative flex items-center">
+                <Mail className="absolute left-3 h-3.5 w-3.5 text-zinc-500 pointer-events-none" aria-hidden="true" />
                 <input
                   type="email"
                   placeholder="Business Email"
@@ -155,14 +160,14 @@ export default function FeedbackModal({ isOpen, onClose }) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isSubmitting}
-                  className="w-full bg-zinc-950/50 border border-border/80 rounded px-9 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors"
+                  className="w-full bg-zinc-950/50 border border-border/80 rounded pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors disabled:opacity-50"
                   required
                 />
               </div>
 
               {/* Message */}
               <div className="relative">
-                <MessageSquare className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" aria-hidden="true" />
+                <MessageSquare className="absolute left-3 top-3.5 h-3.5 w-3.5 text-zinc-500 pointer-events-none" aria-hidden="true" />
                 <textarea
                   placeholder="What is on your mind?..."
                   aria-label="Feedback Message"
@@ -170,7 +175,7 @@ export default function FeedbackModal({ isOpen, onClose }) {
                   onChange={(e) => setMessage(e.target.value)}
                   disabled={isSubmitting}
                   rows={4}
-                  className="w-full bg-zinc-950/50 border border-border/80 rounded pl-9 pr-3 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors resize-none"
+                  className="w-full bg-zinc-950/50 border border-border/80 rounded pl-10 pr-4 py-3 text-xs text-white placeholder-zinc-500 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors resize-none disabled:opacity-50"
                   required
                 />
               </div>
