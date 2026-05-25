@@ -12,7 +12,8 @@ export default function FeatureRow({
   description,
   visual,
   reverse = false,
-  className = ''
+  className = '',
+  children
 }) {
   const textOrder = reverse ? 'lg:order-last' : '';
   const visualOrder = reverse ? 'lg:order-first' : '';
@@ -25,15 +26,22 @@ export default function FeatureRow({
       )}
     >
       {/* Text/Header Area */}
-      <div className={cn("lg:col-span-5 space-y-4", textOrder)}>
+      <div className={cn("lg:col-span-6 space-y-4", textOrder)}>
         <SectionHeader
           badge={badge}
           title={title}
           description={description}
         />
+        {children}
       </div>
       {/* Visual representation Area */}
-      <div className={cn("lg:col-span-7 flex justify-center", visualOrder)}>
+      <div
+        className={cn(
+          "lg:col-span-6 flex justify-center",
+          reverse ? "lg:justify-start" : "lg:justify-end",
+          visualOrder
+        )}
+      >
         {visual}
       </div>
     </div>

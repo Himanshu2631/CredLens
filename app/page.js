@@ -13,6 +13,7 @@ import CTA from '@/components/sections/CTA';
 import SpendAuditForm from '@/components/forms/SpendAuditForm/SpendAuditForm';
 import AuditResultsPanel from '@/components/results/AuditResultsPanel';
 import AuditOverviewSkeleton from '@/components/results/AuditOverviewSkeleton';
+import SavingsMethodologyPanel from '@/components/results/SavingsMethodologyPanel';
 import { OPTIMIZATION_RULES } from '@/data/rules';
 import { runSpendAudit } from '@/lib/audit/rulesEngine';
 import { createSpendAudit } from '@/lib/api';
@@ -155,6 +156,11 @@ export default function Home() {
                   Audits run securely inside your browser session. Stack setups and calculated recommendations are saved to MongoDB to support report sharing and CRM sync.
                 </p>
               </div>
+
+              {/* Supporting Savings Heuristics & Methodology */}
+              {isMounted && activeAudit && (
+                <SavingsMethodologyPanel />
+              )}
             </div>
 
             {/* Right Column: Results Panel or Rules Catalog */}
