@@ -5,6 +5,7 @@ import { ChevronDown, ArrowRight, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ProviderIcon from '@/components/audit/ProviderIcon';
 import ImpactBadge from './ImpactBadge';
+import { formatCurrency, localizeText } from '@/lib/currency';
 
 /**
  * Category label — maps rule category to a short, human-readable label
@@ -49,7 +50,7 @@ const IMPACT_ACCENT = {
  * @param {Object} recommendation  A single item from auditResult.recommendations[]
  * @param {number} index           0-based position for staggered CSS animation delay
  */
-export default function AuditRecommendationCard({ recommendation, index = 0 }) {
+export default function AuditRecommendationCard({ recommendation, index = 0, currency = 'USD' }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [isReviewed, setIsReviewed] = React.useState(false);
 
@@ -123,7 +124,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
             "text-[11px] leading-snug line-clamp-1 pr-2 transition-colors",
             isReviewed ? "text-zinc-600" : "text-zinc-500"
           )}>
-            {explanation}
+            {localizeText(explanation, currency)}
           </p>
         </div>
 
@@ -132,10 +133,10 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
           {hasSavings ? (
             <div className="text-right">
               <div className="text-[12px] font-mono font-semibold text-emerald-400 tabular-nums leading-none">
-                {estimatedSavings.formattedMonthly}
+                {formatCurrency(estimatedSavings.monthly, currency, 'mo')}
               </div>
               <div className="text-[9px] font-mono text-zinc-500 mt-0.5">
-                {estimatedSavings.formattedYearly}/yr
+                {formatCurrency(estimatedSavings.yearly, currency, 'yr')}
               </div>
             </div>
           ) : (
@@ -173,7 +174,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
           <div className="space-y-2">
             <SectionLabel>Why this matters</SectionLabel>
             <p className="text-[12px] text-zinc-400 leading-[1.65] max-w-prose">
-              {whyItMatters}
+              {localizeText(whyItMatters, currency)}
             </p>
           </div>
 
@@ -193,7 +194,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
                       {i + 1}
                     </span>
                     <span className="text-[12px] text-zinc-400 leading-[1.6]">
-                      {step}
+                      {localizeText(step, currency)}
                     </span>
                   </li>
                 ))}
@@ -209,13 +210,13 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
                 {/* Monthly */}
                 <SavingsStat
                   label="Per month"
-                  value={estimatedSavings.formattedMonthly}
+                  value={formatCurrency(estimatedSavings.monthly, currency, 'mo')}
                   highlight
                 />
                 {/* Annual */}
                 <SavingsStat
                   label="Per year"
-                  value={estimatedSavings.formattedYearly}
+                  value={formatCurrency(estimatedSavings.yearly, currency, 'yr')}
                 />
                 {/* Savings math logic — the "show your work" line */}
                 {estimatedSavings.logic && (
@@ -224,7 +225,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0 }) {
                       Calculation
                     </span>
                     <p className="text-[10px] font-mono text-zinc-400 leading-relaxed">
-                      {estimatedSavings.logic}
+                      {localizeText(estimatedSavings.logic, currency)}
                     </p>
                   </div>
                 )}

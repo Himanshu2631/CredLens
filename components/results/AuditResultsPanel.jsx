@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { RotateCcw, CheckCircle2, SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { formatCurrency } from '@/lib/currency';
 import AuditOverviewSection from './AuditOverviewSection';
 import AuditRecommendationCard from './AuditRecommendationCard';
 import AuditEmptyState from './AuditEmptyState';
@@ -40,6 +41,28 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
   const { summary, recommendations = [] } = auditResult;
 
   const [activeFilter, setActiveFilter] = useState('All');
+  const [currency, setCurrency] = useState('USD');
+
+  // Load saved currency preference from localStorage in useEffect (SSR-safe)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('credlens_currency');
+      if (saved === 'USD' || saved === 'INR') {
+        setCurrency(saved);
+      }
+    } catch (e) {
+      console.warn('[CredLens] Failed to load currency preference:', e);
+    }
+  }, []);
+
+  const handleCurrencyToggle = (newCurrency) => {
+    setCurrency(newCurrency);
+    try {
+      localStorage.setItem('credlens_currency', newCurrency);
+    } catch (e) {
+      console.warn('[CredLens] Failed to save currency preference:', e);
+    }
+  };
 
   // Sort by priority first, then filter
   const sorted = useMemo(
@@ -111,18 +134,48 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
           </span>
         </div>
 
-        {onReset && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onReset}
-            className="h-7 gap-1.5 text-[10px] text-zinc-400 hover:text-zinc-300 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-          >
-            <RotateCcw className="h-3 w-3" />
-            Re-run
-          </Button>
-        )}
+        <div className="flex items-center gap-3.5 shrink-0">
+          {/* Currency Switcher */}
+          <div className="flex items-center rounded bg-zinc-900 border border-zinc-800 p-[2px] h-[26px] select-none font-mono">
+            <button
+              type="button"
+              onClick={() => handleCurrencyToggle('USD')}
+              className={cn(
+                "rounded px-2.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold transition-all duration-150 cursor-pointer h-full flex items-center justify-center",
+                currency === 'USD'
+                  ? "bg-zinc-800 text-zinc-100 shadow-sm"
+                  : "bg-transparent text-zinc-500 hover:text-zinc-300"
+              )}
+            >
+              USD
+            </button>
+            <button
+              type="button"
+              onClick={() => handleCurrencyToggle('INR')}
+              className={cn(
+                "rounded px-2.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold transition-all duration-150 cursor-pointer h-full flex items-center justify-center",
+                currency === 'INR'
+                  ? "bg-zinc-800 text-zinc-100 shadow-sm"
+                  : "bg-transparent text-zinc-500 hover:text-zinc-300"
+              )}
+            >
+              INR
+            </button>
+          </div>
+
+          {onReset && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onReset}
+              className="h-7 gap-1.5 text-[10px] text-zinc-400 hover:text-zinc-300 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+            >
+              <RotateCcw className="h-3 w-3" />
+              Re-run
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* ── 2. Audit Overview & Savings Summary Section ────────────────────── */}
@@ -132,6 +185,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         formData={formData}
         auditDate={auditDate}
         aiSummary={auditResult.aiSummary}
+        currency={currency}
       />
 
       {/* ── Lead Capture Persistence Sync Card ── */}
@@ -212,6 +266,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
                 key={rec.id}
                 recommendation={rec}
                 index={i}
+                currency={currency}
               />
             ))}
           </div>
@@ -243,7 +298,7 @@ export default function AuditResultsPanel({ auditResult, formData, onReset }) {
         </span>
         {summary.subscriptionCost > 0 && (
           <span className="text-[9px] font-mono text-zinc-500 tabular-nums">
-            ${summary.subscriptionCost.toLocaleString()}/mo subscription baseline
+            {formatCurrency(summary.subscriptionCost, currency, 'mo')} subscription baseline
           </span>
         )}
       </div>
