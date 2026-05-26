@@ -1,17 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '@/components/layout/Container';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import { Button } from '@/components/ui/button';
 import CTACard from '@/components/ui/CTACard';
 import SectionHeader from '@/components/ui/SectionHeader';
+import DemoModal from '@/components/layout/DemoModal';
 
 /**
  * Centered CTA section promoting the platform's immediate diagnostics.
  * Integrates reusable CTACard and SectionHeader elements.
  */
 export default function CTA() {
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+
   const handleScrollToAudit = (e) => {
     e.preventDefault();
     const element = document.getElementById('audit-workspace');
@@ -58,6 +61,7 @@ export default function CTA() {
               </Button>
               
               <Button
+                onClick={() => setIsDemoOpen(true)}
                 variant="outline"
                 size="lg"
                 className="w-full sm:w-auto text-xs font-semibold px-6 h-10 border-border bg-card/45 text-zinc-300 hover:text-white cursor-pointer"
@@ -74,6 +78,7 @@ export default function CTA() {
           </div>
         </CTACard>
       </Container>
+      <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </SectionWrapper>
   );
 }
