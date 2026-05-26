@@ -31,7 +31,7 @@ export default function InsightFeed({ events = [] }) {
       </div>
 
       {events.length === 0 ? (
-        <p className="text-[11px] text-zinc-500 py-4 text-center">
+        <p className="text-[12.5px] text-zinc-500 py-4 text-center">
           Activity feed will populate after your first saved audit.
         </p>
       ) : (
@@ -52,14 +52,14 @@ export default function InsightFeed({ events = [] }) {
                 {/* Text Layout */}
                 <div className="space-y-1">
                   <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-1">
-                    <h4 className="text-[11px] font-semibold text-zinc-200 leading-normal pr-2">
+                    <h4 className="text-[12.5px] font-semibold text-zinc-200 leading-normal pr-2">
                       {event.title}
                     </h4>
                     <span className="text-[9px] font-mono text-zinc-500 shrink-0">
                       {event.timestamp}
                     </span>
                   </div>
-                  <p className="text-[10.5px] text-zinc-400 leading-relaxed font-normal">
+                  <p className="text-[12px] text-zinc-400 leading-relaxed font-normal">
                     {event.description}
                   </p>
                 </div>

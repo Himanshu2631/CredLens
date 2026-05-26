@@ -62,7 +62,7 @@ export default function SavingsMethodologyPanel() {
       </div>
 
       {/* Intro text */}
-      <p className="text-[11px] text-zinc-400 leading-relaxed font-normal">
+      <p className="text-[12.5px] text-zinc-400 leading-relaxed font-normal">
         The CredLens Spend Intelligence engine analyzes active software deployments against real-time billing structures using five core diagnostic heuristics:
       </p>
 
@@ -79,10 +79,10 @@ export default function SavingsMethodologyPanel() {
                 <Icon className="h-3 w-3 text-zinc-500 group-hover:text-emerald-400 transition-colors" strokeWidth={2} />
               </div>
               <div className="space-y-1">
-                <h4 className="text-[11px] font-semibold text-zinc-300 group-hover:text-white transition-colors leading-tight">
+                <h4 className="text-[12px] font-semibold text-zinc-300 group-hover:text-white transition-colors leading-tight">
                   {item.title}
                 </h4>
-                <p className="text-[10.5px] text-zinc-500 leading-normal font-normal">
+                <p className="text-[11.5px] text-zinc-500 leading-normal font-normal">
                   {item.description}
                 </p>
               </div>

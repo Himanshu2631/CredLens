@@ -21,7 +21,7 @@ export default function RedundancyAlerts({ alerts = [], riskMatrix = [] }) {
         </div>
 
         {alerts.length === 0 ? (
-          <p className="text-[11px] text-zinc-500 py-2 text-center">
+          <p className="text-[12.5px] text-zinc-500 py-2 text-center">
             No high-priority redundancies detected in the latest audit.
           </p>
         ) : (
@@ -38,14 +38,14 @@ export default function RedundancyAlerts({ alerts = [], riskMatrix = [] }) {
 
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                    <h4 className="text-xs font-semibold text-zinc-200 truncate">
+                    <h4 className="text-[13px] font-semibold text-zinc-200 truncate">
                       {alert.title}
                     </h4>
                     <span className="text-[10px] font-mono font-medium text-emerald-400 shrink-0 self-start sm:self-center">
                       {alert.impact}
                     </span>
                   </div>
-                  <p className="text-[11px] text-zinc-400 leading-relaxed">
+                  <p className="text-[12.5px] text-zinc-400 leading-relaxed">
                     {alert.description}
                   </p>
                 </div>
@@ -65,7 +65,7 @@ export default function RedundancyAlerts({ alerts = [], riskMatrix = [] }) {
         </div>
 
         {riskMatrix.length === 0 ? (
-          <p className="text-[11px] text-zinc-500 py-2 text-center">
+          <p className="text-[12.5px] text-zinc-500 py-2 text-center">
             No recommendations available yet.
           </p>
         ) : (
@@ -85,7 +85,7 @@ export default function RedundancyAlerts({ alerts = [], riskMatrix = [] }) {
                     key={idx}
                     className="border-b border-zinc-900/30 last:border-0 hover:bg-zinc-900/10 transition-colors"
                   >
-                    <td className="py-3 text-xs font-medium text-zinc-300">
+                    <td className="py-3 text-[12.5px] font-medium text-zinc-300">
                       {item.action}
                     </td>
                     <td className="py-3 text-xs">

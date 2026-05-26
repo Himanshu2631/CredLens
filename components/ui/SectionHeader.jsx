@@ -43,7 +43,7 @@ export default function SectionHeader({
       {description && (
         <p
           className={cn(
-            "text-zinc-400 text-sm md:text-[15px] leading-[1.7]",
+            "text-zinc-400 text-[14.5px] md:text-[16px] leading-[1.75]",
             align === 'center' ? "max-w-md" : "max-w-xl",
             descriptionClassName
           )}

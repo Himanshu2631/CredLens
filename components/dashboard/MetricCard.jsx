@@ -56,7 +56,7 @@ export default function MetricCard({
         )}
       </div>
 
-      <p className="mt-2 text-[11px] leading-normal text-zinc-400">
+      <p className="mt-2 text-[12px] leading-relaxed text-zinc-400">
         {description}
       </p>
     </div>

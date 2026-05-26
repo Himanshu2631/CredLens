@@ -125,19 +125,19 @@ export default function Features() {
         >
           {/* Supporting scannable points */}
           <ul className="space-y-2 pt-2 select-none">
-            <li className="flex items-start gap-2.5 text-[13px] text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2.5 text-[13.5px] md:text-[14.5px] text-zinc-400 leading-[1.65]">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">Duplicate subscriptions</strong>: Surface overlapping seats across coding and design tools.
               </span>
             </li>
-            <li className="flex items-start gap-2.5 text-[13px] text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2.5 text-[13.5px] md:text-[14.5px] text-zinc-400 leading-[1.65]">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">Bloated plan tiers</strong>: Identify inactive seat allocations and oversized workspace tiers.
               </span>
             </li>
-            <li className="flex items-start gap-2.5 text-[13px] text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2.5 text-[13.5px] md:text-[14.5px] text-zinc-400 leading-[1.65]">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">API capacity leaks</strong>: Audit usage profiles to optimize multi-provider overhead.

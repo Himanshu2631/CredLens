@@ -48,10 +48,10 @@ export default function HowItWorks() {
               <div className="text-[13px] font-mono font-bold text-emerald-400 uppercase tracking-wide">
                 STEP {step.number}
               </div>
-              <h4 className="text-sm font-semibold text-white tracking-tight">
+              <h4 className="text-[14.5px] font-semibold text-white tracking-tight">
                 {step.title}
               </h4>
-              <p className="text-zinc-400 text-xs leading-relaxed">
+              <p className="text-zinc-400 text-[13px] md:text-[13.5px] leading-[1.6]">
                 {step.description}
               </p>
             </div>

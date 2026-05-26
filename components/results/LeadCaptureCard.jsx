@@ -140,7 +140,7 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
               <h4 className="text-xs font-semibold text-zinc-200">
                 Audit Report Persisted Successfully
               </h4>
-              <p className="text-[11px] text-zinc-400 leading-normal max-w-md">
+              <p className="text-[12.5px] text-zinc-400 leading-normal max-w-md">
                 Your AI spend optimization stack is now synced to MongoDB and secure sharing is enabled.
               </p>
             </div>
@@ -159,7 +159,7 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
                 <span className="text-[11px] font-medium text-zinc-200 block">
                   Report Summary Emailed
                 </span>
-                <p className="text-[10px] text-zinc-400 leading-normal">
+                <p className="text-[12px] text-zinc-400 leading-normal">
                   A professional PDF-grade audit summary has been sent successfully to <strong className="text-zinc-300 font-semibold">{linkedEmail || 'your email'}</strong>.
                 </p>
               </div>
@@ -171,7 +171,7 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
                 <span className="text-[11px] font-medium text-zinc-200 block">
                   Email Notification Pending / Bypassed
                 </span>
-                <p className="text-[10px] text-zinc-400 leading-normal">
+                <p className="text-[12px] text-zinc-400 leading-normal">
                   The report saved successfully, but the email summary could not be sent (Resend key missing or sandbox limitation). You can still share this audit using the secure link below.
                 </p>
               </div>
@@ -226,7 +226,7 @@ export default function LeadCaptureCard({ auditId, teamSize, activeSpend }) {
         <h4 className="text-xs font-semibold text-zinc-200">
           Save Report & Lock in Savings
         </h4>
-        <p className="text-[11px] text-zinc-400 leading-normal">
+        <p className="text-[12.5px] text-zinc-400 leading-normal">
           Persist your report permanently in MongoDB to get a secure share link, track optimization progress, 
           and receive updates when AI API pricing changes.
         </p>

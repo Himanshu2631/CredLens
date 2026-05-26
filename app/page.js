@@ -136,7 +136,7 @@ export default function Home() {
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
               Run a Live AI Spend Audit
             </h2>
-            <p className="text-zinc-400 text-xs md:text-sm font-normal leading-relaxed">
+            <p className="text-zinc-400 text-[13.5px] md:text-[14.5px] font-normal leading-relaxed">
               Configure your tools, active pricing plans, and seat assignments. Our cost intelligence engine will identify redundancies, licensing mismatches, and inactive seat leaks.
             </p>
           </div>
@@ -159,11 +159,11 @@ export default function Home() {
 
               {/* Data & Privacy Note */}
               <div className="rounded-xl border border-border bg-card/30 p-4 space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-zinc-300">
+                <div className="flex items-center gap-2 text-[13px] font-semibold text-zinc-300">
                   <AlertCircle className="h-4 w-4 text-zinc-500" />
                   Data & Privacy
                 </div>
-                <p className="text-[11px] text-zinc-500 leading-relaxed font-normal">
+                <p className="text-[12px] md:text-[12.5px] text-zinc-500 leading-relaxed font-normal">
                   Audits run securely inside your browser session. Stack setups and calculated recommendations are saved to MongoDB to support report sharing and CRM sync.
                 </p>
               </div>
