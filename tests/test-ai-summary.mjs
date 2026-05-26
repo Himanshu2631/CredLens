@@ -27,34 +27,34 @@ try {
   console.log('\n--- 1. JSON Extraction Tests ---');
   
   // Direct JSON
-  const rawJson = '{"executiveSummary": "test summary", "keyInsights": ["i1"], "runwayImpact": "ri1"}';
+  const rawJson = '{"ai_audit_summary": "test summary", "keyInsights": ["i1"], "runwayImpact": "ri1"}';
   const p1 = extractJSON(rawJson);
-  assert(p1.executiveSummary === 'test summary', 'Should parse clean direct JSON');
+  assert(p1.ai_audit_summary === 'test summary', 'Should parse clean direct JSON');
   assert(p1.keyInsights[0] === 'i1', 'Should preserve insight lists in direct JSON');
 
   // Markdown code fence JSON
   const mdJson = `Here is your JSON response:
 \`\`\`json
 {
-  "executiveSummary": "markdown summary",
+  "ai_audit_summary": "markdown summary",
   "keyInsights": ["i2"],
   "runwayImpact": "ri2"
 }
 \`\`\`
 Hope this helps!`;
   const p2 = extractJSON(mdJson);
-  assert(p2.executiveSummary === 'markdown summary', 'Should parse JSON wrapped in markdown fences');
+  assert(p2.ai_audit_summary === 'markdown summary', 'Should parse JSON wrapped in markdown fences');
   assert(p2.keyInsights[0] === 'i2', 'Should extract nested insights from markdown blocks');
 
   // Curly brace boundary substring extraction
   const textJson = `Sure, here is the structured object:
 {
-  "executiveSummary": "curly summary",
+  "ai_audit_summary": "curly summary",
   "keyInsights": ["i3"],
   "runwayImpact": "ri3"
 }`;
   const p3 = extractJSON(textJson);
-  assert(p3.executiveSummary === 'curly summary', 'Should extract JSON from surrounding explanation text');
+  assert(p3.ai_audit_summary === 'curly summary', 'Should extract JSON from surrounding explanation text');
   
 } catch (e) {
   console.error('JSON Extraction Tests crashed:', e);
@@ -66,6 +66,7 @@ try {
   console.log('\n--- 2. Validation & Repair Tests ---');
 
   const fallbackData = {
+    ai_audit_summary: 'fallback summary',
     executiveSummary: 'fallback summary',
     keyInsights: ['f1', 'f2', 'f3'],
     runwayImpact: 'fallback runway'
@@ -73,18 +74,18 @@ try {
 
   // Missing insights array should get backfilled
   const invalidPayload = {
-    executiveSummary: 'custom summary',
+    ai_audit_summary: 'custom summary',
     keyInsights: null,
     runwayImpact: 'custom runway'
   };
   const repaired1 = validateAndRepairSummary(invalidPayload, fallbackData);
-  assert(repaired1.executiveSummary === 'custom summary', 'Should preserve valid keys');
+  assert(repaired1.ai_audit_summary === 'custom summary', 'Should preserve valid keys');
   assert(Array.isArray(repaired1.keyInsights) && repaired1.keyInsights.length === 3, 'Should repair and backfill keyInsights list to length 3');
   assert(repaired1.keyInsights[0] === 'f1', 'Should use fallback insights to fill blanks');
 
   // Partially filled insights should get padded to length 3
   const partialPayload = {
-    executiveSummary: 'custom summary 2',
+    ai_audit_summary: 'custom summary 2',
     keyInsights: ['c1'],
     runwayImpact: 'custom runway 2'
   };
@@ -136,8 +137,8 @@ try {
   };
 
   const mockResult = generateMockSummary(auditDataMock);
-  assert(mockResult.executiveSummary.includes('Acme Corp'), 'Mock executive summary should contain the project name');
-  assert(mockResult.executiveSummary.includes('$300/mo'), 'Mock summary should reference actual savings');
+  assert(mockResult.ai_audit_summary.includes('Acme Corp'), 'Mock executive summary should contain the project name');
+  assert(mockResult.ai_audit_summary.includes('$300/mo'), 'Mock summary should reference actual savings');
   assert(mockResult.keyInsights.length === 3, 'Mock summary must contain exactly 3 key insights');
   assert(mockResult.keyInsights[0].includes('Consolidating duplicate Github assistant seats'), 'Mock should generate specific insights from recommendation list');
 
@@ -158,7 +159,7 @@ try {
   };
 
   const zeroResult = generateMockSummary(zeroSavingsData);
-  assert(zeroResult.executiveSummary.includes('fully optimized'), 'Zero savings summary should acknowledge optimization is complete');
+  assert(zeroResult.ai_audit_summary.includes('fully optimized'), 'Zero savings summary should acknowledge optimization is complete');
   assert(zeroResult.keyInsights[0].includes('Zero license redundancies'), 'Zero savings should return clean generic stack insights');
   
 } catch (e) {
@@ -217,7 +218,7 @@ try {
 
   const summaryResult = await generateAuditSummary(auditDataForOrchestrator);
   assert(summaryResult.provider === 'mock', 'Should gracefully fall back to mock builder when GEMINI_API_KEY is missing');
-  assert(summaryResult.executiveSummary.includes('Acme LLC'), 'Fallback summary should still contain calculation details');
+  assert(summaryResult.ai_audit_summary.includes('Acme LLC'), 'Fallback summary should still contain calculation details');
 
 } catch (e) {
   console.error('AI Service Orchestrator Routing Tests crashed:', e);

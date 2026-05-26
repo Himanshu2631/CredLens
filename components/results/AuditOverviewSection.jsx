@@ -113,7 +113,7 @@ export default function AuditOverviewSection({ summary, recommendations = [], fo
       if (aiSummary.debugError) {
         console.warn(`[CredLens Debug] AI Summary Error: "${aiSummary.debugError}"`);
       }
-      console.log(`[CredLens Debug] Summary text:`, aiSummary.executiveSummary);
+      console.log(`[CredLens Debug] Summary text:`, aiSummary.ai_audit_summary || aiSummary.executiveSummary);
     } else {
       console.log('[CredLens Debug] Rendering static fallback summary (No AI summary provided).');
     }
@@ -156,8 +156,9 @@ Runway Overhead Reduced:    ${hasSavings ? summary.runwayRestoredPercent : 0}%
 Baseline Subscriptions:    ${formatCurrency(summary.subscriptionCost || 0, currency, 'mo')}
 Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'mo')}`;
 
-    if (aiSummary?.executiveSummary) {
-      text += `\n\nAI EXECUTIVE SUMMARY:\n${localizeText(aiSummary.executiveSummary, currency)}`;
+    const targetSummaryText = aiSummary?.ai_audit_summary || aiSummary?.executiveSummary;
+    if (targetSummaryText) {
+      text += `\n\nAI AUDIT SUMMARY:\n${localizeText(targetSummaryText, currency)}`;
     }
     if (aiSummary?.keyInsights && aiSummary.keyInsights.length > 0) {
       text += `\n\nKEY INSIGHTS:\n` + aiSummary.keyInsights.map((ins, i) => `${i + 1}. ${localizeText(ins, currency)}`).join('\n');
@@ -227,8 +228,8 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
         </div>
         
         <p className="text-zinc-300 text-xs md:text-sm leading-[1.65] max-w-3xl font-normal">
-          {aiSummary?.executiveSummary ? (
-            highlightTelemetryText(localizeText(aiSummary.executiveSummary, currency))
+          {(aiSummary?.ai_audit_summary || aiSummary?.executiveSummary) ? (
+            highlightTelemetryText(localizeText(aiSummary.ai_audit_summary || aiSummary.executiveSummary, currency))
           ) : (
             <>
               Based on an analysis of <strong className="text-white font-medium">{toolCount} active AI tools</strong> and a team size of <strong className="text-white font-medium">{formData?.seats || 1}</strong>, we identified <strong className="text-emerald-400 font-medium">{hasSavings ? formatCurrency(summary.totalEstimatedSavings, currency) : formatCurrency(0, currency)}</strong> in potential monthly spend optimization. Addressing these issues consolidates your run-rate from <strong className="text-zinc-400 font-medium">{formatCurrency(summary.totalCurrentSpend, currency, 'mo')}</strong> to <strong className="text-white font-medium">{formatCurrency(summary.optimizedSpendEstimate, currency, 'mo')}</strong>, recovering <strong className="text-emerald-400 font-medium">{hasSavings ? summary.runwayRestoredPercent : 0}%</strong> of active AI spend and securing <strong className="text-emerald-400 font-medium">{hasSavings ? formatCurrency(summary.totalEstimatedYearlySavings, currency, 'yr') : formatCurrency(0, currency, 'yr')}</strong> in annualized runway.

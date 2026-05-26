@@ -50,7 +50,7 @@ async function runTests() {
       runwayRestoredPercent: 36.4
     },
     aiSummary: {
-      executiveSummary: 'We identified substantial redundancies in seat allocations for code assistants and direct API volumetrics. Consolidating these licenses recovers $560/mo in active spend.'
+      ai_audit_summary: 'We identified substantial redundancies in seat allocations for code assistants and direct API volumetrics. Consolidating these licenses recovers $560/mo in active spend.'
     },
     recommendations: [
       {

@@ -20,7 +20,7 @@ export async function GET() {
     const audit = await Audit.findOne({})
       .sort({ createdAt: -1 })
       .select(
-        'tools toolPlans seats inactiveSeats monthlySpend summary recommendations projectName createdAt'
+        'tools toolPlans seats inactiveSeats monthlySpend summary recommendations projectName createdAt aiSummary'
       )
       .lean();
 

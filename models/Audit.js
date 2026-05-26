@@ -123,6 +123,7 @@ const AuditSchema = new mongoose.Schema(
     
     // AI Audit Summary
     aiSummary: {
+      ai_audit_summary: { type: String, default: '' },
       executiveSummary: { type: String, default: '' },
       keyInsights: { type: [String], default: [] },
       runwayImpact: { type: String, default: '' },
