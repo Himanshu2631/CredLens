@@ -77,16 +77,23 @@ export default function DashboardClient({ data }) {
 
     // 3. Mount sync check
     // If the local storage has a newer audit ID than what was rendered by SSR, sync immediately
-    try {
-      const localLatestId = localStorage.getItem('credlens_latest_audit_id');
-      const loadedAuditId = data?.auditMeta?.auditId;
-      if (localLatestId && localLatestId !== loadedAuditId) {
-        console.log('[DashboardClient] Mount mismatch detected. Syncing live data...');
-        fetchLiveMetrics(false);
+    const syncOnMount = async () => {
+      // Defer execution to the microtask queue to allow the initial render/effect flow
+      // to complete, preventing synchronous state updates inside the useEffect block.
+      await Promise.resolve();
+      try {
+        const localLatestId = localStorage.getItem('credlens_latest_audit_id');
+        const loadedAuditId = data?.auditMeta?.auditId;
+        if (localLatestId && localLatestId !== loadedAuditId) {
+          console.log('[DashboardClient] Mount mismatch detected. Syncing live data...');
+          await fetchLiveMetrics(false);
+        }
+      } catch (e) {
+        console.warn('[DashboardClient] Failed to perform initial mount sync check:', e);
       }
-    } catch (e) {
-      console.warn('[DashboardClient] Failed to perform initial mount sync check:', e);
-    }
+    };
+
+    syncOnMount();
 
     return () => {
       window.removeEventListener('credlens_audit_updated', handleUpdate);
