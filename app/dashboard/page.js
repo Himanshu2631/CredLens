@@ -1,6 +1,8 @@
 import React from 'react';
 import DashboardClient from '@/components/dashboard/DashboardClient';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Fetch the derived dashboard payload from the API route.
  * Runs server-side — no MongoDB credentials or driver code in the page.

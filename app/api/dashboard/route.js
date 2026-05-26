@@ -3,6 +3,8 @@ import dbConnect from '@/lib/db';
 import Audit from '@/models/Audit';
 import { deriveDashboardMetrics } from '@/lib/dashboard/metrics';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/dashboard
  *
@@ -23,17 +25,26 @@ export async function GET() {
       .lean();
 
     if (!audit) {
-      return NextResponse.json({ empty: true }, { status: 200 });
+      return NextResponse.json({ empty: true }, {
+        status: 200,
+        headers: { 'Cache-Control': 'no-store, must-revalidate' }
+      });
     }
 
     const payload = deriveDashboardMetrics(audit);
 
-    return NextResponse.json({ empty: false, ...payload }, { status: 200 });
+    return NextResponse.json({ empty: false, ...payload }, {
+      status: 200,
+      headers: { 'Cache-Control': 'no-store, must-revalidate' }
+    });
   } catch (err) {
     console.error('[API /dashboard] Error fetching dashboard data:', err);
     return NextResponse.json(
       { error: 'Failed to load dashboard data.' },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { 'Cache-Control': 'no-store, must-revalidate' }
+      }
     );
   }
 }

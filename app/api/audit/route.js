@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server.js';
+import { revalidatePath } from 'next/cache';
 import dbConnect from '../../../lib/db.js';
 import Audit from '../../../models/Audit.js';
 import { runSpendAudit } from '../../../lib/audit/rulesEngine.js';
@@ -141,6 +142,14 @@ export async function POST(request) {
     });
 
     await newAudit.save();
+
+    // Revalidate dashboard caches so new audit is reflected instantly
+    try {
+      revalidatePath('/dashboard');
+      revalidatePath('/api/dashboard');
+    } catch (revalErr) {
+      console.warn('[API Audit] Failed to revalidate dashboard paths:', revalErr);
+    }
 
     // 6. Return response
     return NextResponse.json(newAudit, { status: 201 });

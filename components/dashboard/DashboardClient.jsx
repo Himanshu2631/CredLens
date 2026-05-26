@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { TrendingDown, DollarSign, Users, Zap, Clock } from 'lucide-react';
+import { TrendingDown, DollarSign, Users, Zap, Clock, Loader2 } from 'lucide-react';
 import PageContainer from '@/components/layout/PageContainer';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import Container from '@/components/layout/Container';
@@ -32,6 +32,67 @@ function formatLastUpdated(createdAt) {
 
 export default function DashboardClient({ data }) {
   const [currency, setCurrency] = useState('USD');
+  const [dashboardData, setDashboardData] = useState(data);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncError, setSyncError] = useState(null);
+
+  // Helper to fetch live dashboard data from MongoDB
+  const fetchLiveMetrics = async (showSpinner = true) => {
+    if (showSpinner) setIsSyncing(true);
+    setSyncError(null);
+    try {
+      const res = await fetch('/api/dashboard', {
+        headers: { 'Pragma': 'no-cache', 'Cache-Control': 'no-cache' }
+      });
+      if (!res.ok) {
+        throw new Error(`API responded with status ${res.status}`);
+      }
+      const freshData = await res.json();
+      setDashboardData(freshData);
+    } catch (err) {
+      console.error('[DashboardClient] Failed to fetch live metrics:', err);
+      setSyncError('Live sync failed. Showing offline metrics.');
+    } finally {
+      if (showSpinner) setIsSyncing(false);
+    }
+  };
+
+  // Live state synchronization
+  useEffect(() => {
+    const handleUpdate = () => {
+      console.log('[DashboardClient] Live update triggered. Fetching fresh metrics...');
+      fetchLiveMetrics(true);
+    };
+
+    // 1. Same-tab live update (custom event listener)
+    window.addEventListener('credlens_audit_updated', handleUpdate);
+
+    // 2. Cross-tab live update (storage listener)
+    const handleStorageChange = (e) => {
+      if (e.key === 'credlens_latest_audit_id') {
+        handleUpdate();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    // 3. Mount sync check
+    // If the local storage has a newer audit ID than what was rendered by SSR, sync immediately
+    try {
+      const localLatestId = localStorage.getItem('credlens_latest_audit_id');
+      const loadedAuditId = data?.auditMeta?.auditId;
+      if (localLatestId && localLatestId !== loadedAuditId) {
+        console.log('[DashboardClient] Mount mismatch detected. Syncing live data...');
+        fetchLiveMetrics(false);
+      }
+    } catch (e) {
+      console.warn('[DashboardClient] Failed to perform initial mount sync check:', e);
+    }
+
+    return () => {
+      window.removeEventListener('credlens_audit_updated', handleUpdate);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [data]);
 
   // Load saved currency preference from localStorage (SSR-safe)
   useEffect(() => {
@@ -57,7 +118,7 @@ export default function DashboardClient({ data }) {
   };
 
   // Determine render mode
-  const isEmpty = !data || data.empty === true || data.error;
+  const isEmpty = !dashboardData || dashboardData.empty === true || dashboardData.error;
 
   // Destructure derived data
   const {
@@ -68,7 +129,7 @@ export default function DashboardClient({ data }) {
     riskMatrix = [],
     events = [],
     auditMeta = {},
-  } = isEmpty ? {} : data;
+  } = isEmpty ? {} : dashboardData;
 
   const lastUpdated = isEmpty
     ? 'No audit yet'
@@ -131,18 +192,24 @@ export default function DashboardClient({ data }) {
           {/* Header Row */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <Badge
                   variant={isEmpty ? 'secondary' : 'success'}
-                  dot={!isEmpty}
+                  dot={!isEmpty && !isSyncing}
                   className={
                     isEmpty
                       ? 'border-zinc-700/40 bg-zinc-900/20 text-zinc-500 font-mono text-[9px] uppercase tracking-wider py-0.5 px-2'
                       : 'border-emerald-500/20 bg-emerald-950/10 text-emerald-400 font-mono text-[9px] uppercase tracking-wider py-0.5 px-2'
                   }
                 >
-                  {isEmpty ? 'Awaiting First Audit' : 'Live Data'}
+                  {isSyncing ? 'Syncing...' : isEmpty ? 'Awaiting First Audit' : 'Live Data'}
                 </Badge>
+                {isSyncing && (
+                  <Loader2 className="h-3.5 w-3.5 text-emerald-400 animate-spin" />
+                )}
+                {syncError && (
+                  <span className="text-[10px] font-mono text-amber-500">{syncError}</span>
+                )}
               </div>
               <h1 className="text-2xl font-semibold tracking-tight text-white">
                 Cost Optimization Dashboard

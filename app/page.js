@@ -18,8 +18,10 @@ import { OPTIMIZATION_RULES } from '@/data/rules';
 import { runSpendAudit } from '@/lib/audit/rulesEngine';
 import { createSpendAudit } from '@/lib/api';
 import { AlertCircle, HelpCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   const [activeAudit, setActiveAudit] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -69,8 +71,17 @@ export default function Home() {
       setActiveAudit(auditData);
       try {
         localStorage.setItem('credlens_active_audit', JSON.stringify(auditData));
+        localStorage.setItem('credlens_latest_audit_id', savedAudit._id);
+        window.dispatchEvent(new Event('credlens_audit_updated'));
       } catch (e) {
         console.error('[CredLens] Failed to save active audit to localStorage:', e);
+      }
+      
+      // Force next.js to refresh the router and clear prefetch caches
+      try {
+        router.refresh();
+      } catch (routerErr) {
+        console.warn('[CredLens] Failed to refresh router:', routerErr);
       }
       
       document.getElementById('audit-workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
