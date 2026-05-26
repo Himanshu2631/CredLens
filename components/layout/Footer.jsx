@@ -33,9 +33,6 @@ export default function Footer() {
             <Link href="#" className="text-xs text-muted-foreground hover:text-white transition-colors">
               Security
             </Link>
-            <Link href="/docs" className="text-xs text-muted-foreground hover:text-white transition-colors">
-              Docs
-            </Link>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono ml-0 md:ml-4">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

@@ -84,15 +84,6 @@ export default function Navbar() {
 
           {/* Desktop Right Side CTA Actions */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/docs"
-              className={`text-[13px] font-medium transition-colors px-1 ${
-                pathname === '/docs' ? 'text-white' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              Docs
-            </Link>
-            
             <Button
               variant="outline"
               size="sm"
@@ -166,18 +157,6 @@ export default function Navbar() {
           ))}
           
           <div className="h-px bg-zinc-800/60 my-2" />
-          
-          <Link
-            href="/docs"
-            onClick={() => setIsOpen(false)}
-            className={`flex items-center h-10 px-3 rounded-lg text-[13px] font-medium transition-all duration-150 ${
-              pathname === '/docs'
-                ? 'text-white bg-zinc-900 border border-zinc-800'
-                : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
-            }`}
-          >
-            Docs
-          </Link>
           
           <div className="grid grid-cols-2 gap-2.5 mt-2">
             <Button
