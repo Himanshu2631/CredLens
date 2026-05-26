@@ -21,7 +21,7 @@ export default function CTA() {
   };
 
   return (
-    <SectionWrapper className="pb-20 pt-10">
+    <SectionWrapper className="py-12 md:py-16">
       <Container>
         <CTACard>
           <div className="space-y-6 max-w-2xl flex flex-col items-center">

@@ -21,7 +21,7 @@ export default function FeatureRow({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center",
+        "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center",
         className
       )}
     >
@@ -38,7 +38,7 @@ export default function FeatureRow({
       <div
         className={cn(
           "lg:col-span-6 flex justify-center",
-          reverse ? "lg:justify-start" : "lg:justify-end",
+          reverse ? "lg:justify-end" : "lg:justify-start",
           visualOrder
         )}
       >

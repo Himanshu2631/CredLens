@@ -29,8 +29,8 @@ export default function HowItWorks() {
   ];
 
   return (
-    <SectionWrapper className="border-b border-border/30 bg-zinc-950/15 py-20 md:py-24">
-      <Container className="space-y-16">
+    <SectionWrapper className="border-b border-border/30 bg-zinc-950/15 py-12 md:py-16">
+      <Container className="space-y-12">
         
         {/* Section Title Header */}
         <SectionHeader

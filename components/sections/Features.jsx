@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Container from '@/components/layout/Container';
 import SectionWrapper from '@/components/layout/SectionWrapper';
 import FeatureRow from './FeatureRow';
@@ -11,19 +11,9 @@ import MockCard from '@/components/ui/MockCard';
  * Utilizes reusable FeatureRow layouts and MockCard containers.
  */
 export default function Features() {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText('https://credlens.com/audit/acme-labs-849a');
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
   return (
-    <SectionWrapper className="border-b border-border/30 bg-zinc-950/25">
-      <Container className="space-y-12 md:space-y-16">
+    <SectionWrapper className="border-b border-border/30 bg-zinc-950/25 py-12 md:py-16">
+      <Container className="space-y-12 lg:space-y-16">
 
         {/* Feature 1: Spend Visibility & Optimization Insights (Merged) */}
         <FeatureRow
@@ -151,66 +141,6 @@ export default function Features() {
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">API capacity leaks</strong>: Audit usage profiles to optimize multi-provider overhead.
-              </span>
-            </li>
-          </ul>
-        </FeatureRow>
-
-        {/* Feature 2: Shareable Reports */}
-        <FeatureRow
-          badge="02 · Shareable Reports"
-          title="Share optimization reports with your team"
-          description="Generate secure, read-only dashboard links to share spend insights with teammates or investors."
-          reverse
-          visual={
-            <MockCard className="flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b border-border/50 pb-3">
-                <span className="text-[10px] font-mono text-zinc-500">SECURE REPORT PORTAL</span>
-                <span className="text-[9px] font-mono text-emerald-400 flex items-center gap-1">
-                  <span className="h-1 w-1 rounded-full bg-emerald-500" />
-                  ACTIVE LINK
-                </span>
-              </div>
-              <div className="flex items-center gap-2 border border-border bg-zinc-950 p-2.5 rounded-lg">
-                <div className="text-[11px] font-mono text-zinc-400 overflow-hidden text-ellipsis whitespace-nowrap flex-1">
-                  https://credlens.com/audit/acme-labs-849a
-                </div>
-                <button
-                  onClick={handleCopy}
-                  aria-label="Copy sharing link to clipboard"
-                  className={`h-7.5 px-3 rounded text-[10px] font-mono border transition-all duration-150 cursor-pointer shrink-0 ${
-                    copied
-                      ? 'bg-emerald-950/30 border-emerald-900/40 text-emerald-400'
-                      : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800'
-                  }`}
-                >
-                  {copied ? 'Copied!' : 'Copy Link'}
-                </button>
-              </div>
-              <div className="text-[11px] text-zinc-500 leading-normal">
-                Recipient views a read-only dashboard. Sensitive API configurations, login credentials, and raw telemetry logs are automatically stripped.
-              </div>
-            </MockCard>
-          }
-        >
-          {/* Supporting trust indicators */}
-          <ul className="space-y-2.5 pt-2 select-none">
-            <li className="flex items-start gap-2 text-[13px] text-zinc-400 leading-normal">
-              <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-zinc-500 shrink-0" />
-              <span>
-                <strong className="text-zinc-200 font-medium">Persistent reports</strong>: Access archived recommendation histories and track saved runway anytime.
-              </span>
-            </li>
-            <li className="flex items-start gap-2 text-[13px] text-zinc-400 leading-normal">
-              <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-zinc-500 shrink-0" />
-              <span>
-                <strong className="text-zinc-200 font-medium">Frictionless sharing</strong>: Distribute custom diagnostics dashboards to investors or directors securely.
-              </span>
-            </li>
-            <li className="flex items-start gap-2 text-[13px] text-zinc-400 leading-normal">
-              <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-zinc-500 shrink-0" />
-              <span>
-                <strong className="text-zinc-200 font-medium">Stripped credentials</strong>: Automatically omit active API keys, secrets, and raw database parameters.
               </span>
             </li>
           </ul>

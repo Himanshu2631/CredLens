@@ -125,7 +125,7 @@ export default function Home() {
       {/* 2. Main Audit Workspace — Placed high up to establish the audit flow as the dominant narrative */}
       <SectionWrapper
         id="audit-workspace"
-        className="py-20 md:py-24 scroll-mt-20 border-b border-border/30 bg-zinc-950/5 relative"
+        className="py-12 md:py-16 scroll-mt-20 border-b border-border/30 bg-zinc-950/5 relative"
       >
         <Container className="space-y-12">
           {/* Section Introduction */}
