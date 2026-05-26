@@ -14,7 +14,7 @@ export default function MetricItem({
 }) {
   return (
     <div className={cn("p-5 md:p-6 space-y-1 select-none", className)}>
-      <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">
+      <span className="text-[11px] font-mono tracking-wider text-zinc-500 uppercase">
         {label}
       </span>
       <div
@@ -25,7 +25,7 @@ export default function MetricItem({
       >
         {value}
       </div>
-      <div className="text-[10px] text-zinc-500 block leading-tight">
+      <div className="text-[11px] text-zinc-500 block leading-snug">
         {subtext}
       </div>
     </div>

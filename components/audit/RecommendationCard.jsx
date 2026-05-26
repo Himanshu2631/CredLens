@@ -33,7 +33,7 @@ export default function RecommendationCard({
         <ProviderIcon provider={provider} />
         <div className="space-y-1 text-left">
           <div className="text-xs font-semibold text-zinc-200">{title}</div>
-          <p className="text-[10px] leading-relaxed text-zinc-500 max-w-md">{description}</p>
+          <p className="text-[11px] leading-relaxed text-zinc-500 max-w-md">{description}</p>
         </div>
       </div>
       
@@ -44,7 +44,7 @@ export default function RecommendationCard({
         </div>
         <div
           className={cn(
-            "text-[9px] px-1.5 py-0.5 rounded font-mono font-medium tracking-wide uppercase",
+            "text-[10px] px-1.5 py-0.5 rounded font-mono font-medium tracking-wide uppercase",
             impactStyles[impact] || impactStyles.Low
           )}
         >

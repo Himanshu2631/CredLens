@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-xs text-white tracking-wider">CREDLENS</span>
-              <span className="text-[10px] text-muted-foreground font-mono px-1.5 py-0.5 rounded bg-card border border-border">
+              <span className="text-[11px] text-muted-foreground font-mono px-1.5 py-0.5 rounded bg-card border border-border">
                 v0.1.0-alpha
               </span>
             </div>
@@ -47,10 +47,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] text-zinc-600">
+          <p className="text-xs text-zinc-600">
             &copy; {currentYear} CredLens Inc. All rights reserved.
           </p>
-          <p className="text-[11px] text-zinc-600 font-mono">
+          <p className="text-xs text-zinc-600 font-mono">
             Optimizing startup margins one API request at a time.
           </p>
         </div>

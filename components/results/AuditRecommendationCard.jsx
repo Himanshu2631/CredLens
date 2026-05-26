@@ -113,7 +113,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0, cur
               {title}
             </span>
             {categoryLabel && (
-              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 border border-zinc-800/80 rounded px-1 py-0.5 shrink-0">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 border border-zinc-800/80 rounded px-1 py-0.5 shrink-0">
                 {categoryLabel}
               </span>
             )}
@@ -121,7 +121,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0, cur
           {/* Explanation one-liner — shown collapsed so the list stays readable,
               but at a lighter weight than the title so it doesn't compete. */}
           <p className={cn(
-            "text-[11px] leading-snug line-clamp-1 pr-2 transition-colors",
+            "text-xs leading-snug line-clamp-1 pr-2 transition-colors",
             isReviewed ? "text-zinc-600" : "text-zinc-500"
           )}>
             {localizeText(explanation, currency)}
@@ -135,13 +135,13 @@ export default function AuditRecommendationCard({ recommendation, index = 0, cur
               <div className="text-[12px] font-mono font-semibold text-emerald-400 tabular-nums leading-none">
                 {formatCurrency(estimatedSavings.monthly, currency, 'mo')}
               </div>
-              <div className="text-[9px] font-mono text-zinc-500 mt-0.5">
+              <div className="text-[9.5px] font-mono text-zinc-500 mt-0.5">
                 {formatCurrency(estimatedSavings.yearly, currency, 'yr')}
               </div>
             </div>
           ) : (
             /* Governance / operational recs that have no direct $ savings */
-            <span className="text-[10px] font-mono text-zinc-400">Operational</span>
+            <span className="text-[11px] font-mono text-zinc-400">Operational</span>
           )}
           <ImpactBadge impact={estimatedImpact} />
           <ChevronDown
@@ -173,7 +173,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0, cur
           {/* Section 1: Why This Matters ─────────────────────────────────── */}
           <div className="space-y-2">
             <SectionLabel>Why this matters</SectionLabel>
-            <p className="text-[12px] text-zinc-400 leading-[1.65] max-w-prose">
+            <p className="text-[13px] text-zinc-400 leading-[1.65] max-w-prose">
               {localizeText(whyItMatters, currency)}
             </p>
           </div>
@@ -193,7 +193,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0, cur
                     >
                       {i + 1}
                     </span>
-                    <span className="text-[12px] text-zinc-400 leading-[1.6]">
+                    <span className="text-[13px] text-zinc-400 leading-[1.6]">
                       {localizeText(step, currency)}
                     </span>
                   </li>
@@ -221,10 +221,10 @@ export default function AuditRecommendationCard({ recommendation, index = 0, cur
                 {/* Savings math logic — the "show your work" line */}
                 {estimatedSavings.logic && (
                   <div className="flex-1 min-w-0 border-l border-border/30 pl-5 hidden sm:block">
-                    <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 block mb-1">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block mb-1">
                       Calculation
                     </span>
-                    <p className="text-[10px] font-mono text-zinc-400 leading-relaxed">
+                    <p className="text-[11px] font-mono text-zinc-400 leading-relaxed">
                       {localizeText(estimatedSavings.logic, currency)}
                     </p>
                   </div>
@@ -277,7 +277,7 @@ export default function AuditRecommendationCard({ recommendation, index = 0, cur
 /** Section label — mono uppercase, no decoration. Used as a micro-heading. */
 function SectionLabel({ children }) {
   return (
-    <span className="block text-[9px] font-mono uppercase tracking-widest text-zinc-400">
+    <span className="block text-[10px] font-mono uppercase tracking-widest text-zinc-400">
       {children}
     </span>
   );
@@ -287,7 +287,7 @@ function SectionLabel({ children }) {
 function SavingsStat({ label, value, highlight = false }) {
   return (
     <div>
-      <span className="block text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-0.5">
+      <span className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-0.5">
         {label}
       </span>
       <span

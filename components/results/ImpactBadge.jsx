@@ -21,7 +21,7 @@ export default function ImpactBadge({ impact = 'Low', className }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-mono font-medium uppercase tracking-wider border',
+        'inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-mono font-medium uppercase tracking-wider border',
         styles[impact] || styles.Low,
         className
       )}

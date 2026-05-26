@@ -9,7 +9,7 @@ export default function SocialProof() {
       <Container className="flex flex-col items-center">
         
         {/* Muted category label */}
-        <h2 className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase select-none text-center">
+        <h2 className="text-[11px] font-mono tracking-widest text-zinc-500 uppercase select-none text-center">
           Ingesting spend telemetry for high-growth tech teams
         </h2>
 

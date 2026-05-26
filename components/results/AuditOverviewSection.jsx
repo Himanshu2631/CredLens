@@ -216,12 +216,12 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
               {isRealAi ? 'AI Generated Audit Summary' : 'Executive Summary'}
             </span>
             {aiSummary?.debugError && (
-              <span className="text-[9px] font-mono text-red-400 bg-red-950/30 border border-red-900/30 px-1.5 py-0.5 rounded cursor-help" title={aiSummary.debugError}>
+              <span className="text-[10px] font-mono text-red-400 bg-red-950/30 border border-red-900/30 px-1.5 py-0.5 rounded cursor-help" title={aiSummary.debugError}>
                 AI Error: {aiSummary.debugError.length > 50 ? `${aiSummary.debugError.substring(0, 47)}...` : aiSummary.debugError}
               </span>
             )}
           </div>
-          <span className="text-[9px] font-mono text-zinc-400 bg-zinc-950/50 border border-border/20 px-2 py-0.5 rounded">
+          <span className="text-[10px] font-mono text-zinc-400 bg-zinc-950/50 border border-border/20 px-2 py-0.5 rounded">
             Audit Date: {auditDate}
           </span>
         </div>
@@ -239,7 +239,7 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
         {/* ── Key Insights Ledger ── */}
         {aiSummary?.keyInsights && aiSummary.keyInsights.length > 0 && (
           <div className="mt-5 pt-4 border-t border-border/10 space-y-3">
-            <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase block mb-1">
+            <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase block mb-1">
               Key Insights & Observations
             </span>
             <div className="space-y-2">
@@ -268,33 +268,33 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
           
           {/* Current Spend */}
           <div className="group/tile flex flex-col gap-1 p-4 border-b sm:border-b-0 sm:border-r border-border/30 hover:bg-zinc-900/10 transition-colors select-none">
-            <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase flex items-center gap-1">
+            <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase flex items-center gap-1">
               Current Monthly Spend
             </span>
             <div className="text-lg md:text-xl font-semibold tracking-tight text-zinc-400 tabular-nums">
               {formatCurrency(summary.totalCurrentSpend, currency)}
             </div>
-            <span className="text-[9.5px] text-zinc-500">
+            <span className="text-[10.5px] text-zinc-500">
               Active operating baseline
             </span>
           </div>
 
           {/* After Optimization */}
           <div className="group/tile flex flex-col gap-1 p-4 border-b sm:border-b-0 sm:border-r border-border/30 hover:bg-zinc-900/10 transition-colors select-none">
-            <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase">
+            <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">
               Target Monthly Spend
             </span>
             <div className="text-lg md:text-xl font-semibold tracking-tight text-white tabular-nums">
               {formatCurrency(summary.optimizedSpendEstimate, currency)}
             </div>
-            <span className="text-[9.5px] text-zinc-500">
+            <span className="text-[10.5px] text-zinc-500">
               Post-optimization target
             </span>
           </div>
 
           {/* Monthly Savings */}
           <div className="group/tile flex flex-col gap-1 p-4 hover:bg-zinc-900/10 transition-colors select-none">
-            <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase">
+            <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">
               Net Monthly Savings
             </span>
             <div className={cn(
@@ -303,7 +303,7 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
             )}>
               {hasSavings ? formatCurrency(summary.totalEstimatedSavings, currency, 'mo') : formatCurrency(0, currency, 'mo')}
             </div>
-            <span className="text-[9.5px] text-zinc-500">
+            <span className="text-[10.5px] text-zinc-500">
               {hasSavings ? `${summary.runwayRestoredPercent}% overhead reduction` : 'Stack fully optimized'}
             </span>
           </div>
@@ -320,7 +320,7 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
               : "bg-zinc-900/10 border-border/40 hover:border-zinc-800"
           )}>
             <div className="space-y-1">
-              <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase block">
+              <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase block">
                 Annual Runway Impact
               </span>
               <div className={cn(
@@ -330,7 +330,7 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
                 {hasSavings ? formatCurrency(summary.totalEstimatedYearlySavings, currency, 'yr') : formatCurrency(0, currency, 'yr')}
               </div>
             </div>
-            <p className="mt-3.5 text-[10.5px] text-zinc-500 leading-relaxed font-normal">
+            <p className="mt-3.5 text-[11.5px] text-zinc-500 leading-relaxed font-normal">
               {aiSummary?.runwayImpact ? (
                 highlightTelemetryText(localizeText(aiSummary.runwayImpact, currency))
               ) : hasSavings ? (
@@ -344,7 +344,7 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
           {/* Audit Coverage (Audit Scope Card) */}
           <div className="rounded-lg p-5 border border-border/40 bg-zinc-900/10 hover:border-zinc-800 transition-colors flex flex-col justify-between select-none">
             <div className="space-y-1">
-              <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase block">
+              <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase block">
                 Audit Scope Coverage
               </span>
               <div className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-300 tabular-nums">
@@ -372,7 +372,7 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
 
       {/* ── 3. Spend Breakdown Visualizer ── */}
       <div className="space-y-3 pt-4 border-t border-border/20">
-        <div className="flex items-center justify-between text-[9px] font-mono text-zinc-500 uppercase">
+        <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 uppercase">
           <span className="flex items-center gap-1.5">
             <Layers className="h-3 w-3" />
             Spend Distribution Breakdown
@@ -414,7 +414,7 @@ Volumetric API Spend:       ${formatCurrency(summary.apiSpend || 0, currency, 'm
               APIs: <strong className="text-zinc-300 tabular-nums font-semibold">{formatCurrency(summary.apiSpend || 0, currency, 'mo')}</strong>
             </span>
           </div>
-          <span className="text-[9px] text-zinc-400 flex items-center gap-1">
+          <span className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Info className="h-2.5 w-2.5" />
             Telemetry models synchronized hourly
           </span>

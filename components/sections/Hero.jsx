@@ -40,7 +40,7 @@ export default function Hero() {
         </h1>
 
         {/* Supporting Subheadline */}
-        <p className="text-zinc-400 text-xs md:text-sm font-normal leading-relaxed max-w-xl mt-4 select-none">
+        <p className="text-zinc-400 text-sm md:text-base font-normal leading-relaxed max-w-xl mt-4 select-none">
           Most startups overspend by 30% on redundant LLM seats and ghost API keys. CredLens analyzes execution logs to pinpoint optimizations and extend your runway—no credentials required.
         </p>
 
@@ -76,7 +76,7 @@ export default function Hero() {
         </div>
 
         {/* Trust-focused supporting text */}
-        <div className="flex items-center gap-2 mt-5 text-[11px] text-zinc-500 select-none">
+        <div className="flex items-center gap-2 mt-5 text-xs text-zinc-500 select-none">
           <svg
             viewBox="0 0 24 24"
             fill="none"

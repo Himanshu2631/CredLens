@@ -113,29 +113,29 @@
   font-family: var(--font-sans);
   font-size: 0.875rem; /* 14px */
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.65;
   color: oklch(0.70 0 0); /* zinc-400 */
 }
 
 @utility text-body-premium {
   font-family: var(--font-sans);
-  font-size: 0.8125rem; /* 13px - highly legible compact text */
+  font-size: 0.875rem; /* 14px - legible body text for descriptions */
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.6;
   color: oklch(0.85 0 0); /* zinc-200 */
 }
 
 @utility text-muted-premium {
   font-family: var(--font-sans);
-  font-size: 0.75rem; /* 12px */
+  font-size: 0.8125rem; /* 13px */
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.5;
   color: oklch(0.55 0 0); /* zinc-500 */
 }
 
 @utility text-cta {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.8125rem; /* 13px */
   font-weight: 500;
   letter-spacing: 0.01em;
 }

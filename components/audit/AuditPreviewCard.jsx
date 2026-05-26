@@ -46,7 +46,7 @@ export default function AuditPreviewCard() {
       {/* Card Header metadata bar */}
       <div className="flex items-center justify-between border-b border-border/60 bg-zinc-950/40 px-5 py-3.5">
         <div className="flex items-center gap-2.5">
-          <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">AUDIT PREVIEW</span>
+          <span className="text-[11px] font-mono tracking-wider text-zinc-500 uppercase">AUDIT PREVIEW</span>
           <span className="h-1 w-1 rounded-full bg-zinc-700" />
           <span className="text-xs text-zinc-300 font-medium">AcmeLabs_May_Audit.json</span>
         </div>
@@ -92,7 +92,7 @@ export default function AuditPreviewCard() {
 
       {/* Action Items List */}
       <div className="p-5 md:p-6">
-        <h4 className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase mb-4">
+        <h4 className="text-[11px] font-mono tracking-wider text-zinc-500 uppercase mb-4">
           Targeted Optimizations ({recommendations.length})
         </h4>
         

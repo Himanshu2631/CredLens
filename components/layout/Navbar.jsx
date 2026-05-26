@@ -12,7 +12,7 @@ import FeedbackModal from './FeedbackModal';
 const NavLink = ({ href, children, isActive }) => (
   <Link
     href={href}
-    className={`text-[12px] font-medium transition-colors duration-150 py-1 ${
+    className={`text-[13px] font-medium transition-colors duration-150 py-1 ${
       isActive
         ? 'text-white'
         : 'text-zinc-400 hover:text-white'
@@ -86,7 +86,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <Link
               href="/docs"
-              className={`text-[12px] font-medium transition-colors px-1 ${
+              className={`text-[13px] font-medium transition-colors px-1 ${
                 pathname === '/docs' ? 'text-white' : 'text-zinc-400 hover:text-white'
               }`}
             >

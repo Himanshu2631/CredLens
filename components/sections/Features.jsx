@@ -81,7 +81,7 @@ export default function Features() {
                       <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
                       Duplicate Coding Assistants
                     </div>
-                    <p className="text-[10px] text-zinc-500 truncate mt-0.5">
+                    <p className="text-[11px] text-zinc-500 truncate mt-0.5">
                       Cursor & GitHub Copilot active simultaneously
                     </p>
                   </div>
@@ -97,7 +97,7 @@ export default function Features() {
                       <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
                       Oversized Team Tiers
                     </div>
-                    <p className="text-[10px] text-zinc-500 truncate mt-0.5">
+                    <p className="text-[11px] text-zinc-500 truncate mt-0.5">
                       Workspace plan exceeds active seat baseline
                     </p>
                   </div>
@@ -113,7 +113,7 @@ export default function Features() {
                       <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
                       Unused Premium Plans
                     </div>
-                    <p className="text-[10px] text-zinc-500 truncate mt-0.5">
+                    <p className="text-[11px] text-zinc-500 truncate mt-0.5">
                       Enterprise subscriptions with zero engagement
                     </p>
                   </div>
@@ -135,19 +135,19 @@ export default function Features() {
         >
           {/* Supporting scannable points */}
           <ul className="space-y-2 pt-2 select-none">
-            <li className="flex items-start gap-2.5 text-xs text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2.5 text-[13px] text-zinc-400 leading-normal">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">Duplicate subscriptions</strong>: Surface overlapping seats across coding and design tools.
               </span>
             </li>
-            <li className="flex items-start gap-2.5 text-xs text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2.5 text-[13px] text-zinc-400 leading-normal">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">Bloated plan tiers</strong>: Identify inactive seat allocations and oversized workspace tiers.
               </span>
             </li>
-            <li className="flex items-start gap-2.5 text-xs text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2.5 text-[13px] text-zinc-400 leading-normal">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">API capacity leaks</strong>: Audit usage profiles to optimize multi-provider overhead.
@@ -187,7 +187,7 @@ export default function Features() {
                   {copied ? 'Copied!' : 'Copy Link'}
                 </button>
               </div>
-              <div className="text-[10px] text-zinc-500 leading-normal">
+              <div className="text-[11px] text-zinc-500 leading-normal">
                 Recipient views a read-only dashboard. Sensitive API configurations, login credentials, and raw telemetry logs are automatically stripped.
               </div>
             </MockCard>
@@ -195,19 +195,19 @@ export default function Features() {
         >
           {/* Supporting trust indicators */}
           <ul className="space-y-2.5 pt-2 select-none">
-            <li className="flex items-start gap-2 text-xs text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2 text-[13px] text-zinc-400 leading-normal">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-zinc-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">Persistent reports</strong>: Access archived recommendation histories and track saved runway anytime.
               </span>
             </li>
-            <li className="flex items-start gap-2 text-xs text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2 text-[13px] text-zinc-400 leading-normal">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-zinc-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">Frictionless sharing</strong>: Distribute custom diagnostics dashboards to investors or directors securely.
               </span>
             </li>
-            <li className="flex items-start gap-2 text-xs text-zinc-400 leading-normal">
+            <li className="flex items-start gap-2 text-[13px] text-zinc-400 leading-normal">
               <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-zinc-500 shrink-0" />
               <span>
                 <strong className="text-zinc-200 font-medium">Stripped credentials</strong>: Automatically omit active API keys, secrets, and raw database parameters.

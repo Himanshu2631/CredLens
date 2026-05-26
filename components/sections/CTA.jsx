@@ -67,7 +67,7 @@ export default function CTA() {
             </div>
 
             {/* Micro trust-text below */}
-            <div className="text-[10px] text-zinc-500 pt-1">
+            <div className="text-[11px] text-zinc-500 pt-1">
               No database connections or keys required. All audits run securely in your browser context.
             </div>
 
