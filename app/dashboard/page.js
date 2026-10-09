@@ -1,35 +1,37 @@
 import React from 'react';
+import dbConnect from '@/lib/db';
+import Audit from '@/models/Audit';
+import { deriveDashboardMetrics } from '@/lib/dashboard/metrics';
 import DashboardClient from '@/components/dashboard/DashboardClient';
 
 export const dynamic = 'force-dynamic';
 
 /**
- * Fetch the derived dashboard payload from the API route.
- * Runs server-side — no MongoDB credentials or driver code in the page.
- * cache: 'no-store' ensures every page load gets fresh data from the DB.
+ * Fetch the derived dashboard payload directly server-side from MongoDB.
+ * Direct database access avoids loopback HTTP fetch issues, port mismatches,
+ * and eliminates network overhead.
  */
 async function getDashboardData() {
   try {
-    // In Next.js App Router, relative fetch URLs require the full origin.
-    // VERCEL_URL covers production; localhost covers dev.
-    const base =
-      process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : 'http://localhost:3000';
+    await dbConnect();
 
-    const res = await fetch(`${base}/api/dashboard`, {
-      cache: 'no-store',
-    });
+    const audit = await Audit.findOne({})
+      .sort({ createdAt: -1 })
+      .select(
+        'tools toolPlans seats inactiveSeats monthlySpend summary recommendations projectName createdAt aiSummary'
+      )
+      .lean();
 
-    if (!res.ok) {
-      console.error('[Dashboard] API responded with status', res.status);
-      return null;
+    if (!audit) {
+      return { empty: true };
     }
 
-    return res.json();
+    const payload = deriveDashboardMetrics(audit);
+    // Ensure all props are JSON-serializable plain objects across the RSC boundary
+    return JSON.parse(JSON.stringify({ empty: false, ...payload }));
   } catch (err) {
-    console.error('[Dashboard] Failed to fetch dashboard data:', err);
-    return null;
+    console.error('[Dashboard] Error retrieving dashboard data:', err);
+    return { empty: true, error: true };
   }
 }
 
@@ -38,3 +40,4 @@ export default async function DashboardPage() {
 
   return <DashboardClient data={data} />;
 }
+
